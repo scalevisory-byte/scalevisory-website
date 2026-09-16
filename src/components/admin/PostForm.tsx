@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { savePost } from "@/actions/posts";
 import type { Post } from "@/lib/types";
 import { categoryNames } from "@/lib/content/resources";
@@ -13,7 +14,7 @@ function Submit() {
 }
 
 export default function PostForm({ post }: { post?: Post }) {
-  const [state, formAction] = useFormState(savePost.bind(null, post?.id ?? null), null);
+  const [state, formAction] = useActionState(savePost.bind(null, post?.id ?? null), null);
   return (
     <form action={formAction} className="grid gap-4">
       <div><label className="label">Title</label><input name="title" required defaultValue={post?.title} className="field" /></div>

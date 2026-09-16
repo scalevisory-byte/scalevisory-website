@@ -30,9 +30,23 @@ Phases 1 and 5-7 of `docs/PLATFORM-PLAN.md`: migrations for the V1 tables, RBAC 
 FAQs/testimonials/team tables, settings, and the admin dashboard. Page content is hardcoded in `src/lib/content/*` —
 those files are the seed for the admin-editable tables when Phase 1 lands.
 
-## Known issue — upgrade before launch
-`next@14.2.15` carries 2 advisories, 1 critical (unauthenticated RCE in the image optimizer; Server Function endpoint
-disclosure). There is no patched 14.x stable — the fix is a 14 -> 16 major upgrade. Do it before the domain goes live.
+## Framework (Next 16 / React 19)
+Upgraded from Next 14.2.15 + React 18, which carried a critical unauthenticated RCE with no patched 14.x.
+`npm audit` now reports 0 vulnerabilities. What the upgrade changed, so it is not undone by accident:
+- `cookies()` is async, so `createClient()` in `src/lib/supabase/server.ts` is async — **await it at every call site**.
+- `params` is a `Promise` in every page and `generateMetadata`; destructure it with `await params`.
+  `generateStaticParams` is unchanged.
+- Forms use React 19's `useActionState` (from `react`), not `useFormState`. `useFormStatus` still comes from `react-dom`.
+- The middleware convention is now `proxy`: `src/proxy.ts` exports `proxy()`. The Supabase helper it calls is still
+  `src/lib/supabase/middleware.ts` — that is an internal module, not the framework convention, so leave its name alone.
+- `next lint` was removed in Next 16 (it silently exits 0), so the `lint` script is gone and `npm run typecheck`
+  (`tsc --noEmit`) took its place. **ESLint is not configured** and never was — worth setting up.
+
+## Known issue
+`/resources/[category]` used to be prerendered (SSG) and is now server-rendered on every request, because the page
+reads Supabase through the cookie-bound `createClient()` and Next 16 treats any `cookies()` read as dynamic. The public
+resource pages only ever read published posts, so they do not need the visitor's cookies — giving them a cookie-free
+anon client would make them static/ISR again. Not urgent at current traffic.
 
 ## Where this is going (V1 — approved plan)
 `docs/PLATFORM-PLAN.md` is the source of truth: sitemap, 4 core services (Accounting, Taxation, Legal, Business Consultancy), industries, resources (5 categories), consultation form → lead management, RBAC admin CMS, SEO, security, infra, V2 client portal, V3 AI.

@@ -10,12 +10,13 @@ import { postHref } from "@/lib/content/resources";
  */
 export const revalidate = 600;
 
-export default async function LegacyPostRedirect({ params }: { params: { slug: string } }) {
-  const supabase = createClient();
+export default async function LegacyPostRedirect({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("posts")
     .select("slug,category")
-    .eq("slug", params.slug)
+    .eq("slug", slug)
     .eq("is_published", true)
     .maybeSingle();
 

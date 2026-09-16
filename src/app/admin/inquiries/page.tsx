@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 const KIND: Record<Inquiry["kind"], string> = { general: "Contact", service: "Service", training: "Training" };
 
 export default async function AdminInquiries() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.from("inquiries").select("*").order("created_at", { ascending: false }).limit(200);
   const items = (data ?? []) as Inquiry[];
   return (

@@ -13,8 +13,9 @@ export function generateStaticParams() {
   return routedIndustries.map((i) => ({ slug: i.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const i = getIndustry(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const i = getIndustry(slug);
   if (!i || i.href) return {};
   return {
     title: `${i.name} — Accounting & Advisory`,
@@ -23,8 +24,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function IndustryPage({ params }: { params: { slug: string } }) {
-  const i = getIndustry(params.slug);
+export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const i = getIndustry(slug);
   // Industries with a canonical page elsewhere (travel) are redirected in next.config.
   if (!i || i.href) notFound();
 

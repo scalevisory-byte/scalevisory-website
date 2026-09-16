@@ -12,7 +12,7 @@ import { getCategoryBySlug, categorySlug, postHref } from "@/lib/content/resourc
 export const revalidate = 600;
 
 async function getPost(slug: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from("posts")
     .select("*")
@@ -25,9 +25,10 @@ async function getPost(slug: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: { category: string; slug: string };
+  params: Promise<{ category: string; slug: string }>;
 }): Promise<Metadata> {
-  const p = await getPost(params.slug);
+  const { slug } = await params;
+  const p = await getPost(slug);
   if (!p) return {};
   return {
     title: p.title,
@@ -46,15 +47,16 @@ export async function generateMetadata({
 export default async function PostPage({
   params,
 }: {
-  params: { category: string; slug: string };
+  params: Promise<{ category: string; slug: string }>;
 }) {
-  const p = await getPost(params.slug);
+  const { category: categoryParam, slug } = await params;
+  const p = await getPost(slug);
   if (!p) notFound();
 
   // One post, one URL: if the category in the path is not the post's own,
   // send the reader (and the crawler) to the canonical one.
   const canonicalCategory = categorySlug(p.category);
-  if (canonicalCategory !== params.category) permanentRedirect(postHref(p.category, p.slug));
+  if (canonicalCategory !== categoryParam) permanentRedirect(postHref(p.category, p.slug));
 
   const category = getCategoryBySlug(canonicalCategory)!;
 

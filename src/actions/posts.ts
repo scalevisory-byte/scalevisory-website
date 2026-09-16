@@ -22,7 +22,7 @@ export async function savePost(id: string | null, _prev: { error?: string } | nu
   };
   if (!post.title || !post.content) return { error: "Title and content are required." };
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const patch: Record<string, unknown> = { ...post };
   if (post.is_published) patch.published_at = new Date().toISOString();
 
@@ -34,7 +34,7 @@ export async function savePost(id: string | null, _prev: { error?: string } | nu
 }
 
 export async function deletePost(id: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.from("posts").delete().eq("id", id);
   revalidatePost(null, null);
 }

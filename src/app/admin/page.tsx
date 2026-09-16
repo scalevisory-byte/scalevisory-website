@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 const KIND: Record<Inquiry["kind"], string> = { general: "Contact", service: "Service", training: "Training" };
 
 export default async function AdminHome() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const [{ count: unread }, { count: published }, { count: drafts }, { data: recent }] = await Promise.all([
     supabase.from("inquiries").select("*", { count: "exact", head: true }).eq("is_read", false),
     supabase.from("posts").select("*", { count: "exact", head: true }).eq("is_published", true),

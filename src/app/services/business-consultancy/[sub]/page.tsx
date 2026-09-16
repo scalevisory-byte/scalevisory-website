@@ -13,8 +13,9 @@ export function generateStaticParams() {
   return consultancyPages.map((p) => ({ sub: p.slug }));
 }
 
-export function generateMetadata({ params }: { params: { sub: string } }): Metadata {
-  const p = getConsultancyPage(params.sub);
+export async function generateMetadata({ params }: { params: Promise<{ sub: string }> }): Promise<Metadata> {
+  const { sub } = await params;
+  const p = getConsultancyPage(sub);
   if (!p) return {};
   return {
     title: p.title,
@@ -23,8 +24,9 @@ export function generateMetadata({ params }: { params: { sub: string } }): Metad
   };
 }
 
-export default function ConsultancySubPage({ params }: { params: { sub: string } }) {
-  const p = getConsultancyPage(params.sub);
+export default async function ConsultancySubPage({ params }: { params: Promise<{ sub: string }> }) {
+  const { sub } = await params;
+  const p = getConsultancyPage(sub);
   if (!p) notFound();
 
   const others = consultancyPages.filter((o) => o.slug !== p.slug);

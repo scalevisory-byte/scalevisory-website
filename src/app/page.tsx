@@ -11,7 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 export const revalidate = 600;
 
 export default async function HomePage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: posts } = await supabase
     .from("posts")
     .select("slug,title,category,published_at")

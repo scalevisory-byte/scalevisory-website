@@ -17,8 +17,9 @@ export function generateStaticParams() {
   return resourceCategories.map((c) => ({ category: c.slug }));
 }
 
-export function generateMetadata({ params }: { params: { category: string } }): Metadata {
-  const c = getCategoryBySlug(params.category);
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category } = await params;
+  const c = getCategoryBySlug(category);
   if (!c) return {};
   return {
     title: c.title,
@@ -29,11 +30,12 @@ export function generateMetadata({ params }: { params: { category: string } }): 
 
 export const revalidate = 600;
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
-  const c = getCategoryBySlug(params.category);
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params;
+  const c = getCategoryBySlug(category);
   if (!c) notFound();
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: posts } = await supabase
     .from("posts")
     .select("slug,title,excerpt,category,published_at")

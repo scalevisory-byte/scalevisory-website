@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { submitInquiry, type InquiryResult } from "@/actions/inquiries";
 import type { InquiryKind } from "@/lib/types";
 
@@ -24,7 +25,7 @@ export default function InquiryForm({
   askCompany?: boolean;
   compact?: boolean;
 }) {
-  const [state, action] = useFormState<InquiryResult | null, FormData>(submitInquiry, null);
+  const [state, action] = useActionState<InquiryResult | null, FormData>(submitInquiry, null);
 
   if (state?.ok) {
     return (

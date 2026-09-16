@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import Logo from "@/components/Logo";
 import { signIn } from "@/actions/auth";
 
@@ -10,7 +11,7 @@ function Submit() {
 }
 
 export default function LoginPage() {
-  const [state, action] = useFormState(signIn, null);
+  const [state, action] = useActionState(signIn, null);
   return (
     <div className="flex min-h-screen items-center justify-center bg-navy px-4">
       <div className="w-full max-w-sm rounded-lg bg-white p-8">

@@ -2,9 +2,13 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { createClient as createBase } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
-/** Session-aware client (respects RLS; used for admin pages and public reads). */
-export function createClient() {
-  const cookieStore = cookies();
+/**
+ * Session-aware client (respects RLS; used for admin pages and public reads).
+ * Async because `cookies()` returns a promise from Next 15 onwards — every caller
+ * must await it.
+ */
+export async function createClient() {
+  const cookieStore = await cookies();
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

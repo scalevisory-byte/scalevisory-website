@@ -9,7 +9,7 @@ import { fmtDate } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPosts() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.from("posts").select("id,slug,title,category,is_published,published_at,updated_at").order("updated_at", { ascending: false });
   const posts = (data ?? []) as Post[];
   return (
