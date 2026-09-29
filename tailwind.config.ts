@@ -15,6 +15,10 @@ const config: Config = {
         gold: { DEFAULT: "#B8912F", soft: "#F3ECD8" },
       },
       fontFamily: {
+        // Section headings and the hero line — the serif does the "established
+        // firm" work. Everything structural (labels, buttons, card titles)
+        // stays on the grotesque so it reads cleanly at small sizes.
+        title: ["var(--font-playfair)", "Georgia", "serif"],
         display: ["var(--font-montserrat)", "sans-serif"],
         body: ["var(--font-inter)", "sans-serif"],
       },

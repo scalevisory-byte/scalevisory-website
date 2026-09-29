@@ -12,6 +12,8 @@ export interface HomeService {
   blurb: string;
   href: string;
   icon: string;
+  /** Tint of the icon tile. Gold marks the tax and legal side of the practice. */
+  tone?: "sky" | "gold";
 }
 
 /** The four figures shown under the hero. All are claims the site already makes. */
@@ -24,12 +26,12 @@ export const stats: { icon: string; big: string; small: string }[] = [
 
 /** Six entry points into the four core services. */
 export const homeServices: HomeService[] = [
-  { icon: "book", name: "Bookkeeping", blurb: "Daily transactions, reconciliations and ledger management.", href: "/services/accounting#bookkeeping" },
-  { icon: "calculator", name: "GST & Taxation", blurb: "Registration, return filing and reconciliation.", href: "/services/taxation#gst" },
-  { icon: "doc", name: "TDS & TCS", blurb: "Calculation, filing and compliance.", href: "/services/taxation#tds" },
-  { icon: "bars", name: "Accounts Finalization", blurb: "Balance sheet, P&L and MIS reporting.", href: "/services/accounting#finalisation" },
-  { icon: "people", name: "Payroll", blurb: "Salary processing and compliance.", href: "/services/taxation#statutory" },
-  { icon: "scales", name: "Legal & Advisory", blurb: "ROC, licences, agreements and business support.", href: "/services/legal" },
+  { icon: "book", name: "Bookkeeping", tone: "sky", blurb: "Daily transactions, reconciliations and ledger management.", href: "/services/accounting#bookkeeping" },
+  { icon: "calculator", name: "GST & Taxation", tone: "gold", blurb: "Registration, return filing and reconciliation.", href: "/services/taxation#gst" },
+  { icon: "doc", name: "TDS & TCS", tone: "sky", blurb: "Calculation, filing and compliance.", href: "/services/taxation#tds" },
+  { icon: "bars", name: "Accounts Finalization", tone: "sky", blurb: "Balance sheet, P&L and MIS reporting.", href: "/services/accounting#finalisation" },
+  { icon: "people", name: "Payroll", tone: "gold", blurb: "Salary processing and compliance.", href: "/services/taxation#statutory" },
+  { icon: "scales", name: "Legal & Advisory", tone: "gold", blurb: "ROC, licences, agreements and business support.", href: "/services/legal" },
 ];
 
 /** What the travel specialisation actually covers. */

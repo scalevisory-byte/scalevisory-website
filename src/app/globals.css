@@ -7,15 +7,17 @@
   --sky: #10a9e8;
   --font-montserrat: "Montserrat";
   --font-inter: "Inter";
+  --font-playfair: "Playfair Display";
 }
 
 @layer base {
   html { scroll-behavior: smooth; }
   body { @apply bg-paper text-ink font-body antialiased; }
-  h1, h2, h3, h4 { @apply font-display text-navy tracking-tight; }
-  h1 { @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05]; }
-  h2 { @apply text-3xl md:text-4xl font-bold leading-tight; }
-  h3 { @apply text-xl md:text-2xl font-semibold; }
+  h1, h2, h3, h4 { @apply text-navy tracking-tight; }
+  h1 { @apply font-title text-4xl md:text-5xl lg:text-[56px] font-bold leading-[1.08]; }
+  h2 { @apply font-title text-3xl md:text-[40px] font-bold leading-[1.15]; }
+  h3 { @apply font-display text-xl md:text-2xl font-semibold; }
+  h4 { @apply font-display font-semibold; }
   p { @apply leading-relaxed; }
   a { @apply underline-offset-4; }
   :focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
@@ -37,6 +39,11 @@
   .ledger > * { @apply border-t border-line py-5 first:border-t-0; }
   /* Small caps label above a heading. */
   .eyebrow { @apply font-display text-xs font-bold uppercase tracking-[0.18em] text-sky; }
+  /* Eyebrow followed by a short gold rule, as on the reference layout. */
+  .eyebrow-rule { @apply flex items-center gap-3; }
+  .eyebrow-rule::after { @apply block h-px w-9 bg-gold content-[""]; }
+  /* Quiet "see everything" link that sits opposite a section heading. */
+  .see-all { @apply inline-flex shrink-0 items-center gap-2 text-sm font-semibold no-underline transition-colors; }
   .card { @apply rounded-lg border border-line bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky hover:shadow-[0_8px_30px_-12px_rgba(7,53,116,0.25)]; }
   .prose-sv p { @apply mb-4 text-[17px] leading-8 text-ink; }
   .prose-sv h2 { @apply mt-10 mb-3 text-2xl; }

@@ -2,11 +2,12 @@ import Link from "next/link";
 import Shell from "@/components/Shell";
 import HeroCarousel from "@/components/HeroCarousel";
 import Reveal from "@/components/Reveal";
+import Skyline from "@/components/Skyline";
 import Icon from "@/components/Icon";
 import InquiryForm from "@/components/InquiryForm";
 import JsonLd from "@/components/JsonLd";
 import { services } from "@/lib/content/services";
-import { industries, industryHref, getIndustry } from "@/lib/content/industries";
+import { industryHref, getIndustry } from "@/lib/content/industries";
 import { postHref } from "@/lib/content/resources";
 import { publishedPosts } from "@/lib/content/posts";
 import { homeServices, whyPoints, processSteps, specialisations, stats, travelChecklist, firmPoints } from "@/lib/content/home";
@@ -16,55 +17,65 @@ import { site, whatsappLink } from "@/lib/content/site";
 export default function HomePage() {
   const posts = publishedPosts.slice(0, 3);
   const travel = getIndustry("travel-agencies")!;
+  /* Eight on the homepage; "View all industries" carries the full list. */
+  const homeIndustries = ["travel-agencies", "retail", "trading", "infrastructure",
+    "hospitality", "services", "startups", "smes"].map((slug) => getIndustry(slug)!);
 
   return (
     <Shell>
       <HeroCarousel />
 
-      {/* ── Stats strip ─────────────────────────────────────────────────── */}
-      <section className="border-y border-line bg-white">
-        <div className="wrap grid divide-y divide-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
-          {stats.map((st, i) => (
-            <div
-              key={st.big}
-              className={`flex items-center gap-4 py-7 sm:px-6 lg:border-l lg:border-line ${i === 0 ? "lg:border-l-0 lg:pl-0" : ""}`}
-            >
-              <span className="shrink-0 text-navy"><Icon name={st.icon} className="h-9 w-9" strokeWidth={1.4} /></span>
-              <div>
-                <p className="font-display text-lg font-bold text-navy md:text-xl">{st.big}</p>
-                <p className="mt-0.5 text-sm text-muted">{st.small}</p>
+      {/* ── Stats ───────────────────────────────────────────────────────────
+          A card lifted over the seam between the hero and the section below,
+          rather than a full-bleed band — it is what ties the two together. */}
+      <section className="relative z-10 -mt-8 md:-mt-10">
+        <div className="wrap">
+          <div className="grid divide-y divide-line rounded-xl border border-line bg-white shadow-[0_18px_50px_-24px_rgba(7,53,116,0.45)] sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
+            {stats.map((st, i) => (
+              <div
+                key={st.big}
+                className={`flex items-center gap-4 px-6 py-6 sm:border-t-0 lg:border-l lg:border-line ${i === 0 ? "lg:border-l-0" : ""} ${i === 2 ? "sm:border-t sm:border-line lg:border-t-0" : ""} ${i === 3 ? "sm:border-t sm:border-line lg:border-t-0" : ""} ${i === 1 ? "sm:border-l sm:border-line" : ""}`}
+              >
+                <span className="shrink-0 text-navy"><Icon name={st.icon} className="h-9 w-9" strokeWidth={1.4} /></span>
+                <div className="min-w-0">
+                  <p className="font-display text-lg font-bold leading-tight text-navy">{st.big}</p>
+                  <p className="mt-1 text-sm leading-5 text-muted">{st.small}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── Services ────────────────────────────────────────────────────── */}
-      <section className="bg-[#F5F8FC] py-16 md:py-24" id="services">
+      <section className="bg-[#F5F8FC] pb-16 pt-16 md:pb-24 md:pt-20" id="services">
         <div className="wrap">
           <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <div className="max-w-2xl">
-                <p className="eyebrow text-muted">Our services</p>
+            <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+              <div>
+                <p className="eyebrow eyebrow-rule text-gold">Our services</p>
                 <h2 className="mt-3">Complete Accounting Solutions</h2>
-                <p className="mt-4 text-lg text-muted">
-                  End-to-end financial, tax and compliance support across four core services — so the books, the
-                  filings and the decisions all sit with one team.
-                </p>
               </div>
-              <Link href="/services" className="btn-ghost shrink-0">View all services →</Link>
+              <Link href="/services" className="see-all group mb-1 text-navy hover:text-sky">
+                View all services
+                <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+              </Link>
             </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
             {homeServices.map((s, i) => (
               <Reveal key={s.name} delay={(i % 3) * 60}>
-                <Link href={s.href} className="card group block h-full no-underline">
-                  <span className="text-navy transition-colors group-hover:text-sky">
-                    <Icon name={s.icon} className="h-7 w-7" strokeWidth={1.5} />
+                <Link href={s.href} className="card group block h-full p-5 no-underline">
+                  <span
+                    className={`inline-flex h-11 w-11 items-center justify-center rounded-lg ${
+                      s.tone === "gold" ? "bg-gold-soft text-gold" : "bg-sky-soft text-navy"
+                    }`}
+                  >
+                    <Icon name={s.icon} className="h-6 w-6" strokeWidth={1.5} />
                   </span>
-                  <h3 className="mt-4 text-base text-navy group-hover:text-sky">{s.name}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{s.blurb}</p>
+                  <h3 className="mt-4 text-base leading-snug text-navy group-hover:text-sky">{s.name}</h3>
+                  <p className="mt-1.5 text-sm leading-6 text-muted">{s.blurb}</p>
                   <span className="mt-4 inline-block text-sm font-semibold text-navy group-hover:text-sky">
                     Learn more →
                   </span>
@@ -72,36 +83,48 @@ export default function HomePage() {
               </Reveal>
             ))}
           </div>
-
-          <Reveal>
-            <div className="mt-10">
-              <Link href="/services" className="btn-ghost">View All Services →</Link>
-            </div>
-          </Reveal>
         </div>
       </section>
 
       {/* ── Industries ──────────────────────────────────────────────────── */}
-      <section className="bg-white py-16 md:py-24" id="industries">
-        <div className="wrap">
+      <section className="relative overflow-hidden bg-navy-deep py-16 text-white md:py-20" id="industries">
+        <Skyline className="pointer-events-none absolute inset-x-0 bottom-0 h-44 w-full opacity-[0.06]" />
+        <div className="wrap relative">
           <Reveal>
-            <div className="max-w-2xl">
-              <p className="eyebrow text-muted">Industries</p>
-              <h2 className="mt-3">Industries We Understand</h2>
-              <p className="mt-4 text-lg text-muted">
-                The services are the same; what differs is where the mistakes get made. These are the sectors we work
-                in most.
-              </p>
+            <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+              <div>
+                <p className="eyebrow eyebrow-rule text-gold">Industries</p>
+                <h2 className="mt-3 !text-white">Industries We Understand</h2>
+              </div>
+              <Link
+                href="/industries"
+                className="see-all group mb-1 rounded-md border border-white/25 px-4 py-2.5 text-white hover:border-white hover:bg-white/10"
+              >
+                View all industries
+                <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+              </Link>
             </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {industries.map((ind, i) => (
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {homeIndustries.map((ind, i) => (
               <Reveal key={ind.slug} delay={(i % 4) * 60}>
-                <Link href={industryHref(ind)} className="card group flex h-full flex-col no-underline">
-                  <h3 className="text-base text-navy group-hover:text-sky">{ind.name}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{ind.short}</p>
-                  <span className="mt-4 text-sm font-semibold text-navy group-hover:text-sky">Read more →</span>
+                <Link
+                  href={industryHref(ind)}
+                  className="group flex h-full items-center gap-3.5 rounded-lg bg-white p-4 no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_36px_-16px_rgba(0,0,0,0.5)]"
+                >
+                  <span className="shrink-0 text-navy transition-colors group-hover:text-sky">
+                    <Icon name={ind.icon} className="h-7 w-7" strokeWidth={1.4} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display text-[15px] font-bold leading-tight text-navy group-hover:text-sky">
+                      {ind.cardName ?? ind.name}
+                    </span>
+                    <span className="mt-1 block text-[13px] leading-5 text-muted">{ind.covers}</span>
+                  </span>
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-navy text-[13px] text-white transition-colors group-hover:bg-sky group-hover:text-navy-deep">
+                    →
+                  </span>
                 </Link>
               </Reveal>
             ))}

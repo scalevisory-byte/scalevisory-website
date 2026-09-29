@@ -39,7 +39,12 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    eyebrow: ["Accounting"],
+    eyebrow: ["Accounting", "Taxation", "Legal", "Business Consultancy"],
+    features: [
+      { icon: "clock", title: "Reliable Support", body: "On time, every time" },
+      { icon: "people", title: "Practical Advice", body: "For real business needs" },
+      { icon: "bars", title: "Long-Term Partnership", body: "Beyond just compliance" },
+    ],
     title: "Complete Accounting.",
     titleSecondLine: "Clear Numbers,",
     accent: "Better Decisions.",
@@ -153,7 +158,7 @@ export default function HeroCarousel() {
       )}
 
       <div className="wrap relative py-10 md:py-14 lg:min-h-[520px]">
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-10">
           <div className="grid lg:col-span-6">
             {slides.map((s, i) => (
               <div
@@ -165,26 +170,28 @@ export default function HeroCarousel() {
                 aria-hidden={i !== index}
               >
                 <p className={`flex flex-wrap items-center gap-x-2.5 gap-y-1 font-display text-[11px] font-bold uppercase tracking-[0.16em] md:text-xs ${s.tone === "dark" ? "text-sky" : "text-gold"}`}>
+                  {/* The separator trails its word, so a wrap never starts a
+                      line with a stray pipe. */}
                   {s.eyebrow.map((e, n) => (
-                    <span key={e} className="flex items-center gap-x-2.5">
-                      {n > 0 && <span className="opacity-40">|</span>}
+                    <span key={e} className="flex items-center gap-x-2.5 whitespace-nowrap">
                       {e}
+                      {n < s.eyebrow.length - 1 && <span className="opacity-40">|</span>}
                     </span>
                   ))}
                 </p>
 
-                <h1 className={`mt-4 ${s.tone === "dark" ? "!text-white" : "text-navy"}`}>
+                <h1 className={`mt-5 ${s.tone === "dark" ? "!text-white" : "text-navy"}`}>
                   {s.title}
-                  {(s.titleSecondLine || s.accent) && (
+                  {s.titleSecondLine && (<><br />{s.titleSecondLine}</>)}
+                  {s.accent && (
                     <>
                       <br />
-                      {s.titleSecondLine}
-                      {s.accent && <> <span className={s.tone === "dark" ? "text-sky" : "text-gold"}>{s.accent}</span></>}
+                      <span className={s.tone === "dark" ? "text-sky" : "text-gold"}>{s.accent}</span>
                     </>
                   )}
                 </h1>
 
-                <p className={`mt-5 max-w-xl text-lg leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted"}`}>{s.body}</p>
+                <p className={`mt-5 max-w-[34rem] text-[17px] leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted"}`}>{s.body}</p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link href="/contact" className={`group ${s.tone === "dark" ? "btn-sky" : "btn-primary"}`} tabIndex={i === index ? 0 : -1}>
@@ -204,18 +211,33 @@ export default function HeroCarousel() {
                 </div>
 
                 {s.features && (
-                  <ul className="mt-9 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                    {s.features.map((f) => (
-                      <li key={f.title}>
-                        <span className={s.tone === "dark" ? "text-sky" : "text-navy"}>
-                          <Icon name={f.icon} className="h-6 w-6" strokeWidth={1.5} />
+                  <ul
+                    className={`mt-8 grid gap-x-4 gap-y-6 sm:grid-cols-2 ${
+                      s.features.length === 3 ? "lg:grid-cols-3" : "xl:grid-cols-4"
+                    }`}
+                  >
+                    {s.features.map((f, n) => (
+                      <li
+                        key={f.title}
+                        className={`flex items-start gap-2.5 ${
+                          n > 0
+                            ? s.tone === "dark"
+                              ? "sm:border-l sm:border-white/15 sm:pl-3.5"
+                              : "sm:border-l sm:border-line sm:pl-3.5"
+                            : ""
+                        }`}
+                      >
+                        <span className={`shrink-0 ${s.tone === "dark" ? "text-sky" : "text-navy"}`}>
+                          <Icon name={f.icon} className="mt-0.5 h-6 w-6" strokeWidth={1.4} />
                         </span>
-                        <p className={`mt-2 font-display text-sm font-bold ${s.tone === "dark" ? "text-white" : "text-navy"}`}>
-                          {f.title}
-                        </p>
-                        <p className={`mt-0.5 text-xs leading-5 ${s.tone === "dark" ? "text-white/65" : "text-muted"}`}>
-                          {f.body}
-                        </p>
+                        <div className="min-w-0">
+                          <p className={`font-display text-[12px] font-bold leading-tight tracking-tight ${s.tone === "dark" ? "text-white" : "text-navy"}`}>
+                            {f.title}
+                          </p>
+                          <p className={`mt-0.5 text-[11.5px] leading-5 ${s.tone === "dark" ? "text-white/65" : "text-muted"}`}>
+                            {f.body}
+                          </p>
+                        </div>
                       </li>
                     ))}
                   </ul>

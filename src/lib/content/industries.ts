@@ -10,6 +10,12 @@ export interface Industry {
   slug: string;
   name: string;
   short: string;
+  /** Who the sector covers, in three or four words — the homepage card line. */
+  covers: string;
+  /** Shorter label for the compact homepage card, where the full name wraps. */
+  cardName?: string;
+  /** Line icon from Icon.tsx, used on the homepage cards. */
+  icon: string;
   intro: string;
   /** Sector-specific issues we see repeatedly — not generic marketing copy. */
   challenges: string[];
@@ -26,6 +32,9 @@ export const industries: Industry[] = [
     slug: "travel-agencies",
     href: "/travel-agency-accounting",
     name: "Travel Agencies & Tour Operators",
+    cardName: "Travel & Tourism",
+    covers: "Travel agents, tour operators, hotels",
+    icon: "plane",
     short: "TCS on overseas packages, GST on commission, supplier ledgers that never tie out.",
     intro:
       "Travel is one of the few sectors where the accounting is genuinely different: money moves through you that is not your revenue, tax applies on a margin you have to compute, and every booking touches three ledgers. We handle a number of travel businesses and know where the mistakes are made.",
@@ -48,6 +57,8 @@ export const industries: Industry[] = [
   {
     slug: "trading",
     name: "Trading & Distribution",
+    covers: "Wholesalers, distributors, import/export",
+    icon: "box",
     short: "Stock, credit and margin — the three things that decide whether a trading business makes money.",
     intro:
       "Trading margins are thin enough that small leaks matter. The accounting has to keep stock, debtors and purchase rates under continuous watch rather than discovering the position at year-end.",
@@ -68,6 +79,8 @@ export const industries: Industry[] = [
   {
     slug: "retail",
     name: "Retail",
+    covers: "Retailers, showrooms, traders",
+    icon: "bag",
     short: "High transaction volume, cash handling and multi-counter or multi-branch control.",
     intro:
       "Retail generates more transactions than any other small business, much of it in cash and across counters or branches. The control question is not whether the books balance but whether every sale reached them.",
@@ -88,6 +101,9 @@ export const industries: Industry[] = [
   {
     slug: "services",
     name: "Service Businesses",
+    cardName: "Professional Services",
+    covers: "CA firms, consultants, service businesses",
+    icon: "person",
     short: "Time, retainers and receivables — revenue you have earned but not yet collected.",
     intro:
       "Service businesses carry their risk in receivables and in unbilled work. The accounting has to make both visible monthly, not annually.",
@@ -108,6 +124,8 @@ export const industries: Industry[] = [
   {
     slug: "startups",
     name: "Startups",
+    covers: "Growing startups and new businesses",
+    icon: "rocket",
     short: "Getting the structure, the registrations and the first-year compliance right the first time.",
     intro:
       "Most startup accounting problems are founding decisions that were cheap to get right and expensive to unwind: the wrong entity form, a cap table recorded informally, registrations taken late.",
@@ -128,6 +146,8 @@ export const industries: Industry[] = [
   {
     slug: "smes",
     name: "SMEs & Family Businesses",
+    covers: "Established and growing businesses",
+    icon: "people",
     short: "Businesses that have outgrown informal management but not yet built systems.",
     intro:
       "The common pattern: turnover has grown several times over, but the way decisions are made and recorded has not changed since the business was a third of its size. That is a systems problem, and it is fixable.",
@@ -148,6 +168,9 @@ export const industries: Industry[] = [
   {
     slug: "infrastructure",
     name: "Infrastructure & Construction",
+    cardName: "Infrastructure",
+    covers: "Construction, contractors, infra companies",
+    icon: "crane",
     short: "Project-wise costing, retention money, running bills and long payment cycles.",
     intro:
       "Construction and infrastructure work is accounted project by project, not month by month. Revenue is certified in stages, retention is held back for months, and sub-contractor bills arrive out of sequence — so the books only tell the truth if they are kept that way.",
@@ -170,6 +193,9 @@ export const industries: Industry[] = [
   {
     slug: "hospitality",
     name: "Hotels & Hospitality",
+    cardName: "Hospitality",
+    covers: "Hotels, resorts, restaurants",
+    icon: "hotel",
     short: "Daily covers, multiple revenue heads, high cash volume and thin margins.",
     intro:
       "Hospitality runs on volume and small margins across several revenue heads at once — rooms, food and beverage, banquets, bar. Each carries its own tax treatment, and the cash side needs watching daily rather than monthly.",
@@ -192,6 +218,8 @@ export const industries: Industry[] = [
   {
     slug: "professionals",
     name: "Professional Practices",
+    covers: "Doctors, architects, consultants",
+    icon: "briefcase",
     short: "Doctors, architects, consultants and other practices with personal and practice income mixed.",
     intro:
       "Professional practices usually need less bookkeeping and more tax structure: multiple income heads, presumptive-taxation decisions, and a clean line between personal and practice money.",
@@ -212,6 +240,8 @@ export const industries: Industry[] = [
   {
     slug: "other",
     name: "Other Industries",
+    covers: "Manufacturing, education, logistics and more",
+    icon: "sector",
     short: "Manufacturing, construction, education, logistics and everything not listed above.",
     intro:
       "The four core services apply to any business; only the emphasis changes. If your sector is not listed, the first conversation is about what is specific to it — we will tell you honestly whether we have done that work before.",
