@@ -30,7 +30,7 @@ export default function Header() {
           scrolled ? "h-16" : "h-20"
         }`}
       >
-        <Logo className={`w-auto transition-[height] duration-300 ${scrolled ? "h-9 md:h-10" : "h-10 md:h-11"}`} />
+        <Logo className={`w-auto transition-[height] duration-300 ${scrolled ? "h-10 md:h-11" : "h-12 md:h-14"}`} />
         <nav className="hidden items-center gap-5 xl:flex" aria-label="Main">
           {nav.map((n) => (
             <Link

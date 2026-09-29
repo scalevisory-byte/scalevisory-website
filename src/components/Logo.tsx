@@ -8,7 +8,8 @@ import { asset } from "@/lib/basePath";
  * The lockup already contains the wordmark, the "Accounting | Taxation | Legal"
  * line and the tagline, so no text is set alongside it. `light` swaps in the
  * all-white version for dark backgrounds, matching the firm's own creatives.
- * Both files are transparent PNGs trimmed to the artwork.
+ * Both files are transparent PNGs trimmed to the artwork, re-cut from the
+ * owner's original at 1280px by `scripts/build-logo-assets.py`.
  */
 export default function Logo({
   light = false,
@@ -22,8 +23,8 @@ export default function Logo({
       <img
         src={asset(light ? "/logo-white.png" : "/logo.png")}
         alt="Scale Visory — Accounting, Taxation, Legal. Balancing The Unbalanced."
-        width={900}
-        height={187}
+        width={1280}
+        height={268}
         className={`${className} w-auto`}
       />
     </Link>
