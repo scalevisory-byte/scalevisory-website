@@ -34,6 +34,8 @@ const slides: Slide[] = [
     titleSecondLine: "The",
     accent: "Unbalanced",
     body: "Reliable financial, tax and compliance solutions that help businesses stay organised, compliant and ready to grow.",
+    image: "/hero/office.jpg",
+    imageAlt: "",
     visual: "dashboard",
     whatsapp: "Hi Scale Visory, I'd like to book a free consultation.",
   },
@@ -112,22 +114,25 @@ export default function HeroCarousel() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* Photographic backdrop, when one has been supplied for the slide. */}
+      {/* Photographic backdrop for the right-hand panel, where one is supplied.
+          Hidden below lg, where the column layout stacks and the drawn
+          composition reads better at narrow widths. */}
       {slides.map((s, i) =>
         s.image ? (
           <div
             key={`bg-${s.title}`}
-            className={`slide absolute inset-0 ${i === index ? "is-active" : ""}`}
+            className={`slide absolute inset-y-0 right-0 hidden w-[62%] lg:block ${i === index ? "is-active" : ""}`}
             aria-hidden="true"
           >
-            <img src={asset(s.image)} alt="" className="h-full w-full object-cover" />
-            {/* Keeps the headline legible over any photograph. */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
+            <img src={asset(s.image)} alt="" className="h-full w-full object-cover object-center" />
+            {/* Feathers the photograph into the page rather than ending on a hard edge. */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/25 to-transparent" />
+            <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white to-transparent" />
           </div>
         ) : null
       )}
 
-      <div className="wrap relative py-10 md:py-14">
+      <div className="wrap relative py-10 md:py-14 lg:min-h-[520px]">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="grid lg:col-span-6">
             {slides.map((s, i) => (
@@ -181,9 +186,8 @@ export default function HeroCarousel() {
             ))}
           </div>
 
-          {/* Drawn composition — hidden when a photograph is supplying the scene. */}
-          {!hasPhoto && (
-            <div className="lg:col-span-6">
+          {/* Drawn composition. On lg the photograph takes over, so this hides. */}
+          <div className={hasPhoto ? "lg:hidden" : "lg:col-span-6"}>
               <div className="grid mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none">
                 {slides.map((s, i) => (
                   <div
@@ -195,8 +199,7 @@ export default function HeroCarousel() {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Dots, centred under the hero. */}
