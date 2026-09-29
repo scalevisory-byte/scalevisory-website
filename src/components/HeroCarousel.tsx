@@ -15,9 +15,18 @@ interface SlideFeature {
   body: string;
 }
 
+interface SlideCta {
+  label: string;
+  href: string;
+  /** Opens in a new tab — used for the partner ventures on their own domains. */
+  external?: boolean;
+}
+
 interface Slide {
   /** "dark" puts the slide on navy with white type; default is the light treatment. */
   tone?: "light" | "dark";
+  /** Overrides "Book a free consultation" → /contact on slides that belong elsewhere. */
+  cta?: SlideCta;
   /** Optional four-up row beneath the buttons. */
   features?: SlideFeature[];
   /** Rendered with pipe separators, like the printed lockup. */
@@ -37,8 +46,14 @@ interface Slide {
   whatsapp: string;
 }
 
+/**
+ * Every slide is dark: navy ground, white type, sky accent. The two slides
+ * with a photograph run it behind the type with a scrim over it, so the
+ * picture reads as atmosphere rather than as a thing competing with the words.
+ */
 const slides: Slide[] = [
   {
+    tone: "dark",
     eyebrow: ["Accounting", "Taxation", "Legal", "Business Consultancy"],
     features: [
       { icon: "clock", title: "Reliable Support", body: "On time, every time" },
@@ -55,6 +70,7 @@ const slides: Slide[] = [
     whatsapp: "Hi Scale Visory, I'd like to discuss my accounting requirements.",
   },
   {
+    tone: "dark",
     eyebrow: ["Taxation", "Compliance"],
     title: "Stay Compliant. Stay Focused.",
     titleSecondLine: "",
@@ -64,6 +80,7 @@ const slides: Slide[] = [
     whatsapp: "Hi Scale Visory, I need help with GST / income tax compliance.",
   },
   {
+    tone: "dark",
     eyebrow: ["Business Consultancy"],
     title: "Your Business Deserves",
     titleSecondLine: "More Than Just",
@@ -73,6 +90,42 @@ const slides: Slide[] = [
     whatsapp: "Hi Scale Visory, I'd like to know about business consultancy.",
   },
   {
+    tone: "dark",
+    eyebrow: ["Specialisation", "Travel"],
+    title: "Specialized Accounting",
+    titleSecondLine: "for",
+    accent: "Travel Agents.",
+    body: "Tickets, hotels, packages, agent commissions, TCS and GST — travel accounting works differently, and we handle the whole of it for you.",
+    image: "/hero/travel.jpg",
+    imageAlt: "",
+    visual: "dashboard",
+    cta: { label: "Explore travel accounting", href: "/travel-agency-accounting" },
+    whatsapp: "Hi Scale Visory, I run a travel agency and need help with accounting and GST/TCS.",
+  },
+  {
+    tone: "dark",
+    eyebrow: ["Payment Recovery"],
+    title: "Money You Have Earned",
+    titleSecondLine: "But Not Yet",
+    accent: "Collected.",
+    body: "Overdue invoices pursued through a documented, escalating process — carried out by our partner venture Artha at artharecovery.in.",
+    visual: "recovery",
+    cta: { label: "Visit artharecovery.in", href: "https://artharecovery.in", external: true },
+    whatsapp: "Hi Scale Visory, I'd like to discuss recovering overdue payments.",
+  },
+  {
+    tone: "dark",
+    eyebrow: ["Careers"],
+    title: "Build Your Career",
+    titleSecondLine: "in Accounts",
+    accent: "and Tax.",
+    body: "Openings at Scale Visory are listed on Zynta Jobs — the place to apply if you want to learn this work properly and grow with the firm.",
+    visual: "careers",
+    cta: { label: "See openings on Zynta Jobs", href: "https://zyntajobs.in", external: true },
+    whatsapp: "Hi Scale Visory, I'd like to know about openings at the firm.",
+  },
+  {
+    tone: "dark",
     eyebrow: ["Accounting", "Taxation", "Legal", "Business Consultancy"],
     title: "Balancing",
     titleSecondLine: "The",
@@ -82,6 +135,7 @@ const slides: Slide[] = [
     whatsapp: "Hi Scale Visory, I'd like to book a free consultation.",
   },
 ];
+
 
 export default function HeroCarousel() {
   const [index, setIndex] = useState(0);
@@ -141,11 +195,15 @@ export default function HeroCarousel() {
             aria-hidden="true"
           >
             <img src={asset(s.image)} alt="" className="h-full w-full object-cover object-center" />
-            {/* Feathers the photograph into the slide's own ground. */}
+            {/* Feathers the photograph into the slide's own ground, then drops
+                an even scrim over the whole of it so the right-hand side stays
+                dark enough for the navy section to read as one surface. */}
             {s.tone === "dark" ? (
               <>
-                <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/25 to-transparent" />
+                <div className="absolute inset-0 bg-navy/38" />
+                <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/45 to-navy/15" />
                 <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-navy to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-navy to-transparent" />
               </>
             ) : (
               <>
@@ -194,15 +252,36 @@ export default function HeroCarousel() {
                 <p className={`mt-5 max-w-[34rem] text-[17px] leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted"}`}>{s.body}</p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href="/contact" className={`group ${s.tone === "dark" ? "btn-sky" : "btn-primary"}`} tabIndex={i === index ? 0 : -1}>
-                    Book a free consultation
-                    <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
-                  </Link>
+                  {s.cta?.external ? (
+                    <a
+                      href={s.cta.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`group ${s.tone === "dark" ? "btn-sky" : "btn-primary"}`}
+                      tabIndex={i === index ? 0 : -1}
+                    >
+                      {s.cta.label}
+                      <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                    </a>
+                  ) : (
+                    <Link
+                      href={s.cta?.href ?? "/contact"}
+                      className={`group ${s.tone === "dark" ? "btn-sky" : "btn-primary"}`}
+                      tabIndex={i === index ? 0 : -1}
+                    >
+                      {s.cta?.label ?? "Book a free consultation"}
+                      <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                    </Link>
+                  )}
                   <a
                     href={whatsappLink(s.whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`btn bg-white text-navy hover:text-sky ${s.tone === "dark" ? "border border-white/20" : "border border-line hover:border-sky"}`}
+                    className={
+                      s.tone === "dark"
+                        ? "btn border border-white/25 bg-white/5 text-white hover:border-white hover:bg-white/10"
+                        : "btn border border-line bg-white text-navy hover:border-sky hover:text-sky"
+                    }
                     tabIndex={i === index ? 0 : -1}
                   >
                     <WhatsAppIcon />
@@ -287,7 +366,11 @@ export default function HeroCarousel() {
         type="button"
         onClick={prev}
         aria-label="Previous slide"
-        className="absolute left-3 top-1/2 hidden -translate-y-1/2 rounded-full border border-line bg-white p-3 text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] transition-colors hover:border-sky hover:text-sky md:block xl:left-6"
+        className={`absolute left-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:left-6 ${
+          dark
+            ? "border-white/25 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white/20"
+            : "border-line bg-white text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] hover:border-sky hover:text-sky"
+        }`}
       >
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M12 4 L6 10 L12 16" />
@@ -297,7 +380,11 @@ export default function HeroCarousel() {
         type="button"
         onClick={next}
         aria-label="Next slide"
-        className="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-full border border-line bg-white p-3 text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] transition-colors hover:border-sky hover:text-sky md:block xl:right-6"
+        className={`absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:right-6 ${
+          dark
+            ? "border-white/25 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white/20"
+            : "border-line bg-white text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] hover:border-sky hover:text-sky"
+        }`}
       >
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M8 4 L14 10 L8 16" />

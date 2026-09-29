@@ -3,13 +3,14 @@
  *
  * The project has no photography and the brand rules rule out stock office
  * shots, so each slide carries a drawn composition instead: a finance
- * dashboard, a compliance calendar, a reporting stack, an advisory review.
+ * dashboard, a compliance calendar, a reporting stack, an advisory review,
+ * a receivables ageing, a list of openings.
  * Vector, so it stays crisp at any size and weighs almost nothing.
  *
  * Depth comes from layered cards and a single soft shadow rather than
  * gradients. Decorative only — aria-hidden, and every figure is illustrative.
  */
-export type VisualKind = "dashboard" | "calendar" | "reports" | "advisory";
+export type VisualKind = "dashboard" | "calendar" | "reports" | "advisory" | "recovery" | "careers";
 
 const NAVY = "#073574";
 const DEEP = "#052651";
@@ -354,9 +355,108 @@ function Advisory() {
   );
 }
 
+function Recovery() {
+  /* Receivables ageing: the older the bucket, the longer and warmer the bar. */
+  const ageing = [
+    { days: "0–30", w: 78, fill: SKY, op: 0.55 },
+    { days: "31–60", w: 112, fill: SKY, op: 0.9 },
+    { days: "61–90", w: 142, fill: GOLD, op: 0.75 },
+    { days: "90+", w: 166, fill: GOLD, op: 1 },
+  ];
+  return (
+    <Svg>
+      <rect x="44" y="64" width="150" height="120" rx="14" fill={GOLD} opacity="0.1" />
+
+      {/* ageing of what is outstanding */}
+      <g filter="url(#sv-lift)">
+        <rect x="48" y="48" width="330" height="268" rx="16" fill="#FFFFFF" />
+        <rect x="78" y="80" width="130" height="12" rx="6" fill={NAVY} />
+        <rect x="78" y="102" width="72" height="7" rx="3.5" fill={GOLD} />
+        <line x1="78" y1="126" x2="348" y2="126" stroke={LINE} />
+        {ageing.map((r, i) => (
+          <g key={r.days} transform={`translate(78, ${152 + i * 30})`}>
+            <rect width="42" height="7" rx="3.5" fill={NAVY} opacity=".3" />
+            <rect x="56" y="-3" width={r.w} height="13" rx="6.5" fill={r.fill} opacity={r.op} />
+          </g>
+        ))}
+        <line x1="78" y1="258" x2="348" y2="258" stroke={LINE} />
+        <rect x="78" y="272" width="96" height="10" rx="5" fill={NAVY} />
+        <rect x="256" y="272" width="92" height="10" rx="5" fill={GOLD} />
+      </g>
+
+      {/* the escalation ladder — reminder, notice, next step */}
+      <g filter="url(#sv-lift)" transform="translate(316, 148)">
+        <rect width="218" height="236" rx="16" fill={DEEP} />
+        <rect x="28" y="30" width="104" height="10" rx="5" fill="#FFFFFF" opacity=".9" />
+        <rect x="28" y="48" width="62" height="6" rx="3" fill={SKY} />
+        <line x1="28" y1="72" x2="190" y2="72" stroke="#FFFFFF" strokeOpacity=".12" />
+        {[0, 1, 2, 3].map((i) => (
+          <g key={i} transform={`translate(28, ${90 + i * 36})`}>
+            {i < 2 ? (
+              <>
+                <circle cx="9" cy="9" r="9" fill={SKY} />
+                <path d="M5 9 l3 3 l5 -5.5" fill="none" stroke={DEEP} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+              </>
+            ) : (
+              <circle cx="9" cy="9" r="8" fill="none" stroke="#FFFFFF" strokeOpacity=".3" strokeWidth="1.7" />
+            )}
+            <rect x="28" y="4" width={130 - i * 18} height="7" rx="3.5" fill="#FFFFFF" opacity={i < 2 ? 0.45 : 0.2} />
+            <rect x="28" y="16" width={70 - i * 10} height="5" rx="2.5" fill="#FFFFFF" opacity=".14" />
+          </g>
+        ))}
+      </g>
+    </Svg>
+  );
+}
+
+function Careers() {
+  return (
+    <Svg>
+      <rect x="52" y="76" width="150" height="116" rx="14" fill={SKY} opacity="0.12" />
+
+      {/* openings list */}
+      <g filter="url(#sv-lift)">
+        <rect x="56" y="58" width="306" height="300" rx="16" fill="#FFFFFF" />
+        <rect x="86" y="90" width="118" height="12" rx="6" fill={NAVY} />
+        <rect x="86" y="112" width="68" height="7" rx="3.5" fill={SKY} />
+        <line x1="86" y1="138" x2="332" y2="138" stroke={LINE} />
+        {[0, 1, 2, 3].map((i) => (
+          <g key={i} transform={`translate(86, ${156 + i * 50})`}>
+            <rect width="34" height="34" rx="9" fill={i === 0 ? SKY : NAVY} opacity={i === 0 ? 0.16 : 0.08} />
+            <rect x="9" y="12" width="16" height="11" rx="2.5" fill="none" stroke={i === 0 ? SKY : NAVY} strokeWidth="1.8" />
+            <path d="M13 12 v-2.5 a1.5 1.5 0 0 1 1.5 -1.5 h5 a1.5 1.5 0 0 1 1.5 1.5 V12" fill="none" stroke={i === 0 ? SKY : NAVY} strokeWidth="1.8" />
+            <rect x="48" y="4" width={132 - i * 20} height="8" rx="4" fill={NAVY} opacity=".75" />
+            <rect x="48" y="19" width={92 - i * 12} height="6" rx="3" fill={NAVY} opacity=".22" />
+            <rect x="196" y="9" width="38" height="16" rx="8" fill={GREEN} opacity=".16" />
+          </g>
+        ))}
+      </g>
+
+      {/* apply card */}
+      <g filter="url(#sv-lift)" transform="translate(338, 192)">
+        <rect width="198" height="206" rx="16" fill={DEEP} />
+        <circle cx="46" cy="60" r="22" fill={SKY} opacity=".22" />
+        <circle cx="46" cy="53" r="9" fill="#FFFFFF" opacity=".85" />
+        <path d="M30 76 a16 16 0 0 1 32 0" fill="#FFFFFF" opacity=".85" />
+        <rect x="82" y="44" width="80" height="9" rx="4.5" fill="#FFFFFF" opacity=".85" />
+        <rect x="82" y="60" width="52" height="6" rx="3" fill={SKY} />
+        <line x1="28" y1="104" x2="170" y2="104" stroke="#FFFFFF" strokeOpacity=".12" />
+        {[0, 1].map((i) => (
+          <g key={i} transform={`translate(28, ${122 + i * 22})`}>
+            <rect width={i === 0 ? 142 : 104} height="7" rx="3.5" fill="#FFFFFF" opacity=".2" />
+          </g>
+        ))}
+        <rect x="28" y="168" width="142" height="26" rx="8" fill={SKY} />
+      </g>
+    </Svg>
+  );
+}
+
 export default function HeroVisual({ kind }: { kind: VisualKind }) {
   if (kind === "calendar") return <Calendar />;
   if (kind === "reports") return <Reports />;
   if (kind === "advisory") return <Advisory />;
+  if (kind === "recovery") return <Recovery />;
+  if (kind === "careers") return <Careers />;
   return <Dashboard />;
 }
