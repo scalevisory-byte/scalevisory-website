@@ -1,172 +1,356 @@
 /**
- * The hero artwork.
+ * Hero artwork.
  *
- * The project has no photography and none could be sourced, so rather than drop
- * in a stock office photo — which the brand rules rule out — each slide gets a
- * drawn composition: a finance dashboard, a compliance calendar, a reporting
- * stack. Vector, so it stays crisp at any size and costs almost nothing to load.
+ * The project has no photography and the brand rules rule out stock office
+ * shots, so each slide carries a drawn composition instead: a finance
+ * dashboard, a compliance calendar, a reporting stack, an advisory review.
+ * Vector, so it stays crisp at any size and weighs almost nothing.
  *
- * Decorative only: aria-hidden, and every figure is illustrative rather than a
- * claim about the firm's numbers.
+ * Depth comes from layered cards and a single soft shadow rather than
+ * gradients. Decorative only — aria-hidden, and every figure is illustrative.
  */
 export type VisualKind = "dashboard" | "calendar" | "reports" | "advisory";
 
 const NAVY = "#073574";
 const DEEP = "#052651";
 const SKY = "#10A9E8";
-const LINE = "#D9E0EA";
+const LINE = "#E3E9F1";
+const SOFT = "#F4F7FB";
 const GOLD = "#B8912F";
+const GREEN = "#16916B";
 
-function Frame({ children }: { children: React.ReactNode }) {
+function Defs() {
   return (
-    <svg viewBox="0 0 520 420" className="h-auto w-full" role="presentation" aria-hidden="true">
-      <defs>
-        <linearGradient id="sv-panel" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#FFFFFF" />
-          <stop offset="1" stopColor="#F2F6FB" />
-        </linearGradient>
-      </defs>
-      {children}
-    </svg>
+    <defs>
+      <filter id="sv-lift" x="-25%" y="-25%" width="150%" height="150%">
+        <feDropShadow dx="0" dy="10" stdDeviation="14" floodColor="#052651" floodOpacity="0.16" />
+      </filter>
+      <filter id="sv-lift-sm" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="5" stdDeviation="7" floodColor="#052651" floodOpacity="0.13" />
+      </filter>
+      <linearGradient id="sv-area" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor={SKY} stopOpacity="0.30" />
+        <stop offset="1" stopColor={SKY} stopOpacity="0" />
+      </linearGradient>
+      <linearGradient id="sv-bar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor={SKY} />
+        <stop offset="1" stopColor="#0B7FB4" />
+      </linearGradient>
+      <linearGradient id="sv-navybar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#2A5FA8" />
+        <stop offset="1" stopColor={NAVY} />
+      </linearGradient>
+    </defs>
+  );
+}
+
+const Svg = ({ children }: { children: React.ReactNode }) => (
+  <svg viewBox="0 0 560 440" className="h-auto w-full" role="presentation" aria-hidden="true">
+    <Defs />
+    {children}
+  </svg>
+);
+
+/** Small upward/downward delta chip. */
+function Delta({ x, y, up = true, w = 34 }: { x: number; y: number; up?: boolean; w?: number }) {
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      <rect width={w} height="16" rx="8" fill={up ? GREEN : GOLD} opacity="0.12" />
+      <path
+        d={up ? "M9 11 L12 6 L15 11" : "M9 6 L12 11 L15 6"}
+        fill="none"
+        stroke={up ? GREEN : GOLD}
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <rect x="19" y="6" width={w - 26} height="4.5" rx="2.25" fill={up ? GREEN : GOLD} opacity="0.55" />
+    </g>
   );
 }
 
 function Dashboard() {
-  const bars = [38, 56, 44, 72, 64, 88];
+  const bars = [34, 50, 42, 66, 58, 82];
   return (
-    <Frame>
-      <rect x="24" y="28" width="472" height="330" rx="14" fill="url(#sv-panel)" stroke={LINE} />
-      <rect x="24" y="28" width="472" height="44" rx="14" fill={NAVY} />
-      <rect x="24" y="58" width="472" height="14" fill={NAVY} />
-      <circle cx="48" cy="50" r="4" fill={SKY} />
-      <circle cx="64" cy="50" r="4" fill="#ffffff" opacity=".45" />
-      <circle cx="80" cy="50" r="4" fill="#ffffff" opacity=".25" />
-      {[0, 1, 2].map((i) => (
-        <g key={i} transform={`translate(${48 + i * 142}, 96)`}>
-          <rect width="126" height="70" rx="9" fill="#FFFFFF" stroke={LINE} />
-          <rect x="14" y="16" width="52" height="7" rx="3.5" fill={LINE} />
-          <rect x="14" y="33" width="74" height="13" rx="4" fill={NAVY} />
-          <rect x="14" y="54" width="34" height="6" rx="3" fill={SKY} opacity=".6" />
+    <Svg>
+      {/* Accent card peeking out behind, for depth */}
+      <rect x="392" y="60" width="142" height="92" rx="12" fill={SKY} opacity="0.14" />
+
+      <g filter="url(#sv-lift)">
+        <rect x="28" y="36" width="470" height="352" rx="16" fill="#FFFFFF" />
+        {/* Window chrome */}
+        <path d="M28 52a16 16 0 0 1 16-16h438a16 16 0 0 1 16 16v26H28z" fill={NAVY} />
+        <circle cx="52" cy="57" r="4" fill={SKY} />
+        <circle cx="68" cy="57" r="4" fill="#FFFFFF" opacity=".4" />
+        <circle cx="84" cy="57" r="4" fill="#FFFFFF" opacity=".22" />
+        <rect x="108" y="53" width="86" height="8" rx="4" fill="#FFFFFF" opacity=".55" />
+        <rect x="404" y="50" width="70" height="14" rx="7" fill={SKY} opacity=".85" />
+
+        {/* KPI tiles */}
+        {[
+          { label: 62, value: 84, up: true },
+          { label: 48, value: 70, up: true },
+          { label: 56, value: 62, up: false },
+        ].map((k, i) => (
+          <g key={i} transform={`translate(${50 + i * 148}, 96)`}>
+            <rect width="132" height="82" rx="10" fill={SOFT} stroke={LINE} />
+            <rect x="16" y="16" width={k.label} height="6" rx="3" fill={NAVY} opacity=".3" />
+            <rect x="16" y="32" width={k.value} height="14" rx="4" fill={NAVY} />
+            <Delta x={16} y={56} up={k.up} />
+            {/* sparkline */}
+            <path
+              d={`M64 68 L74 62 L84 65 L94 56 L104 59 L116 ${k.up ? 50 : 62}`}
+              fill="none"
+              stroke={k.up ? GREEN : GOLD}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity=".85"
+            />
+          </g>
+        ))}
+
+        {/* Combo chart */}
+        <g transform="translate(50, 194)">
+          <rect width="280" height="174" rx="10" fill="#FFFFFF" stroke={LINE} />
+          <rect x="18" y="18" width="92" height="7" rx="3.5" fill={NAVY} opacity=".35" />
+          {[0, 1, 2, 3].map((i) => (
+            <line key={i} x1="18" y1={54 + i * 26} x2="262" y2={54 + i * 26} stroke={LINE} />
+          ))}
+          <path
+            d="M34 132 L74 116 L114 122 L154 96 L194 104 L238 74 L238 158 L34 158 Z"
+            fill="url(#sv-area)"
+          />
+          {bars.map((h, i) => (
+            <rect
+              key={i}
+              x={26 + i * 36}
+              y={158 - h}
+              width="17"
+              height={h}
+              rx="4"
+              fill={i === bars.length - 1 ? "url(#sv-bar)" : "url(#sv-navybar)"}
+              opacity={i === bars.length - 1 ? 1 : 0.22 + i * 0.13}
+            />
+          ))}
+          <path
+            d="M34 132 L74 116 L114 122 L154 96 L194 104 L238 74"
+            fill="none"
+            stroke={GOLD}
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {[[74, 116], [154, 96], [238, 74]].map(([cx, cy]) => (
+            <circle key={cx} cx={cx} cy={cy} r="3.6" fill="#FFFFFF" stroke={GOLD} strokeWidth="2" />
+          ))}
         </g>
-      ))}
-      <rect x="48" y="188" width="268" height="150" rx="9" fill="#FFFFFF" stroke={LINE} />
-      {bars.map((h, i) => (
-        <rect key={i} x={70 + i * 40} y={318 - h} width="20" height={h} rx="4" fill={i === bars.length - 1 ? SKY : NAVY} opacity={i === bars.length - 1 ? 1 : 0.24 + i * 0.1} />
-      ))}
-      <path d="M70 268 L110 250 L150 258 L190 226 L230 234 L270 200" fill="none" stroke={GOLD} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="334" y="188" width="138" height="150" rx="9" fill="#FFFFFF" stroke={LINE} />
-      <circle cx="403" cy="247" r="38" fill="none" stroke={LINE} strokeWidth="14" />
-      <circle cx="403" cy="247" r="38" fill="none" stroke={NAVY} strokeWidth="14" strokeDasharray="175 240" strokeLinecap="round" transform="rotate(-90 403 247)" />
-      <circle cx="403" cy="247" r="38" fill="none" stroke={SKY} strokeWidth="14" strokeDasharray="60 240" strokeLinecap="round" transform="rotate(62 403 247)" />
-      {[0, 1, 2].map((i) => (
-        <g key={i} transform={`translate(360, ${300 + i * 13})`}>
-          <rect width="7" height="7" rx="2" fill={i === 0 ? NAVY : i === 1 ? SKY : LINE} />
-          <rect x="14" y="1.5" width="56" height="5" rx="2.5" fill={LINE} />
+
+        {/* Donut + legend */}
+        <g transform="translate(346, 194)">
+          <rect width="152" height="174" rx="10" fill="#FFFFFF" stroke={LINE} />
+          <rect x="18" y="18" width="64" height="7" rx="3.5" fill={NAVY} opacity=".35" />
+          <g transform="translate(76, 84)">
+            <circle r="38" fill="none" stroke={SOFT} strokeWidth="15" />
+            <circle r="38" fill="none" stroke={NAVY} strokeWidth="15" strokeDasharray="128 239" strokeLinecap="round" transform="rotate(-90)" />
+            <circle r="38" fill="none" stroke={SKY} strokeWidth="15" strokeDasharray="68 239" strokeLinecap="round" transform="rotate(103)" />
+            <circle r="38" fill="none" stroke={GOLD} strokeWidth="15" strokeDasharray="26 239" strokeLinecap="round" transform="rotate(207)" />
+          </g>
+          {[NAVY, SKY, GOLD].map((c, i) => (
+            <g key={c} transform={`translate(22, ${138 + i * 13})`}>
+              <circle cx="4" cy="4" r="4" fill={c} />
+              <rect x="14" y="1.5" width={78 - i * 16} height="5" rx="2.5" fill={NAVY} opacity=".2" />
+            </g>
+          ))}
         </g>
-      ))}
-      <rect x="150" y="372" width="220" height="12" rx="6" fill={NAVY} opacity=".07" />
-    </Frame>
+      </g>
+
+      {/* Floating status chip */}
+      <g filter="url(#sv-lift-sm)" transform="translate(372, 336)">
+        <rect width="166" height="56" rx="12" fill="#FFFFFF" />
+        <circle cx="30" cy="28" r="14" fill={GREEN} opacity=".12" />
+        <path d="M24 28 l4 4 l8 -9" fill="none" stroke={GREEN} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="54" y="17" width="88" height="7" rx="3.5" fill={NAVY} opacity=".7" />
+        <rect x="54" y="31" width="58" height="6" rx="3" fill={NAVY} opacity=".22" />
+      </g>
+    </Svg>
   );
 }
 
 function Calendar() {
-  const marks = [3, 7, 12, 15, 21, 26];
+  const due = { 4: "gst", 9: "tds", 15: "roc", 18: "gst", 24: "tds", 27: "roc" } as Record<number, string>;
+  const tone: Record<string, string> = { gst: NAVY, tds: SKY, roc: GOLD };
   return (
-    <Frame>
-      <rect x="52" y="34" width="416" height="318" rx="14" fill="url(#sv-panel)" stroke={LINE} />
-      <rect x="52" y="34" width="416" height="52" rx="14" fill={NAVY} />
-      <rect x="52" y="72" width="416" height="14" fill={NAVY} />
-      <rect x="78" y="54" width="92" height="10" rx="5" fill="#ffffff" opacity=".85" />
-      <rect x="384" y="54" width="58" height="10" rx="5" fill={SKY} />
-      {Array.from({ length: 28 }).map((_, i) => {
-        const col = i % 7;
-        const row = Math.floor(i / 7);
-        const on = marks.includes(i);
-        return (
-          <g key={i} transform={`translate(${80 + col * 52}, ${112 + row * 52})`}>
-            <rect width="38" height="38" rx="7" fill={on ? NAVY : "#FFFFFF"} stroke={on ? NAVY : LINE} />
-            <rect x="10" y="16" width="18" height="5" rx="2.5" fill={on ? "#FFFFFF" : LINE} opacity={on ? 0.9 : 1} />
-            {on && <circle cx="31" cy="7" r="3.5" fill={SKY} />}
-          </g>
-        );
-      })}
-      <g transform="translate(300, 300)">
-        <rect width="150" height="42" rx="9" fill="#FFFFFF" stroke={SKY} />
-        <circle cx="26" cy="21" r="9" fill={SKY} opacity=".18" />
-        <path d="M22 21 l3 3 l6 -7" fill="none" stroke={SKY} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <rect x="46" y="12" width="84" height="6" rx="3" fill={NAVY} opacity=".7" />
-        <rect x="46" y="25" width="56" height="5" rx="2.5" fill={LINE} />
+    <Svg>
+      <rect x="58" y="252" width="150" height="150" rx="14" fill={SKY} opacity="0.12" />
+
+      <g filter="url(#sv-lift)">
+        <rect x="62" y="34" width="400" height="336" rx="16" fill="#FFFFFF" />
+        <path d="M62 50a16 16 0 0 1 16-16h368a16 16 0 0 1 16 16v44H62z" fill={NAVY} />
+        <rect x="88" y="55" width="104" height="10" rx="5" fill="#FFFFFF" opacity=".9" />
+        <rect x="88" y="72" width="62" height="6" rx="3" fill={SKY} />
+        <g transform="translate(392, 54)">
+          <rect width="44" height="26" rx="8" fill="#FFFFFF" opacity=".14" />
+          <path d="M16 13 h12 M23 8 l5 5 l-5 5" stroke="#FFFFFF" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+
+        {/* weekday rail */}
+        {Array.from({ length: 7 }).map((_, i) => (
+          <rect key={i} x={92 + i * 48} y={112} width="20" height="5" rx="2.5" fill={NAVY} opacity=".25" />
+        ))}
+
+        {Array.from({ length: 28 }).map((_, i) => {
+          const col = i % 7;
+          const row = Math.floor(i / 7);
+          const kind = due[i];
+          const c = kind ? tone[kind] : null;
+          return (
+            <g key={i} transform={`translate(${88 + col * 48}, ${130 + row * 50})`}>
+              <rect width="36" height="38" rx="9" fill={c ? c : SOFT} stroke={c ? c : LINE} />
+              <rect x="10" y="12" width="16" height="5" rx="2.5" fill={c ? "#FFFFFF" : NAVY} opacity={c ? 0.95 : 0.3} />
+              {c && <rect x="10" y="24" width="16" height="4" rx="2" fill="#FFFFFF" opacity=".55" />}
+            </g>
+          );
+        })}
+
+        {/* legend */}
+        <g transform="translate(88, 336)">
+          {["gst", "tds", "roc"].map((k, i) => (
+            <g key={k} transform={`translate(${i * 92}, 0)`}>
+              <rect width="10" height="10" rx="3" fill={tone[k]} />
+              <rect x="18" y="2.5" width={52 - i * 6} height="5.5" rx="2.75" fill={NAVY} opacity=".25" />
+            </g>
+          ))}
+        </g>
       </g>
-    </Frame>
+
+      {/* Reminder toast */}
+      <g filter="url(#sv-lift-sm)" transform="translate(304, 322)">
+        <rect width="206" height="64" rx="13" fill="#FFFFFF" />
+        <circle cx="34" cy="32" r="16" fill={SKY} opacity=".12" />
+        <path d="M34 23 v9 l6 4" stroke={SKY} strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="34" cy="32" r="11" fill="none" stroke={SKY} strokeWidth="2" />
+        <rect x="62" y="19" width="118" height="8" rx="4" fill={NAVY} opacity=".7" />
+        <rect x="62" y="34" width="76" height="6" rx="3" fill={NAVY} opacity=".22" />
+        <rect x="146" y="33" width="34" height="8" rx="4" fill={GREEN} opacity=".5" />
+      </g>
+    </Svg>
   );
 }
 
 function Reports() {
   return (
-    <Frame>
-      <g transform="translate(58, 72) rotate(-4)">
-        <rect width="290" height="300" rx="10" fill="#FFFFFF" stroke={LINE} opacity=".65" />
+    <Svg>
+      {/* stacked sheets behind */}
+      <g filter="url(#sv-lift-sm)">
+        <rect x="70" y="86" width="286" height="312" rx="12" fill="#FFFFFF" opacity=".55" transform="rotate(-5 213 242)" />
       </g>
-      <g transform="translate(86, 56) rotate(2)">
-        <rect width="290" height="300" rx="10" fill="#FFFFFF" stroke={LINE} opacity=".85" />
+      <g filter="url(#sv-lift-sm)">
+        <rect x="92" y="70" width="286" height="312" rx="12" fill="#FFFFFF" opacity=".8" transform="rotate(-2 235 226)" />
       </g>
-      <g transform="translate(118, 42)">
-        <rect width="300" height="312" rx="12" fill="url(#sv-panel)" stroke={LINE} />
-        <rect x="28" y="30" width="118" height="12" rx="6" fill={NAVY} />
-        <rect x="28" y="52" width="70" height="7" rx="3.5" fill={SKY} />
-        <rect x="28" y="80" width="244" height="1" fill={LINE} />
-        {[0, 1, 2, 3, 4].map((i) => (
-          <g key={i} transform={`translate(28, ${98 + i * 34})`}>
-            <rect width="150" height="7" rx="3.5" fill={LINE} />
-            <rect x="196" width="48" height="7" rx="3.5" fill={i === 4 ? NAVY : LINE} opacity={i === 4 ? 1 : 0.85} />
+
+      <g filter="url(#sv-lift)">
+        <rect x="116" y="46" width="300" height="330" rx="14" fill="#FFFFFF" />
+        <rect x="146" y="80" width="126" height="13" rx="6.5" fill={NAVY} />
+        <rect x="146" y="104" width="74" height="7" rx="3.5" fill={SKY} />
+        <rect x="336" y="78" width="52" height="24" rx="8" fill={GREEN} opacity=".12" />
+        <path d="M350 90 l4 4 l8 -9" fill="none" stroke={GREEN} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+
+        <line x1="146" y1="132" x2="388" y2="132" stroke={LINE} />
+        {/* statement rows */}
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <g key={i} transform={`translate(146, ${150 + i * 32})`}>
+            <rect width={i === 5 ? 96 : 118 - (i % 3) * 18} height="7" rx="3.5" fill={NAVY} opacity={i === 5 ? 0.85 : 0.18} />
+            <rect x="176" width="66" height="7" rx="3.5" fill={i === 5 ? NAVY : NAVY} opacity={i === 5 ? 0.85 : 0.3} />
+            {i < 5 && <line x1="0" y1="20" x2="242" y2="20" stroke={LINE} />}
           </g>
         ))}
-        <rect x="28" y="268" width="244" height="1" fill={LINE} />
-        <rect x="28" y="280" width="92" height="9" rx="4.5" fill={NAVY} />
-        <rect x="204" y="280" width="68" height="9" rx="4.5" fill={GOLD} />
+        <line x1="146" y1="336" x2="388" y2="336" stroke={NAVY} strokeWidth="1.5" />
+        <rect x="146" y="348" width="82" height="9" rx="4.5" fill={NAVY} />
+        <rect x="318" y="348" width="70" height="9" rx="4.5" fill={GOLD} />
       </g>
-      <g transform="translate(372, 250)">
-        <rect width="92" height="110" rx="10" fill={DEEP} />
-        <rect x="14" y="16" width="64" height="24" rx="5" fill="#ffffff" opacity=".9" />
+
+      {/* calculator */}
+      <g filter="url(#sv-lift-sm)" transform="translate(396, 252)">
+        <rect width="106" height="132" rx="13" fill={DEEP} />
+        <rect x="16" y="18" width="74" height="28" rx="6" fill="#FFFFFF" opacity=".92" />
+        <rect x="58" y="28" width="26" height="8" rx="4" fill={NAVY} opacity=".5" />
         {Array.from({ length: 9 }).map((_, i) => (
-          <rect key={i} x={14 + (i % 3) * 23} y={52 + Math.floor(i / 3) * 19} width="17" height="13" rx="3" fill={i === 8 ? SKY : "#ffffff"} opacity={i === 8 ? 1 : 0.28} />
+          <rect
+            key={i}
+            x={16 + (i % 3) * 27}
+            y={58 + Math.floor(i / 3) * 24}
+            width="21"
+            height="17"
+            rx="4"
+            fill={i === 8 ? SKY : "#FFFFFF"}
+            opacity={i === 8 ? 1 : 0.24}
+          />
         ))}
       </g>
-    </Frame>
+    </Svg>
   );
 }
 
 function Advisory() {
   return (
-    <Frame>
-      <rect x="40" y="44" width="300" height="300" rx="14" fill="url(#sv-panel)" stroke={LINE} />
-      <rect x="68" y="76" width="104" height="11" rx="5.5" fill={NAVY} />
-      <rect x="68" y="97" width="62" height="7" rx="3.5" fill={SKY} />
-      <path d="M68 300 L124 258 L180 272 L236 214 L292 176" fill="none" stroke={NAVY} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M68 300 L124 258 L180 272 L236 214 L292 176 L292 312 L68 312 Z" fill={SKY} opacity=".1" />
-      {[[124, 258], [180, 272], [236, 214]].map(([cx, cy]) => (
-        <circle key={cx} cx={cx} cy={cy} r="4.5" fill="#FFFFFF" stroke={NAVY} strokeWidth="2.5" />
-      ))}
-      <circle cx="292" cy="176" r="6.5" fill={SKY} stroke="#FFFFFF" strokeWidth="3" />
-      <rect x="68" y="130" width="224" height="1" fill={LINE} />
-      {[0, 1].map((i) => (
-        <g key={i} transform={`translate(68, ${146 + i * 26})`}>
-          <rect width="9" height="9" rx="2" fill={i === 0 ? NAVY : SKY} />
-          <rect x="18" y="1.5" width="120" height="6" rx="3" fill={LINE} />
+    <Svg>
+      <rect x="40" y="70" width="150" height="120" rx="14" fill={SKY} opacity="0.12" />
+
+      <g filter="url(#sv-lift)">
+        <rect x="44" y="52" width="316" height="316" rx="16" fill="#FFFFFF" />
+        <rect x="74" y="84" width="112" height="12" rx="6" fill={NAVY} />
+        <rect x="74" y="106" width="66" height="7" rx="3.5" fill={SKY} />
+        <Delta x={296} y={84} up w={38} />
+
+        {/* growth chart with area */}
+        <g transform="translate(0, 10)">
+          <path d="M74 300 L132 256 L190 270 L248 210 L306 166 L330 152 L330 312 L74 312 Z" fill="url(#sv-area)" />
+          <path
+            d="M74 300 L132 256 L190 270 L248 210 L306 166 L330 152"
+            fill="none"
+            stroke={NAVY}
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {[[132, 256], [190, 270], [248, 210]].map(([cx, cy]) => (
+            <circle key={cx} cx={cx} cy={cy} r="4.5" fill="#FFFFFF" stroke={NAVY} strokeWidth="2.5" />
+          ))}
+          <circle cx="330" cy="152" r="7" fill={SKY} stroke="#FFFFFF" strokeWidth="3" />
+          <line x1="74" y1="312" x2="330" y2="312" stroke={LINE} />
         </g>
-      ))}
-      <g transform="translate(300, 150)">
-        <rect width="180" height="196" rx="12" fill={DEEP} />
-        <rect x="24" y="28" width="86" height="9" rx="4.5" fill="#ffffff" opacity=".9" />
-        <rect x="24" y="46" width="52" height="6" rx="3" fill={SKY} />
-        {[0, 1, 2, 3].map((i) => (
-          <g key={i} transform={`translate(24, ${74 + i * 30})`}>
-            <circle cx="6" cy="6" r="6" fill={i < 2 ? SKY : "#ffffff"} opacity={i < 2 ? 1 : 0.22} />
-            <rect x="20" y="2" width={112 - i * 14} height="7" rx="3.5" fill="#ffffff" opacity=".35" />
+
+        {[0, 1].map((i) => (
+          <g key={i} transform={`translate(74, ${136 + i * 24})`}>
+            <rect width="9" height="9" rx="2.5" fill={i === 0 ? NAVY : SKY} />
+            <rect x="18" y="1.5" width={124 - i * 30} height="6" rx="3" fill={NAVY} opacity=".18" />
           </g>
         ))}
       </g>
-    </Frame>
+
+      {/* action plan panel */}
+      <g filter="url(#sv-lift)" transform="translate(324, 130)">
+        <rect width="196" height="232" rx="16" fill={DEEP} />
+        <rect x="26" y="30" width="94" height="10" rx="5" fill="#FFFFFF" opacity=".9" />
+        <rect x="26" y="48" width="58" height="6" rx="3" fill={SKY} />
+        <line x1="26" y1="72" x2="170" y2="72" stroke="#FFFFFF" strokeOpacity=".12" />
+        {[0, 1, 2, 3].map((i) => (
+          <g key={i} transform={`translate(26, ${88 + i * 34})`}>
+            {i < 2 ? (
+              <>
+                <circle cx="8" cy="8" r="8" fill={SKY} />
+                <path d="M4.5 8 l2.5 2.5 l4.5 -5" fill="none" stroke={DEEP} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </>
+            ) : (
+              <circle cx="8" cy="8" r="7.2" fill="none" stroke="#FFFFFF" strokeOpacity=".3" strokeWidth="1.6" />
+            )}
+            <rect x="24" y="3" width={122 - i * 16} height="7" rx="3.5" fill="#FFFFFF" opacity={i < 2 ? 0.42 : 0.2} />
+            <rect x="24" y="15" width={62 - i * 8} height="5" rx="2.5" fill="#FFFFFF" opacity=".14" />
+          </g>
+        ))}
+      </g>
+    </Svg>
   );
 }
 

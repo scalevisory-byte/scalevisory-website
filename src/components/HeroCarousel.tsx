@@ -116,11 +116,11 @@ export default function HeroCarousel() {
       <div className="wrap relative py-12 md:py-16">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
           {/* Slides share one grid cell and cross-fade, so height never jumps. */}
-          <div className="grid lg:col-span-7">
+          <div className="grid lg:col-span-6">
             {slides.map((s, i) => (
               <div
                 key={s.title}
-                className={`slide col-start-1 row-start-1 ${i === index ? "is-active" : ""}`}
+                className={`slide col-start-1 row-start-1 flex flex-col justify-center ${i === index ? "is-active" : ""}`}
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`${i + 1} of ${slides.length}`}
@@ -151,8 +151,8 @@ export default function HeroCarousel() {
             ))}
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="grid mx-auto w-full max-w-md lg:max-w-none">
+          <div className="lg:col-span-6">
+            <div className="grid mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none">
               {slides.map((s, i) => (
                 <div
                   key={s.visual}
