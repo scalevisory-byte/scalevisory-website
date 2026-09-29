@@ -98,6 +98,45 @@ export const services: Service[] = [
         ],
       },
       {
+        id: "virtual-accounting",
+        title: "Virtual Accounting",
+        summary:
+          "Your accounts function run off-site by our team, on your own system — for businesses that need the work done properly without carrying a full-time accounts department.",
+        items: [
+          "Remote access to your Tally, Zoho or Busy — we work in your file, not a copy",
+          "Agreed cycle for entries, reconciliation and reporting, with a named person responsible",
+          "Documents collected and filed digitally, so there is an audit trail for every entry",
+          "Month-end close and MIS delivered on a fixed date",
+          "Handover pack if you later bring the function in-house",
+        ],
+      },
+      {
+        id: "staffing-support",
+        title: "Accounting Staffing & Support",
+        summary:
+          "Trained accounts people to fill a gap in your team — a resignation, a busy season, or a role you are still hiring for.",
+        items: [
+          "Accounts staff placed with your business, screened on real work rather than only a CV",
+          "Short-term cover for leave, notice periods and year-end load",
+          "Supervision and review of your existing accounts staff",
+          "Training on your processes so the person is useful from the first week",
+        ],
+      },
+      {
+        id: "forensic-accounting",
+        title: "Forensic Accounting",
+        summary:
+          "Investigation where something is already suspected — funds diverted, stock missing, purchases inflated — carried out so the findings stand up later.",
+        items: [
+          "Scope agreed in writing, and the work kept confidential to whoever commissions it",
+          "Transaction tracing across ledgers, bank statements and supporting documents",
+          "Vendor, purchase and expense examination for inflation, duplication and related parties",
+          "Stock and cash reconstruction for the period in question",
+          "Written report with the quantum, the evidence behind each finding, and the control that failed",
+          "Coordination with your advocate where the matter is taken further",
+        ],
+      },
+      {
         id: "financial-internal-audit",
         title: "Financial Internal Audit",
         summary:

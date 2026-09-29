@@ -3,8 +3,8 @@
  *
  * Every card here points at a section that actually exists in services.ts —
  * nothing on this page advertises work the firm has not described elsewhere.
- * Where a requested card had no backing content (Virtual Accounting, Staffing,
- * Forensic Accounting) it was left out rather than invented; see README.
+ * Virtual Accounting, Accounting Staffing & Support and Forensic Accounting
+ * were confirmed by the owner and now have their own sections under Accounting.
  */
 
 export interface HomeService {
@@ -24,6 +24,7 @@ export const homeServices: HomeService[] = [
   { name: "Legal & Advisory", blurb: "Incorporation, agreements, licences and demand notices, documented properly.", href: "/services/legal" },
   { name: "Audit Support", blurb: "Internal audit of ledgers, stock, cash and controls before anyone else looks.", href: "/services/accounting#financial-internal-audit" },
   { name: "Compliance Management", blurb: "ROC filings, registers and licence renewals tracked on one calendar.", href: "/services/legal#roc" },
+  { name: "Virtual Accounting", blurb: "Your whole accounts function run off-site by our team, on your own system.", href: "/services/accounting#virtual-accounting" },
   { name: "Business Consultancy", blurb: "Health check, profit, cash flow and a monthly review with your department heads.", href: "/services/business-consultancy" },
 ];
 
@@ -68,10 +69,22 @@ export const specialisations: Specialisation[] = [
     cta: "Visit artharecovery.in",
   },
   {
-    name: "Fraud Detection & Control Review",
-    body: "Pattern analysis across sales, purchases and payments, surprise cash counts and an internal control gap report — for multi-branch, field-staff and high-cash operations.",
-    href: "/services/accounting#financial-internal-audit",
-    cta: "See Financial Internal Audit",
+    name: "Virtual Accounting",
+    body: "Your accounts function run off-site by our team, working inside your own Tally, Zoho or Busy file — the work done properly without carrying a full-time department.",
+    href: "/services/accounting#virtual-accounting",
+    cta: "See Virtual Accounting",
+  },
+  {
+    name: "Accounting Staffing & Support",
+    body: "Trained accounts people to fill a gap — a resignation, a busy season, or a role you are still hiring for — plus supervision and review of the staff you already have.",
+    href: "/services/accounting#staffing-support",
+    cta: "See Staffing & Support",
+  },
+  {
+    name: "Forensic Accounting",
+    body: "Investigation where something is already suspected: transactions traced, stock and cash reconstructed, and a written report with the quantum, the evidence and the control that failed.",
+    href: "/services/accounting#forensic-accounting",
+    cta: "See Forensic Accounting",
   },
   {
     name: "Business Advisory",
@@ -84,11 +97,5 @@ export const specialisations: Specialisation[] = [
     body: "Billing, follow-ups, recurring reports and data flowing between Tally, Zoho, billing and CRM — the repetitive work measured first, then removed.",
     href: "/services/business-consultancy/ai-automation",
     cta: "See AI & Automation",
-  },
-  {
-    name: "Training Institute",
-    body: "Practical accounts and taxation courses taught by working professionals on real client files — for freshers, job-seekers and your own staff.",
-    href: "/training",
-    cta: "See courses",
   },
 ];
