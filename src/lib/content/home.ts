@@ -17,24 +17,37 @@ export interface HomeService {
 /** The four figures shown under the hero. All are claims the site already makes. */
 export const stats: { icon: string; big: string; small: string }[] = [
   { icon: "badge", big: "12+ Years", small: "of professional experience" },
-  { icon: "people", big: "Travel Expertise", small: "Specialised industry knowledge" },
-  { icon: "shield", big: "End-to-End", small: "Accounting & compliance" },
+  { icon: "shieldCheck", big: "Complete Support", small: "Accounting • Tax • Compliance" },
+  { icon: "briefcase", big: "End-to-End", small: "Business financial support" },
   { icon: "pin", big: "Gujarat & Beyond", small: "Serving businesses across India" },
 ];
 
-/** Ten entry points into the four core services. */
+/** Six entry points into the four core services. */
 export const homeServices: HomeService[] = [
-  { icon: "book", name: "Bookkeeping", blurb: "Daily entries, vouchers and masters kept current in Tally, Zoho or Busy.", href: "/services/accounting#bookkeeping" },
-  { icon: "calculator", name: "GST & Taxation", blurb: "Registration, GSTR-1/3B/9, e-invoicing and input credit reconciled to 2B.", href: "/services/taxation#gst" },
-  { icon: "doc", name: "TDS & TCS", blurb: "24Q, 26Q and 27EQ returns, Form 16/16A and default resolution on TRACES.", href: "/services/taxation#tds" },
-  { icon: "bars", name: "Accounts Finalisation", blurb: "Year-end schedules, annexures and coordination with your statutory auditor.", href: "/services/accounting#finalisation" },
-  { icon: "search", name: "Reconciliation", blurb: "Bank, gateway, party and inter-branch balances that agree before you are asked.", href: "/services/accounting#reconciliation" },
-  { icon: "people", name: "Payroll Compliance", blurb: "PF, ESIC and professional tax registration and monthly returns.", href: "/services/taxation#statutory" },
-  { icon: "scales", name: "Legal & Advisory", blurb: "Incorporation, agreements, licences and demand notices, documented properly.", href: "/services/legal" },
-  { icon: "shieldCheck", name: "Audit Support", blurb: "Internal audit of ledgers, stock, cash and controls before anyone else looks.", href: "/services/accounting#financial-internal-audit" },
-  { icon: "calendar", name: "Compliance Management", blurb: "ROC filings, registers and licence renewals tracked on one calendar.", href: "/services/legal#roc" },
-  { icon: "cloud", name: "Virtual Accounting", blurb: "Your whole accounts function run off-site by our team, on your own system.", href: "/services/accounting#virtual-accounting" },
-  { icon: "briefcase", name: "Business Consultancy", blurb: "Health check, profit, cash flow and a monthly review with your department heads.", href: "/services/business-consultancy" },
+  { icon: "book", name: "Bookkeeping", blurb: "Daily transactions, reconciliations and ledger management.", href: "/services/accounting#bookkeeping" },
+  { icon: "calculator", name: "GST & Taxation", blurb: "Registration, return filing and reconciliation.", href: "/services/taxation#gst" },
+  { icon: "doc", name: "TDS & TCS", blurb: "Calculation, filing and compliance.", href: "/services/taxation#tds" },
+  { icon: "bars", name: "Accounts Finalization", blurb: "Balance sheet, P&L and MIS reporting.", href: "/services/accounting#finalisation" },
+  { icon: "people", name: "Payroll", blurb: "Salary processing and compliance.", href: "/services/taxation#statutory" },
+  { icon: "scales", name: "Legal & Advisory", blurb: "ROC, licences, agreements and business support.", href: "/services/legal" },
+];
+
+/** What the travel specialisation actually covers. */
+export const travelChecklist = [
+  "TCS on overseas tours",
+  "GST on service fees",
+  "Supplier & agent reconciliation",
+  "Multiple payment flows",
+  "Accurate reports & MIS",
+  "Compliance on time",
+];
+
+/** The four points a client actually gets from the working relationship. */
+export const firmPoints = [
+  "Regular follow-ups",
+  "Clear communication",
+  "Advisory support",
+  "Documentation and compliance assistance",
 ];
 
 export interface WhyPoint {
@@ -45,12 +58,12 @@ export interface WhyPoint {
 }
 
 export const whyPoints: WhyPoint[] = [
-  { icon: "ledger", title: "Complete Accounting Support", body: "Entries, reconciliation, receivables, MIS and year-end finalisation — one team across the whole cycle, not pieces of it.", },
-  { icon: "calendar", title: "Tax & Compliance Expertise", body: "GST, income tax, TDS and every statutory date on a single calendar, with reminders a week ahead rather than a penalty after.", },
-  { icon: "sector", title: "Industry Understanding", body: "Travel, trading, retail, services and professional practices each break differently. We work to where your sector actually leaks.", },
-  { icon: "clock", title: "Timely Reporting", body: "A monthly close you can read in ten minutes: P&L, balance sheet, cash-flow and a short note on what moved and why.", },
-  { icon: "person", title: "Dedicated Support", body: "You speak to the person who signs off your books, not a call centre — on WhatsApp, on the number at the top of this page.", },
-  { icon: "chart", title: "Business-Focused Advisory", body: "Beyond compliance: margin, cash cycle, pricing and the few changes that move the number most, reviewed every month.", },
+  { icon: "ledger", title: "Complete Accounting Support", body: "Books, reconciliations, compliance and reporting." },
+  { icon: "calendar", title: "Tax & Compliance Expertise", body: "GST, TDS, ROC and statutory requirements." },
+  { icon: "sector", title: "Industry Understanding", body: "Solutions based on the actual business model." },
+  { icon: "clock", title: "Timely Reporting", body: "Accurate reports delivered on time." },
+  { icon: "person", title: "Dedicated Support", body: "A responsive team that understands the business." },
+  { icon: "chart", title: "Business-Focused Advisory", body: "Practical guidance for better financial decisions." },
 ];
 
 export const processSteps = [
@@ -70,41 +83,10 @@ export interface Specialisation {
 
 /** Capabilities that sit alongside the four core services. */
 export const specialisations: Specialisation[] = [
-  {
-    name: "Payment Recovery",
-    body: "Overdue invoices pursued through a documented, escalating process — ledger audit, demand notice, negotiation, then formal escalation. Run by our partner venture Artha.",
-    href: "https://artharecovery.in",
-    external: true,
-    cta: "Visit artharecovery.in",
-  },
-  {
-    name: "Virtual Accounting",
-    body: "Your accounts function run off-site by our team, working inside your own Tally, Zoho or Busy file — the work done properly without carrying a full-time department.",
-    href: "/services/accounting#virtual-accounting",
-    cta: "See Virtual Accounting",
-  },
-  {
-    name: "Accounting Staffing & Support",
-    body: "Trained accounts people to fill a gap — a resignation, a busy season, or a role you are still hiring for — plus supervision and review of the staff you already have.",
-    href: "/services/accounting#staffing-support",
-    cta: "See Staffing & Support",
-  },
-  {
-    name: "Forensic Accounting",
-    body: "Investigation where something is already suspected: transactions traced, stock and cash reconstructed, and a written report with the quantum, the evidence and the control that failed.",
-    href: "/services/accounting#forensic-accounting",
-    cta: "See Forensic Accounting",
-  },
-  {
-    name: "Business Advisory",
-    body: "A monthly review with you and your department heads: numbers against target, an issue log ranked by money at risk, and an action plan carried forward until it closes.",
-    href: "/services/business-consultancy/monthly-business-advisory",
-    cta: "See Monthly Advisory",
-  },
-  {
-    name: "AI & Automation",
-    body: "Billing, follow-ups, recurring reports and data flowing between Tally, Zoho, billing and CRM — the repetitive work measured first, then removed.",
-    href: "/services/business-consultancy/ai-automation",
-    cta: "See AI & Automation",
-  },
+  { name: "Payment Recovery", body: "Overdue invoices pursued through a documented, escalating process.", href: "https://artharecovery.in", external: true, cta: "Visit artharecovery.in" },
+  { name: "Virtual Accounting", body: "Your accounts function run off-site, inside your own Tally, Zoho or Busy file.", href: "/services/accounting#virtual-accounting", cta: "Learn more" },
+  { name: "Accounting Staffing & Support", body: "Trained accounts people to fill a gap, plus review of the staff you have.", href: "/services/accounting#staffing-support", cta: "Learn more" },
+  { name: "Forensic Accounting", body: "Investigation where a loss is already suspected, reported with the evidence.", href: "/services/accounting#forensic-accounting", cta: "Learn more" },
+  { name: "Business Advisory", body: "A monthly review with your department heads and an action plan that closes.", href: "/services/business-consultancy/monthly-business-advisory", cta: "Learn more" },
+  { name: "AI & Automation", body: "Billing, follow-ups and reporting automated on the systems you already run.", href: "/services/business-consultancy/ai-automation", cta: "Learn more" },
 ];

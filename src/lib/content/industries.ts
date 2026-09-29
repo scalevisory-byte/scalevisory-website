@@ -146,6 +146,50 @@ export const industries: Industry[] = [
     services: ["business-consultancy", "accounting", "legal"],
   },
   {
+    slug: "infrastructure",
+    name: "Infrastructure & Construction",
+    short: "Project-wise costing, retention money, running bills and long payment cycles.",
+    intro:
+      "Construction and infrastructure work is accounted project by project, not month by month. Revenue is certified in stages, retention is held back for months, and sub-contractor bills arrive out of sequence — so the books only tell the truth if they are kept that way.",
+    challenges: [
+      "Project-wise costing not maintained, so nobody knows which site made money",
+      "Running account bills and certified revenue recognised in the wrong period",
+      "Retention money and security deposits untracked until they are due",
+      "Sub-contractor and labour payments reconciled late",
+      "GST on works contracts and RCM on specific services applied inconsistently",
+    ],
+    weDo: [
+      "Project-wise books with cost heads, so margin is visible per site",
+      "Revenue recognised against certified bills and work completed",
+      "Retention and deposit register maintained and followed up",
+      "Sub-contractor ledger reconciliation with TDS applied correctly",
+      "Works-contract GST treatment and RCM compliance",
+    ],
+    services: ["accounting", "taxation", "business-consultancy"],
+  },
+  {
+    slug: "hospitality",
+    name: "Hotels & Hospitality",
+    short: "Daily covers, multiple revenue heads, high cash volume and thin margins.",
+    intro:
+      "Hospitality runs on volume and small margins across several revenue heads at once — rooms, food and beverage, banquets, bar. Each carries its own tax treatment, and the cash side needs watching daily rather than monthly.",
+    challenges: [
+      "Room, F&B, banquet and bar revenue not separated, so no head is measurable",
+      "Different GST rates across revenue heads applied inconsistently",
+      "High daily cash collection reaching the books late or partially",
+      "Stock and consumption at the kitchen and bar unreconciled",
+      "Advance bookings and cancellations recorded as revenue too early",
+    ],
+    weDo: [
+      "Revenue split by head with margin reported for each",
+      "GST treatment set per revenue head and applied at billing",
+      "Daily cash reconciliation and surprise counts",
+      "Kitchen and bar stock reconciliation against consumption",
+      "Advances held until the stay or event is delivered",
+    ],
+    services: ["accounting", "taxation", "business-consultancy"],
+  },
+  {
     slug: "professionals",
     name: "Professional Practices",
     short: "Doctors, architects, consultants and other practices with personal and practice income mixed.",

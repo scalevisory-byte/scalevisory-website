@@ -18,7 +18,7 @@ const config: Config = {
         display: ["var(--font-montserrat)", "sans-serif"],
         body: ["var(--font-inter)", "sans-serif"],
       },
-      maxWidth: { wrap: "72rem", prose: "42rem" },
+      maxWidth: { wrap: "80rem", prose: "44rem" },
     },
   },
   plugins: [],

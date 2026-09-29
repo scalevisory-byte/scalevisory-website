@@ -33,12 +33,6 @@ export default function Footer() {
                 <Link className="no-underline hover:text-sky" href={`/services/${s.slug}`}>{s.name}</Link>
               </li>
             ))}
-            <li><Link className="no-underline hover:text-sky" href="/training">Training institute</Link></li>
-            <li>
-              <a className="no-underline hover:text-sky" href="https://artharecovery.in" target="_blank" rel="noopener noreferrer">
-                Payment recovery
-              </a>
-            </li>
           </ul>
         </div>
 
@@ -68,16 +62,21 @@ export default function Footer() {
         <div className="md:col-span-2">
           <h4 className="mb-3 font-display text-sm font-semibold text-white">Quick Links</h4>
           <ul className="space-y-2 text-sm">
-            <li><Link className="no-underline hover:text-sky" href="/services">Services</Link></li>
             <li><Link className="no-underline hover:text-sky" href="/industries">Industries</Link></li>
-            <li><Link className="no-underline hover:text-sky" href="/about">About</Link></li>
-            <li><Link className="no-underline hover:text-sky" href="/contact">Contact</Link></li>
+            <li><Link className="no-underline hover:text-sky" href="/resources">Resources</Link></li>
             <li><Link className="no-underline hover:text-sky" href="/training">Training</Link></li>
+            <li>
+              <a className="no-underline hover:text-sky" href="https://artharecovery.in" target="_blank" rel="noopener noreferrer">
+                Payment Recovery
+              </a>
+            </li>
             <li>
               <a className="no-underline hover:text-sky" href="https://zyntajobs.in" target="_blank" rel="noopener noreferrer">
                 Careers
               </a>
             </li>
+            <li><Link className="no-underline hover:text-sky" href="/about">About</Link></li>
+            <li><Link className="no-underline hover:text-sky" href="/contact">Contact</Link></li>
           </ul>
           <h4 className="mb-3 mt-6 font-display text-sm font-semibold text-white">Contact</h4>
           <p className="text-sm leading-6">{site.address}</p>
@@ -85,6 +84,15 @@ export default function Footer() {
             <a className="no-underline hover:text-sky" href={`tel:${site.phoneRaw}`}>{site.phone}</a>
             <br />
             <a className="no-underline hover:text-sky" href={`mailto:${site.email}`}>{site.email}</a>
+            <br />
+            <a
+              className="no-underline hover:text-sky"
+              href={whatsappLink("Hi Scale Visory, I have a query.")}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </a>
           </p>
           <p className="mt-2 text-sm">{site.hours[0].days}<br />{site.hours[0].time}</p>
         </div>

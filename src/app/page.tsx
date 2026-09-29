@@ -9,7 +9,8 @@ import { services } from "@/lib/content/services";
 import { industries, industryHref, getIndustry } from "@/lib/content/industries";
 import { postHref } from "@/lib/content/resources";
 import { publishedPosts } from "@/lib/content/posts";
-import { homeServices, whyPoints, processSteps, specialisations, stats } from "@/lib/content/home";
+import { homeServices, whyPoints, processSteps, specialisations, stats, travelChecklist, firmPoints } from "@/lib/content/home";
+import { asset } from "@/lib/basePath";
 import { site, whatsappLink } from "@/lib/content/site";
 
 export default function HomePage() {
@@ -55,15 +56,18 @@ export default function HomePage() {
             </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
             {homeServices.map((s, i) => (
-              <Reveal key={s.name} delay={(i % 4) * 60}>
+              <Reveal key={s.name} delay={(i % 3) * 60}>
                 <Link href={s.href} className="card group block h-full no-underline">
                   <span className="text-navy transition-colors group-hover:text-sky">
                     <Icon name={s.icon} className="h-7 w-7" strokeWidth={1.5} />
                   </span>
                   <h3 className="mt-4 text-base text-navy group-hover:text-sky">{s.name}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted">{s.blurb}</p>
+                  <span className="mt-4 inline-block text-sm font-semibold text-navy group-hover:text-sky">
+                    Learn more →
+                  </span>
                 </Link>
               </Reveal>
             ))}
@@ -82,7 +86,7 @@ export default function HomePage() {
         <div className="wrap">
           <Reveal>
             <div className="max-w-2xl">
-              <p className="eyebrow">Sectors</p>
+              <p className="eyebrow text-muted">Industries</p>
               <h2 className="mt-3">Industries We Understand</h2>
               <p className="mt-4 text-lg text-muted">
                 The services are the same; what differs is where the mistakes get made. These are the sectors we work
@@ -105,29 +109,39 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Travel specialisation (one capability among several) ────────── */}
-      <section className="section">
-        <div className="wrap grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
-          <Reveal className="lg:col-span-6">
-            <p className="eyebrow">Specialisation</p>
-            <h2 className="mt-3">Specialized Accounting for Travel Businesses</h2>
-            <p className="mt-4 leading-8 text-muted">
-              Travel accounting involves tickets, hotels, packages, commissions, TCS, GST, supplier reconciliation and
-              several payment flows at once. Money moves through you that is not your revenue, tax applies on a margin
-              you have to compute, and every booking touches three ledgers.
-            </p>
-            <p className="mt-4 leading-8 text-muted">
-              It is one of the sectors we are asked about most — and one where general accounting quietly gets it wrong.
-            </p>
-            <Link href="/travel-agency-accounting" className="btn-primary mt-8">Explore Travel Accounting →</Link>
-          </Reveal>
+      {/* ── Travel specialisation ───────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-navy py-16 text-white md:py-24">
+        <div
+          className="absolute inset-y-0 right-0 hidden w-1/2 lg:block"
+          aria-hidden="true"
+        >
+          <img src={asset("/hero/travel.jpg")} alt="" className="h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/45 to-navy/10" />
+        </div>
 
-          <Reveal className="lg:col-span-6" delay={120}>
-            <ul className="ledger rounded-lg border border-line bg-white px-6">
-              {travel.challenges.map((c) => (
-                <li key={c} className="!py-4 text-sm leading-6">{c}</li>
+        <div className="wrap relative grid gap-10 lg:grid-cols-12">
+          <Reveal className="lg:col-span-6">
+            <p className="eyebrow">Specialization</p>
+            <h2 className="mt-3 text-white">Accounting Built for Travel Businesses</h2>
+            <p className="mt-5 max-w-xl leading-8 text-white/75">
+              Travel accounting is different. We handle tickets, hotels, packages, commissions, TCS, GST, supplier
+              reconciliation and complex payment flows — so travel businesses can focus on growth.
+            </p>
+
+            <ul className="mt-8 grid gap-x-8 gap-y-3.5 sm:grid-cols-2">
+              {travelChecklist.map((c) => (
+                <li key={c} className="flex items-start gap-3 text-sm leading-6 text-white/85">
+                  <span className="mt-0.5 shrink-0 text-sky" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 10.5 L8 14.5 L16 5.5" />
+                    </svg>
+                  </span>
+                  {c}
+                </li>
               ))}
             </ul>
+
+            <Link href="/travel-agency-accounting" className="btn-sky mt-9">Explore Travel Accounting →</Link>
           </Reveal>
         </div>
       </section>
@@ -142,7 +156,7 @@ export default function HomePage() {
             </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {whyPoints.map((p, i) => (
               <Reveal key={p.title} delay={(i % 3) * 70}>
                 <div className="border-t border-white/15 pt-5">
@@ -190,7 +204,7 @@ export default function HomePage() {
             </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {specialisations.map((s, i) => (
               <Reveal key={s.name} delay={(i % 3) * 70}>
                 <div className="card flex h-full flex-col">
@@ -212,33 +226,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Credibility — only what the site already states ─────────────── */}
+      {/* ── A firm, not a portal ────────────────────────────────────────── */}
       <section className="section">
-        <div className="wrap grid gap-10 md:grid-cols-12">
-          <Reveal className="md:col-span-5">
-            <p className="eyebrow">The practice</p>
+        <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-14">
+          <Reveal className="lg:col-span-6">
+            <p className="eyebrow text-muted">The practice</p>
             <h2 className="mt-3">A Firm, Not a Portal</h2>
-            <p className="mt-4 leading-8 text-muted">
-              Scale Visory works out of {site.address.split(",").slice(-3).join(",").trim()}, with clients across
-              Gujarat. {site.years} years of accounting, tax and audit practice sit behind the four services on this site.
+            <p className="mt-5 text-lg leading-8 text-ink">
+              Real people. Real conversations. Real accountability.
             </p>
+            <p className="mt-4 leading-8 text-muted">
+              We work with the systems you already use — Tally, Zoho and Busy — rather than moving you onto ours. You
+              speak to the person who signs off your books, and the work is documented as it goes.
+            </p>
+            <p className="mt-6 text-sm text-muted">{site.address}</p>
           </Reveal>
 
-          <div className="ledger md:col-span-7">
-            {[
-              ["We work in your system", "Tally, Zoho, Busy or Excel — we do not force a migration to bill you for it."],
-              ["Reminders before due dates, not after", "Your compliance calendar lands on WhatsApp a week ahead, every time."],
-              ["Owner-level conversations", "You speak to the person who signs off your books."],
-              ["Advisory and documentation on the legal side", "Representation before courts and authorities is coordinated through empanelled advocates."],
-            ].map(([t, d], i) => (
-              <Reveal key={t} delay={i * 60}>
-                <div>
-                  <h3 className="text-lg">{t}</h3>
-                  <p className="mt-1 text-muted">{d}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal className="lg:col-span-6" delay={100}>
+            <ul className="grid gap-4 sm:grid-cols-2">
+              {firmPoints.map((f) => (
+                <li key={f} className="rounded-lg border border-line bg-white p-5">
+                  <span className="text-sky" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 10.5 L8 14.5 L16 5.5" />
+                    </svg>
+                  </span>
+                  <p className="mt-3 font-display text-sm font-bold text-navy">{f}</p>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </section>
 
@@ -266,21 +283,21 @@ export default function HomePage() {
       <section className="bg-navy-deep py-16 text-white md:py-20">
         <div className="wrap grid gap-8 md:grid-cols-12 md:items-center">
           <Reveal className="md:col-span-7">
-            <h2 className="text-white">Let&apos;s Bring Balance to Your Business.</h2>
+            <h2 className="text-white">Let&apos;s Bring Balance<br className="hidden sm:block" /> to Your Business.</h2>
             <p className="mt-4 max-w-2xl text-lg text-white/75">
-              Talk to us about your accounting, taxation, compliance or business support requirements.
+              Accounting, taxation, compliance and business advisory support built around your business.
             </p>
           </Reveal>
           <Reveal className="md:col-span-5" delay={100}>
             <div className="flex flex-wrap gap-3 md:justify-end">
-              <Link href="/contact" className="btn-sky">Book a Free Consultation</Link>
+              <Link href="/contact" className="btn-sky">Book a free consultation →</Link>
               <a
                 href={whatsappLink("Hi Scale Visory, I'd like to discuss my requirements.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-light"
               >
-                WhatsApp Us
+                WhatsApp us
               </a>
             </div>
           </Reveal>
@@ -291,7 +308,7 @@ export default function HomePage() {
       <section className="section" id="inquiry">
         <div className="wrap grid gap-10 md:grid-cols-12">
           <Reveal className="md:col-span-5">
-            <h2>Tell us where the books stand</h2>
+            <h2>Tell us where the books stand.</h2>
             <p className="mt-3 text-muted">
               A 20-minute call, no charge. We&apos;ll tell you what&apos;s pending, what it costs to fix, and whether
               we&apos;re the right fit.
