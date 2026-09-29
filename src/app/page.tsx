@@ -9,7 +9,7 @@ import { services } from "@/lib/content/services";
 import { industries, industryHref, getIndustry } from "@/lib/content/industries";
 import { postHref } from "@/lib/content/resources";
 import { publishedPosts } from "@/lib/content/posts";
-import { homeServices, whyPoints, processSteps, specialisations } from "@/lib/content/home";
+import { homeServices, whyPoints, processSteps, specialisations, stats } from "@/lib/content/home";
 import { site, whatsappLink } from "@/lib/content/site";
 
 export default function HomePage() {
@@ -21,42 +21,49 @@ export default function HomePage() {
       <HeroCarousel />
 
       {/* ── Stats strip ─────────────────────────────────────────────────── */}
-      <section className="border-b border-line bg-white">
+      <section className="border-y border-line bg-white">
         <div className="wrap grid divide-y divide-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
-          {[
-            [`${site.years} Years`, "Professional experience"],
-            ["Travel Expertise", "Specialised industry knowledge"],
-            ["End-to-End", "Accounting & compliance"],
-            ["Gujarat & Beyond", "Serving businesses across India"],
-          ].map(([big, small], i) => (
-            <div key={big} className={`py-7 sm:px-6 lg:border-l lg:border-line ${i === 0 ? "lg:border-l-0 lg:pl-0" : ""}`}>
-              <p className="font-display text-xl font-bold text-navy md:text-2xl">{big}</p>
-              <p className="mt-1 text-sm text-muted">{small}</p>
+          {stats.map((st, i) => (
+            <div
+              key={st.big}
+              className={`flex items-center gap-4 py-7 sm:px-6 lg:border-l lg:border-line ${i === 0 ? "lg:border-l-0 lg:pl-0" : ""}`}
+            >
+              <span className="shrink-0 text-navy"><Icon name={st.icon} className="h-9 w-9" strokeWidth={1.4} /></span>
+              <div>
+                <p className="font-display text-lg font-bold text-navy md:text-xl">{st.big}</p>
+                <p className="mt-0.5 text-sm text-muted">{st.small}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── Services ────────────────────────────────────────────────────── */}
-      <section className="section" id="services">
+      <section className="bg-[#F5F8FC] py-16 md:py-24" id="services">
         <div className="wrap">
           <Reveal>
-            <div className="max-w-2xl">
-              <p className="eyebrow">What we do</p>
-              <h2 className="mt-3">Complete Accounting Solutions</h2>
-              <p className="mt-4 text-lg text-muted">
-                End-to-end financial, tax and compliance support across four core services — so the books, the filings
-                and the decisions all sit with one team.
-              </p>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div className="max-w-2xl">
+                <p className="eyebrow text-muted">Our services</p>
+                <h2 className="mt-3">Complete Accounting Solutions</h2>
+                <p className="mt-4 text-lg text-muted">
+                  End-to-end financial, tax and compliance support across four core services — so the books, the
+                  filings and the decisions all sit with one team.
+                </p>
+              </div>
+              <Link href="/services" className="btn-ghost shrink-0">View all services →</Link>
             </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {homeServices.map((s, i) => (
-              <Reveal key={s.name} delay={(i % 3) * 70}>
+              <Reveal key={s.name} delay={(i % 4) * 60}>
                 <Link href={s.href} className="card group block h-full no-underline">
-                  <h3 className="text-lg text-navy group-hover:text-sky">{s.name}</h3>
-                  <p className="mt-2 text-sm leading-7 text-muted">{s.blurb}</p>
+                  <span className="text-navy transition-colors group-hover:text-sky">
+                    <Icon name={s.icon} className="h-7 w-7" strokeWidth={1.5} />
+                  </span>
+                  <h3 className="mt-4 text-base text-navy group-hover:text-sky">{s.name}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted">{s.blurb}</p>
                 </Link>
               </Reveal>
             ))}

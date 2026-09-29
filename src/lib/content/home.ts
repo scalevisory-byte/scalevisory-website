@@ -11,21 +11,30 @@ export interface HomeService {
   name: string;
   blurb: string;
   href: string;
+  icon: string;
 }
+
+/** The four figures shown under the hero. All are claims the site already makes. */
+export const stats: { icon: string; big: string; small: string }[] = [
+  { icon: "badge", big: "12+ Years", small: "of professional experience" },
+  { icon: "people", big: "Travel Expertise", small: "Specialised industry knowledge" },
+  { icon: "shield", big: "End-to-End", small: "Accounting & compliance" },
+  { icon: "pin", big: "Gujarat & Beyond", small: "Serving businesses across India" },
+];
 
 /** Ten entry points into the four core services. */
 export const homeServices: HomeService[] = [
-  { name: "Bookkeeping", blurb: "Daily entries, vouchers and masters kept current in Tally, Zoho or Busy.", href: "/services/accounting#bookkeeping" },
-  { name: "GST & Taxation", blurb: "Registration, GSTR-1/3B/9, e-invoicing and input credit reconciled to 2B.", href: "/services/taxation#gst" },
-  { name: "TDS & TCS", blurb: "24Q, 26Q and 27EQ returns, Form 16/16A and default resolution on TRACES.", href: "/services/taxation#tds" },
-  { name: "Accounts Finalisation", blurb: "Year-end schedules, annexures and coordination with your statutory auditor.", href: "/services/accounting#finalisation" },
-  { name: "Reconciliation", blurb: "Bank, gateway, party and inter-branch balances that agree before you are asked.", href: "/services/accounting#reconciliation" },
-  { name: "Payroll Compliance", blurb: "PF, ESIC and professional tax registration and monthly returns.", href: "/services/taxation#statutory" },
-  { name: "Legal & Advisory", blurb: "Incorporation, agreements, licences and demand notices, documented properly.", href: "/services/legal" },
-  { name: "Audit Support", blurb: "Internal audit of ledgers, stock, cash and controls before anyone else looks.", href: "/services/accounting#financial-internal-audit" },
-  { name: "Compliance Management", blurb: "ROC filings, registers and licence renewals tracked on one calendar.", href: "/services/legal#roc" },
-  { name: "Virtual Accounting", blurb: "Your whole accounts function run off-site by our team, on your own system.", href: "/services/accounting#virtual-accounting" },
-  { name: "Business Consultancy", blurb: "Health check, profit, cash flow and a monthly review with your department heads.", href: "/services/business-consultancy" },
+  { icon: "book", name: "Bookkeeping", blurb: "Daily entries, vouchers and masters kept current in Tally, Zoho or Busy.", href: "/services/accounting#bookkeeping" },
+  { icon: "calculator", name: "GST & Taxation", blurb: "Registration, GSTR-1/3B/9, e-invoicing and input credit reconciled to 2B.", href: "/services/taxation#gst" },
+  { icon: "doc", name: "TDS & TCS", blurb: "24Q, 26Q and 27EQ returns, Form 16/16A and default resolution on TRACES.", href: "/services/taxation#tds" },
+  { icon: "bars", name: "Accounts Finalisation", blurb: "Year-end schedules, annexures and coordination with your statutory auditor.", href: "/services/accounting#finalisation" },
+  { icon: "search", name: "Reconciliation", blurb: "Bank, gateway, party and inter-branch balances that agree before you are asked.", href: "/services/accounting#reconciliation" },
+  { icon: "people", name: "Payroll Compliance", blurb: "PF, ESIC and professional tax registration and monthly returns.", href: "/services/taxation#statutory" },
+  { icon: "scales", name: "Legal & Advisory", blurb: "Incorporation, agreements, licences and demand notices, documented properly.", href: "/services/legal" },
+  { icon: "shieldCheck", name: "Audit Support", blurb: "Internal audit of ledgers, stock, cash and controls before anyone else looks.", href: "/services/accounting#financial-internal-audit" },
+  { icon: "calendar", name: "Compliance Management", blurb: "ROC filings, registers and licence renewals tracked on one calendar.", href: "/services/legal#roc" },
+  { icon: "cloud", name: "Virtual Accounting", blurb: "Your whole accounts function run off-site by our team, on your own system.", href: "/services/accounting#virtual-accounting" },
+  { icon: "briefcase", name: "Business Consultancy", blurb: "Health check, profit, cash flow and a monthly review with your department heads.", href: "/services/business-consultancy" },
 ];
 
 export interface WhyPoint {

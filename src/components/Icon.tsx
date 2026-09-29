@@ -1,26 +1,62 @@
-/** Thin line icons, drawn inline so nothing extra loads. Decorative only. */
+/** Thin line icons, drawn inline so nothing extra loads. Decorative by default. */
 const paths: Record<string, React.ReactNode> = {
+  // why-us
   ledger: (<><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" /></>),
   calendar: (<><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4" /></>),
   sector: (<><path d="M3 20h18" /><rect x="5" y="12" width="4" height="8" /><rect x="11" y="8" width="4" height="12" /><rect x="17" y="4" width="4" height="16" /></>),
   clock: (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),
   person: (<><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" /></>),
   chart: (<><path d="M3 20h18" /><path d="M5 16l4-5 4 3 6-8" /><circle cx="9" cy="11" r="1.3" /><circle cx="13" cy="14" r="1.3" /></>),
+
+  // stats strip
+  badge: (<><circle cx="12" cy="9" r="6" /><path d="M9 14.5 L8 22l4-2 4 2-1-7.5" /><path d="M10 9l1.5 1.5L15 7" /></>),
+  people: (<><circle cx="9" cy="8" r="3.4" /><path d="M2.5 20c0-3.3 2.9-5 6.5-5s6.5 1.7 6.5 5" /><path d="M16 5.5a3.4 3.4 0 0 1 0 6.6M17.5 15.2c2.4.5 4 2 4 4.8" /></>),
+  shield: (<><path d="M12 3l7.5 3v5.5c0 4.4-3 8.2-7.5 9.5-4.5-1.3-7.5-5.1-7.5-9.5V6z" /><path d="M9 12l2 2 4-4.5" /></>),
+  pin: (<><path d="M12 21s7-5.8 7-11a7 7 0 1 0-14 0c0 5.2 7 11 7 11z" /><circle cx="12" cy="10" r="2.6" /></>),
+
+  // services
+  book: (<><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5A2.5 2.5 0 0 0 4 20.5z" /><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v4H6.5A2.5 2.5 0 0 1 4 19.5" /><path d="M8 7h7M8 11h5" /></>),
+  calculator: (<><rect x="4" y="2.5" width="16" height="19" rx="2.5" /><rect x="7.5" y="6" width="9" height="3.5" rx="1" /><circle cx="8.5" cy="13.5" r=".9" /><circle cx="12" cy="13.5" r=".9" /><circle cx="15.5" cy="13.5" r=".9" /><circle cx="8.5" cy="17.5" r=".9" /><circle cx="12" cy="17.5" r=".9" /><circle cx="15.5" cy="17.5" r=".9" /></>),
+  doc: (<><path d="M14 2.5H7A2 2 0 0 0 5 4.5v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z" /><path d="M14 2.5v5h5" /><path d="M8.5 13h7M8.5 17h5" /></>),
+  bars: (<><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7.5 16v-4M12 16V8.5M16.5 16v-6" /></>),
+  scales: (<><path d="M12 3v18M7 21h10" /><path d="M12 6.5 4 8.5M12 6.5 20 8.5" /><path d="M4 8.5 1.6 14a2.6 2.6 0 0 0 4.8 0z" /><path d="M20 8.5 17.6 14a2.6 2.6 0 0 0 4.8 0z" /></>),
+  briefcase: (<><rect x="2.5" y="7" width="19" height="13" rx="2.5" /><path d="M8.5 7V5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2" /><path d="M2.5 12.5h19" /></>),
+  cloud: (<><path d="M7 18h10.5a3.5 3.5 0 0 0 .3-7 5.5 5.5 0 0 0-10.6-1.3A4 4 0 0 0 7 18z" /></>),
+  search: (<><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></>),
+  shieldCheck: (<><path d="M12 3l7.5 3v5.5c0 4.4-3 8.2-7.5 9.5-4.5-1.3-7.5-5.1-7.5-9.5V6z" /><path d="M9 12l2 2 4-4.5" /></>),
+  handshake: (<><path d="M3 12.5 7 8.5l3 2.5 2-1.5 2 1.5 3-2.5 4 4" /><path d="M7 8.5 4 11.5a2 2 0 0 0 0 2.8l3.5 3.5a1.6 1.6 0 0 0 2.3 0" /><path d="M17 8.5l3 3a2 2 0 0 1 0 2.8l-3.5 3.5a1.6 1.6 0 0 1-2.3 0L12 15.5" /></>),
 };
 
-export default function Icon({ name, className = "h-6 w-6" }: { name: string; className?: string }) {
+export default function Icon({
+  name,
+  className = "h-6 w-6",
+  strokeWidth = 1.6,
+}: {
+  name: string;
+  className?: string;
+  strokeWidth?: number;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.6"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
       aria-hidden="true"
     >
       {paths[name] ?? paths.ledger}
+    </svg>
+  );
+}
+
+/** WhatsApp glyph — solid, since the brand mark is not a line icon. */
+export function WhatsAppIcon({ className = "h-[18px] w-[18px]" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.48 1.34 5L2 22l5.2-1.36a9.9 9.9 0 0 0 4.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96 0-2.66-1.04-5.16-2.92-7.04A9.88 9.88 0 0 0 12.04 2zm0 1.84c2.17 0 4.2.85 5.74 2.38a8.07 8.07 0 0 1 2.38 5.74c0 4.48-3.64 8.12-8.12 8.12a8.1 8.1 0 0 1-4.13-1.13l-.3-.18-3.07.8.82-3-.19-.31a8.05 8.05 0 0 1-1.24-4.3c0-4.48 3.64-8.12 8.11-8.12zm-2.5 4.1c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.02 0 1.19.87 2.34.99 2.5.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.05.14-1.16-.06-.1-.22-.16-.46-.28-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.55.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.79-.2-.47-.4-.4-.55-.41h-.47z" />
     </svg>
   );
 }
