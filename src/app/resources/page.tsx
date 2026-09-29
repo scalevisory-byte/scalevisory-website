@@ -3,9 +3,9 @@ import Link from "next/link";
 import Shell from "@/components/Shell";
 import PageHero from "@/components/PageHero";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/lib/format";
 import { resourceCategories, categorySlug, postHref } from "@/lib/content/resources";
+import { publishedPosts } from "@/lib/content/posts";
 
 export const metadata: Metadata = {
   title: "Resources",
@@ -13,19 +13,11 @@ export const metadata: Metadata = {
     "GST updates, tax updates, legal updates, articles and business insights from Scale Visory, Surat — written for business owners, not for other accountants.",
   alternates: { canonical: "/resources" },
 };
-export const revalidate = 600;
-
-export default async function ResourcesPage() {
-  const supabase = await createClient();
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("slug,title,excerpt,category,published_at")
-    .eq("is_published", true)
-    .order("published_at", { ascending: false })
-    .limit(12);
+export default function ResourcesPage() {
+  const posts = publishedPosts.slice(0, 12);
 
   const counts = new Map<string, number>();
-  for (const p of posts ?? []) {
+  for (const p of publishedPosts) {
     const s = categorySlug(p.category);
     counts.set(s, (counts.get(s) ?? 0) + 1);
   }
@@ -58,16 +50,16 @@ export default async function ResourcesPage() {
             ))}
           </div>
 
-          {(posts?.length ?? 0) > 0 && (
+          {posts.length > 0 && (
             <div className="mt-16">
               <h2 className="text-2xl">Latest</h2>
               <div className="ledger mt-4">
-                {posts!.map((p) => (
+                {posts.map((p) => (
                   <article key={p.slug} className="grid gap-2 md:grid-cols-12 md:gap-8">
                     <p className="text-sm text-muted md:col-span-3">
                       {p.category}
                       <br />
-                      {fmtDate(p.published_at)}
+                      {fmtDate(p.date)}
                     </p>
                     <div className="md:col-span-9">
                       <h3 className="text-xl">
@@ -75,7 +67,7 @@ export default async function ResourcesPage() {
                           {p.title}
                         </Link>
                       </h3>
-                      {p.excerpt && <p className="mt-2 text-muted">{p.excerpt}</p>}
+                      <p className="mt-2 text-muted">{p.excerpt}</p>
                     </div>
                   </article>
                 ))}
@@ -83,7 +75,7 @@ export default async function ResourcesPage() {
             </div>
           )}
 
-          {!posts?.length && (
+          {posts.length === 0 && (
             <p className="mt-12 text-muted">
               Posts are on the way. In the meantime, call or WhatsApp us with a question and we will answer it directly.
             </p>

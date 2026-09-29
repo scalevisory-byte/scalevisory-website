@@ -5,17 +5,14 @@ import { consultancyPages } from "@/lib/content/consultancy";
 import { routedIndustries } from "@/lib/content/industries";
 import { resourceCategories, postHref } from "@/lib/content/resources";
 import { policies } from "@/lib/content/policies";
-import { createClient } from "@/lib/supabase/server";
+import { publishedPosts } from "@/lib/content/posts";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+// Emitted once at build time — there is no server to regenerate it.
+export const dynamic = "force-static";
+
+export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url;
   const now = new Date();
-
-  const supabase = await createClient();
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("slug,category,updated_at")
-    .eq("is_published", true);
 
   const entry = (
     path: string,
@@ -40,8 +37,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...consultancyPages.map((p) => entry(`/services/business-consultancy/${p.slug}`, 0.8)),
     ...routedIndustries.map((i) => entry(`/industries/${i.slug}`, 0.7)),
     ...resourceCategories.map((c) => entry(`/resources/${c.slug}`, 0.7, "weekly")),
-    ...(posts ?? []).map((p) =>
-      entry(postHref(p.category, p.slug), 0.6, "monthly", new Date(p.updated_at))
+    ...publishedPosts.map((p) =>
+      entry(postHref(p.category, p.slug), 0.6, "monthly", new Date(p.date))
     ),
     ...policies.map((p) => entry(`/${p.slug}`, 0.3, "yearly")),
   ];

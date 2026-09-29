@@ -3,8 +3,8 @@
 ## What this is
 Website + future business platform for Scale Visory (Surat accounting / taxation / legal / business consultancy firm). Tagline: "Balancing The Unbalanced". Owner: Dinesh Parmar.
 
-## Current state (public site rebuilt to the V1 sitemap; builds clean)
-Next.js 14 App Router + TypeScript + Tailwind + Supabase (Postgres, Auth, Storage). See README.md for setup.
+## Current state (public site on the V1 sitemap; builds clean)
+Next.js 16 App Router + TypeScript + Tailwind, exported to static HTML. No database. See README.md for setup.
 - **Services** — 4 core services in `src/lib/content/services.ts`, each with `sections[]` (decision #1 fold applied).
   Old six slugs 301 in `next.config.mjs`.
 - **Consultancy sub-pages** — `src/lib/content/consultancy.ts` -> `/services/business-consultancy/[sub]`:
@@ -13,15 +13,13 @@ Next.js 14 App Router + TypeScript + Tailwind + Supabase (Postgres, Auth, Storag
   Travel's canonical page is `/travel-agency-accounting`; `/industries/travel-agencies` 301s to it (decision #6).
   An industry with `href` set is excluded from `/industries/[slug]` via `routedIndustries`.
 - **Resources** — `src/lib/content/resources.ts`, 5 categories -> `/resources`, `/resources/[category]`,
-  `/resources/[category]/[slug]`. `posts.category` is still a text column; `categorySlug()` maps both the new names
-  and the pre-V1 six ("GST", "Income Tax", ...) so old rows keep resolving. `/blog` 301s to `/resources`;
-  `/blog/[slug]` looks the post up and 301s to its canonical resource URL.
-  **Do not delete that route — the old URLs are indexed.**
+  and posts from `src/lib/content/posts.ts`. `categorySlug()` also maps the pre-V1 category names
+  ("GST", "Income Tax", ...) so older posts keep resolving. The `/blog` routes are gone — the site was never
+  live under them.
 - **Policies** — `src/lib/content/policies.ts` -> `/privacy-policy`, `/terms`, `/disclaimer` (footer only, never main nav)
 - **SEO** — per-page `alternates.canonical`; `Breadcrumbs` emits BreadcrumbList; `JsonLd` emits AccountingService (home),
   Service (service pages), FAQPage (travel), Article (posts). `sitemap.ts` covers every route.
-- Admin (/admin): inquiries inbox, blog editor. Auth = Supabase email/password, protected by `src/middleware.ts`
-- Schema: `supabase/schema.sql` (inquiries, posts, RLS) — unchanged; this rebuild needed no migration
+- No admin panel and no database — see the deployment section above
 - External links in nav: Careers -> https://zyntajobs.in, Payment recovery -> https://artharecovery.in (built separately — do NOT rebuild a job portal or recovery module here)
 
 ## Not built yet (V1 remainder)
@@ -30,23 +28,39 @@ Phases 1 and 5-7 of `docs/PLATFORM-PLAN.md`: migrations for the V1 tables, RBAC 
 FAQs/testimonials/team tables, settings, and the admin dashboard. Page content is hardcoded in `src/lib/content/*` —
 those files are the seed for the admin-editable tables when Phase 1 lands.
 
-## Framework (Next 16 / React 19)
-Upgraded from Next 14.2.15 + React 18, which carried a critical unauthenticated RCE with no patched 14.x.
-`npm audit` now reports 0 vulnerabilities. What the upgrade changed, so it is not undone by accident:
-- `cookies()` is async, so `createClient()` in `src/lib/supabase/server.ts` is async — **await it at every call site**.
-- `params` is a `Promise` in every page and `generateMetadata`; destructure it with `await params`.
-  `generateStaticParams` is unchanged.
-- Forms use React 19's `useActionState` (from `react`), not `useFormState`. `useFormStatus` still comes from `react-dom`.
-- The middleware convention is now `proxy`: `src/proxy.ts` exports `proxy()`. The Supabase helper it calls is still
-  `src/lib/supabase/middleware.ts` — that is an internal module, not the framework convention, so leave its name alone.
-- `next lint` was removed in Next 16 (it silently exits 0), so the `lint` script is gone and `npm run typecheck`
-  (`tsc --noEmit`) took its place. **ESLint is not configured** and never was — worth setting up.
+## How this site is deployed (READ FIRST)
+**Static export on GitHub Pages.** `next build` writes plain HTML/CSS/JS to `out/`; the workflow in
+`.github/workflows/deploy.yml` publishes it on every push to `main`. There is **no server and no database**.
 
-## Known issue
-`/resources/[category]` used to be prerendered (SSG) and is now server-rendered on every request, because the page
-reads Supabase through the cookie-bound `createClient()` and Next 16 treats any `cookies()` read as dynamic. The public
-resource pages only ever read published posts, so they do not need the visitor's cookies — giving them a cookie-free
-anon client would make them static/ISR again. Not urgent at current traffic.
+What that rules out — do not reintroduce any of these without moving off GitHub Pages first:
+- server actions (`"use server"`), route handlers, `middleware`/`proxy`
+- `cookies()`, `headers()`, or anything that forces dynamic rendering
+- `redirects()` / `rewrites()` in `next.config.mjs` (a static host cannot issue them)
+- ISR / `revalidate`; `sitemap.ts` and `robots.ts` are pinned with `export const dynamic = "force-static"`
+- every dynamic route needs `generateStaticParams`, and it must return **at least one** entry or the build fails
+
+Consequences already handled:
+- **Enquiry forms** (`src/components/InquiryForm.tsx`) build a WhatsApp message on the visitor's device and open
+  `wa.me`. Nothing is transmitted to or stored by the site. The privacy policy and terms say exactly this — if the
+  form ever changes, update `src/lib/content/policies.ts` in the same commit.
+- **Admin panel, Supabase and all server actions are gone.** Posts live in `src/lib/content/posts.ts` (currently
+  empty; see the note in that file about restoring the post route with the first post).
+- **Legacy URLs** are real pages that meta-refresh + canonical to the new URL (`src/components/LegacyRedirect.tsx`),
+  since 301s are impossible here. `noindex` comes from each route's `generateMetadata`.
+
+## Framework
+Next 16 + React 19 (upgraded from 14.2.15, which had a critical unauthenticated RCE with no patched 14.x).
+`npm audit`: 0 vulnerabilities. Things the upgrade changed that are easy to undo by accident:
+- `params` is a `Promise` in every page and `generateMetadata` — `await params`. `generateStaticParams` is unchanged.
+- Forms use React 19's `useActionState` (from `react`), not `useFormState`.
+- `next lint` was removed in Next 16 (it exits 0 without checking), so `npm run typecheck` is the gate.
+  **ESLint is not configured** and never was.
+
+## If you ever need the server back
+Forms that store leads, an admin panel and a blog editor all need a host that runs code (Vercel) plus a database
+(Supabase). The content in `src/lib/content/*` is deliberately independent of any data source, so the move is
+additive — nothing here has to be rewritten. The pre-static version is in git history on `main` before the
+static-export commit.
 
 ## Where this is going (V1 — approved plan)
 `docs/PLATFORM-PLAN.md` is the source of truth: sitemap, 4 core services (Accounting, Taxation, Legal, Business Consultancy), industries, resources (5 categories), consultation form → lead management, RBAC admin CMS, SEO, security, infra, V2 client portal, V3 AI.

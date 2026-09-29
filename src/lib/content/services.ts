@@ -417,10 +417,13 @@ export const services: Service[] = [
 
 export const getService = (slug: string) => services.find((s) => s.slug === slug);
 
-/** Old six-service slugs → the core service that absorbed them (decision #1). */
-export const legacyServiceRedirects: Record<string, string> = {
-  "accounting-bookkeeping": "accounting",
-  "compliance-regulatory": "taxation",
-  "business-advisory": "business-consultancy",
-  "internal-audit": "accounting",
+/**
+ * Old six-service slugs → where they went (decision #1).
+ * `anchor` deep-links to the section that absorbed the page, where one exists.
+ */
+export const legacyServiceRedirects: Record<string, { slug: string; anchor?: string }> = {
+  "accounting-bookkeeping": { slug: "accounting" },
+  "compliance-regulatory": { slug: "taxation" },
+  "business-advisory": { slug: "business-consultancy" },
+  "internal-audit": { slug: "accounting", anchor: "financial-internal-audit" },
 };

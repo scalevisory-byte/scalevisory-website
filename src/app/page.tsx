@@ -5,19 +5,11 @@ import JsonLd from "@/components/JsonLd";
 import { services } from "@/lib/content/services";
 import { industries, industryHref } from "@/lib/content/industries";
 import { postHref } from "@/lib/content/resources";
+import { publishedPosts } from "@/lib/content/posts";
 import { site, whatsappLink } from "@/lib/content/site";
-import { createClient } from "@/lib/supabase/server";
 
-export const revalidate = 600;
-
-export default async function HomePage() {
-  const supabase = await createClient();
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("slug,title,category,published_at")
-    .eq("is_published", true)
-    .order("published_at", { ascending: false })
-    .limit(3);
+export default function HomePage() {
+  const posts = publishedPosts.slice(0, 3);
 
   return (
     <Shell>
@@ -188,12 +180,12 @@ export default async function HomePage() {
       </section>
 
       {/* Resources */}
-      {(posts?.length ?? 0) > 0 && (
+      {posts.length > 0 && (
         <section className="border-t border-line bg-white py-16">
           <div className="wrap">
             <h2 className="text-2xl">Latest from Resources</h2>
             <ul className="ledger mt-4">
-              {posts!.map((p) => (
+              {posts.map((p) => (
                 <li key={p.slug}>
                   <Link href={postHref(p.category, p.slug)} className="font-semibold text-navy no-underline hover:text-sky">
                     {p.title}

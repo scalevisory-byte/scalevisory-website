@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import Shell from "@/components/Shell";
 import PageHero from "@/components/PageHero";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/lib/format";
 import {
   resourceCategories,
@@ -12,6 +11,7 @@ import {
   storedNamesForSlug,
   postHref,
 } from "@/lib/content/resources";
+import { publishedPosts } from "@/lib/content/posts";
 
 export function generateStaticParams() {
   return resourceCategories.map((c) => ({ category: c.slug }));
@@ -28,20 +28,13 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   };
 }
 
-export const revalidate = 600;
-
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const c = getCategoryBySlug(category);
   if (!c) notFound();
 
-  const supabase = await createClient();
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("slug,title,excerpt,category,published_at")
-    .eq("is_published", true)
-    .in("category", storedNamesForSlug(c.slug))
-    .order("published_at", { ascending: false });
+  const names = storedNamesForSlug(c.slug);
+  const posts = publishedPosts.filter((p) => names.includes(p.category));
 
   return (
     <Shell>
@@ -55,7 +48,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
       <section className="section">
         <div className="wrap">
-          {!posts?.length ? (
+          {posts.length === 0 ? (
             <div className="rounded-lg border border-line bg-white p-8">
               <p className="text-muted">
                 Nothing published under {c.title} yet. Browse the{" "}
@@ -67,14 +60,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <div className="ledger">
               {posts.map((p) => (
                 <article key={p.slug} className="grid gap-2 md:grid-cols-12 md:gap-8">
-                  <p className="text-sm text-muted md:col-span-3">{fmtDate(p.published_at)}</p>
+                  <p className="text-sm text-muted md:col-span-3">{fmtDate(p.date)}</p>
                   <div className="md:col-span-9">
                     <h2 className="text-2xl">
                       <Link href={postHref(p.category, p.slug)} className="no-underline hover:text-sky">
                         {p.title}
                       </Link>
                     </h2>
-                    {p.excerpt && <p className="mt-2 text-muted">{p.excerpt}</p>}
+                    <p className="mt-2 text-muted">{p.excerpt}</p>
                   </div>
                 </article>
               ))}

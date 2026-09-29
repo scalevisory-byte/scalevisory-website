@@ -6,17 +6,22 @@ import PageHero from "@/components/PageHero";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import InquiryForm from "@/components/InquiryForm";
 import JsonLd from "@/components/JsonLd";
-import { services, getService } from "@/lib/content/services";
+import { services, getService, legacyServiceRedirects } from "@/lib/content/services";
+import LegacyRedirect from "@/components/LegacyRedirect";
 import { consultancyPages } from "@/lib/content/consultancy";
 import { industries, industryHref } from "@/lib/content/industries";
 import { site, whatsappLink } from "@/lib/content/site";
 
 export function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }));
+  return [
+    ...services.map((s) => ({ slug: s.slug })),
+    ...Object.keys(legacyServiceRedirects).map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  if (legacyServiceRedirects[slug]) return { robots: { index: false, follow: true } };
   const s = getService(slug);
   if (!s) return {};
   return {
@@ -28,6 +33,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
+  // Retired slug from the six-service structure — send the visitor to the
+  // core service that absorbed it (decision #1).
+  const moved = legacyServiceRedirects[slug];
+  if (moved) {
+    const target = getService(moved.slug)!;
+    const to = `/services/${moved.slug}${moved.anchor ? `#${moved.anchor}` : ""}`;
+    return <LegacyRedirect to={to} label={target.name} />;
+  }
+
   const s = getService(slug);
   if (!s) notFound();
 

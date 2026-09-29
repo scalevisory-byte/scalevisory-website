@@ -1,20 +1,23 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import { submitInquiry, type InquiryResult } from "@/actions/inquiries";
+import { useState } from "react";
+import { site } from "@/lib/content/site";
 import type { InquiryKind } from "@/lib/types";
 
-function Submit({ label }: { label: string }) {
-  const { pending } = useFormStatus();
-  return <button className="btn-primary w-full sm:w-auto" disabled={pending}>{pending ? "Sending…" : label}</button>;
-}
-
+/**
+ * The site is a static export, so there is no server to post to and nowhere to
+ * store an enquiry. The form collects the same fields as before and hands them
+ * to WhatsApp as a pre-filled message, which is how most of the firm's clients
+ * get in touch anyway.
+ *
+ * Nothing is transmitted to or stored by this site — the visitor sends the
+ * message themselves from their own WhatsApp. The privacy policy says so.
+ */
 export default function InquiryForm({
   kind = "general",
   subject,
   subjectOptions,
-  buttonLabel = "Send inquiry",
+  buttonLabel = "Send on WhatsApp",
   askCompany = true,
   compact = false,
 }: {
@@ -25,22 +28,46 @@ export default function InquiryForm({
   askCompany?: boolean;
   compact?: boolean;
 }) {
-  const [state, action] = useActionState<InquiryResult | null, FormData>(submitInquiry, null);
+  const [error, setError] = useState<string | null>(null);
 
-  if (state?.ok) {
-    return (
-      <div className="rounded-md border border-sky bg-sky-soft p-5">
-        <p className="font-display font-semibold text-navy">Inquiry sent.</p>
-        <p className="mt-1 text-sm text-ink">We reply on working days within a few hours. For anything urgent, call or WhatsApp +91 99099 93565.</p>
-      </div>
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const get = (k: string) => String(data.get(k) ?? "").trim();
+
+    const name = get("name");
+    const phone = get("phone");
+    const email = get("email");
+    const company = get("company");
+    const topic = get("subject") || subject || "";
+    const message = get("message");
+
+    if (name.length < 2) return setError("Enter your name.");
+    if (!/^[0-9+\s-]{10,15}$/.test(phone)) return setError("Enter a valid 10-digit mobile number.");
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) return setError("Enter a valid email address.");
+    setError(null);
+
+    const lines = [
+      "Hi Scale Visory, I'd like to enquire.",
+      "",
+      `Name: ${name}`,
+      `Mobile: ${phone}`,
+      email && `Email: ${email}`,
+      company && `Business: ${company}`,
+      topic && `About: ${topic}`,
+      message && `\n${message}`,
+    ].filter(Boolean);
+
+    window.open(
+      `https://wa.me/${site.phoneRaw}?text=${encodeURIComponent(lines.join("\n"))}`,
+      "_blank",
+      "noopener,noreferrer"
     );
   }
 
   return (
-    <form action={action} className={`grid gap-4 ${compact ? "" : "sm:grid-cols-2"}`}>
-      <input type="hidden" name="kind" value={kind} />
+    <form onSubmit={handleSubmit} className={`grid gap-4 ${compact ? "" : "sm:grid-cols-2"}`}>
       {subject && !subjectOptions && <input type="hidden" name="subject" value={subject} />}
-      <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <div>
         <label className="label" htmlFor={`${kind}-name`}>Your name</label>
         <input id={`${kind}-name`} name="name" required className="field" />
@@ -71,9 +98,13 @@ export default function InquiryForm({
         <label className="label" htmlFor={`${kind}-message`}>Message</label>
         <textarea id={`${kind}-message`} name="message" rows={4} className="field" placeholder="Tell us briefly about your business and what you need." />
       </div>
-      {state?.error && <p className="text-sm text-red-700 sm:col-span-2">{state.error}</p>}
+      {error && <p className="text-sm text-red-700 sm:col-span-2">{error}</p>}
       <div className={compact ? "" : "sm:col-span-2"}>
-        <Submit label={buttonLabel} />
+        <button className="btn-primary w-full sm:w-auto">{buttonLabel}</button>
+        <p className="mt-2.5 text-xs leading-5 text-muted">
+          This opens WhatsApp with your details filled in — you press send. Prefer to talk?{" "}
+          <a href={`tel:${site.phoneRaw}`} className="font-semibold text-navy">Call {site.phone}</a>.
+        </p>
       </div>
     </form>
   );

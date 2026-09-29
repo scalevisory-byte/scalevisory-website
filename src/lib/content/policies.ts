@@ -25,34 +25,33 @@ export const policies: Policy[] = [
       "How Scale Visory collects, uses, stores and deletes personal information submitted through scalevisory.in.",
     sections: [
       {
-        heading: "What we collect",
+        heading: "This website does not collect your details",
         paragraphs: [
-          "We only collect what a form asks for. There is no account creation and no public sign-up on this website.",
-        ],
-        items: [
-          "Enquiry forms: your name, mobile number, and optionally email, business name, the service you asked about and your message",
-          "Analytics: anonymised usage data through Google Analytics 4, where you have not blocked it",
-          "Chat: if you use the chat widget, the conversation is handled by our chat provider under their terms",
+          "This is a static website. It has no database, no accounts and no sign-up, and its enquiry forms do not send anything to us.",
+          "When you fill an enquiry form, your browser assembles the details into a WhatsApp message on your own device and opens WhatsApp. Nothing leaves your device until you press send, and if you close it instead, nothing has been recorded anywhere.",
         ],
       },
       {
-        heading: "Why we collect it",
+        heading: "What the website does use",
+        paragraphs: ["Only the third-party tools below, and only where they are switched on:"],
+        items: [
+          "Analytics: anonymised usage data through Google Analytics 4, where you have not blocked it",
+          "Chat: if you use the chat widget, the conversation is handled by our chat provider under their terms",
+          "Hosting: the site is served as static files by GitHub Pages, which keeps its own standard server logs",
+        ],
+      },
+      {
+        heading: "What happens once you contact us",
         paragraphs: [
-          "To reply to your enquiry, to provide the services you engage us for, and to meet the record-keeping obligations that apply to a professional practice.",
+          "When you message us on WhatsApp, call, or email, we hold what you send us so we can reply and, if you engage us, provide the service. That information sits in our own business systems, not in this website.",
           "We do not sell personal information, and we do not share it with third parties for their own marketing.",
         ],
       },
       {
         heading: "How long we keep it",
         paragraphs: [
-          "Enquiries that do not become engagements are purged 24 months after last contact.",
+          "Enquiries that do not become engagements are deleted 24 months after last contact.",
           "Records relating to an actual engagement are kept for as long as the applicable tax, company and professional record-keeping rules require, and are then deleted.",
-        ],
-      },
-      {
-        heading: "Where it is stored",
-        paragraphs: [
-          "Website enquiry data is stored in a managed Postgres database hosted in the Mumbai (ap-south-1) region. Access is restricted to authorised Scale Visory staff and protected by row-level security rules in the database itself.",
         ],
       },
       {
@@ -98,6 +97,12 @@ export const policies: Policy[] = [
         heading: "Accuracy",
         paragraphs: [
           "Tax, GST and corporate law in India change frequently. Content here is written as at the date of publication and is not updated retrospectively. Do not rely on any page as current without checking the position for your own facts.",
+        ],
+      },
+      {
+        heading: "Forms on this site",
+        paragraphs: [
+          "The enquiry forms here do not submit to a server. They open WhatsApp with your details filled in, and you choose whether to send. Sending a message does not create a professional engagement — see above.",
         ],
       },
       {

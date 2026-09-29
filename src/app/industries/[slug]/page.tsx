@@ -5,18 +5,22 @@ import Shell from "@/components/Shell";
 import PageHero from "@/components/PageHero";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import InquiryForm from "@/components/InquiryForm";
-import { routedIndustries, getIndustry } from "@/lib/content/industries";
+import { industries, routedIndustries, getIndustry } from "@/lib/content/industries";
+import LegacyRedirect from "@/components/LegacyRedirect";
 import { getService } from "@/lib/content/services";
 import { whatsappLink } from "@/lib/content/site";
 
 export function generateStaticParams() {
-  return routedIndustries.map((i) => ({ slug: i.slug }));
+  // Industries with a canonical page elsewhere still get a page here, so the
+  // old URL keeps working and forwards.
+  return industries.map((i) => ({ slug: i.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const i = getIndustry(slug);
-  if (!i || i.href) return {};
+  if (!i) return {};
+  if (i.href) return { robots: { index: false, follow: true } };
   return {
     title: `${i.name} — Accounting & Advisory`,
     description: i.short,
@@ -27,8 +31,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const i = getIndustry(slug);
-  // Industries with a canonical page elsewhere (travel) are redirected in next.config.
-  if (!i || i.href) notFound();
+  if (!i) notFound();
+  if (i.href) return <LegacyRedirect to={i.href} label={i.name} />;
 
   return (
     <Shell>
