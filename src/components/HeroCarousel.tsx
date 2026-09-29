@@ -9,7 +9,17 @@ import { site, whatsappLink } from "@/lib/content/site";
 
 const ROTATE_MS = 5500;
 
+interface SlideFeature {
+  icon: string;
+  title: string;
+  body: string;
+}
+
 interface Slide {
+  /** "dark" puts the slide on navy with white type; default is the light treatment. */
+  tone?: "light" | "dark";
+  /** Optional four-up row beneath the buttons. */
+  features?: SlideFeature[];
   /** Rendered with pipe separators, like the printed lockup. */
   eyebrow: string[];
   title: string;
@@ -66,6 +76,24 @@ const slides: Slide[] = [
     visual: "advisory",
     whatsapp: "Hi Scale Visory, I'd like to know about business consultancy.",
   },
+  {
+    tone: "dark",
+    eyebrow: ["Accounting", "Taxation", "Legal", "Business Consultancy — Surat"],
+    title: "Specialized Accounting",
+    titleSecondLine: "for",
+    accent: "Travel Agents",
+    body: "Tickets, hotels, packages, agent commissions, TCS and GST — travel accounting works differently, and we handle the whole of it for you.",
+    image: "/hero/travel.jpg",
+    imageAlt: "",
+    visual: "dashboard",
+    whatsapp: "Hi Scale Visory, I run a travel agency and need help with accounting and GST/TCS.",
+    features: [
+      { icon: "clock", title: "Save Time", body: "Focus on growing your business" },
+      { icon: "shieldCheck", title: "Stay Compliant", body: "GST, TDS, ROC and more" },
+      { icon: "bars", title: "Accurate Reports", body: "Clear financial insights" },
+      { icon: "people", title: "Dedicated Support", body: "A team that knows travel" },
+    ],
+  },
 ];
 
 export default function HeroCarousel() {
@@ -99,10 +127,11 @@ export default function HeroCarousel() {
 
   const active = slides[index];
   const hasPhoto = Boolean(active.image);
+  const dark = active.tone === "dark";
 
   return (
     <section
-      className="relative overflow-hidden bg-white"
+      className={`relative overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-white"}`}
       aria-roledescription="carousel"
       aria-label="Scale Visory highlights"
       tabIndex={0}
@@ -125,9 +154,18 @@ export default function HeroCarousel() {
             aria-hidden="true"
           >
             <img src={asset(s.image)} alt="" className="h-full w-full object-cover object-center" />
-            {/* Feathers the photograph into the page rather than ending on a hard edge. */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/25 to-transparent" />
-            <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white to-transparent" />
+            {/* Feathers the photograph into the slide's own ground. */}
+            {s.tone === "dark" ? (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/25 to-transparent" />
+                <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-navy to-transparent" />
+              </>
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/25 to-transparent" />
+                <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white to-transparent" />
+              </>
+            )}
           </div>
         ) : null
       )}
@@ -144,30 +182,30 @@ export default function HeroCarousel() {
                 aria-label={`${i + 1} of ${slides.length}`}
                 aria-hidden={i !== index}
               >
-                <p className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-display text-[11px] font-bold uppercase tracking-[0.16em] text-gold md:text-xs">
+                <p className={`flex flex-wrap items-center gap-x-2.5 gap-y-1 font-display text-[11px] font-bold uppercase tracking-[0.16em] md:text-xs ${s.tone === "dark" ? "text-sky" : "text-gold"}`}>
                   {s.eyebrow.map((e, n) => (
                     <span key={e} className="flex items-center gap-x-2.5">
-                      {n > 0 && <span className="text-gold/40">|</span>}
+                      {n > 0 && <span className="opacity-40">|</span>}
                       {e}
                     </span>
                   ))}
                 </p>
 
-                <h1 className="mt-4 text-navy">
+                <h1 className={`mt-4 ${s.tone === "dark" ? "!text-white" : "text-navy"}`}>
                   {s.title}
                   {(s.titleSecondLine || s.accent) && (
                     <>
                       <br />
                       {s.titleSecondLine}
-                      {s.accent && <> <span className="text-gold">{s.accent}</span></>}
+                      {s.accent && <> <span className={s.tone === "dark" ? "text-sky" : "text-gold"}>{s.accent}</span></>}
                     </>
                   )}
                 </h1>
 
-                <p className="mt-5 max-w-xl text-lg leading-8 text-muted">{s.body}</p>
+                <p className={`mt-5 max-w-xl text-lg leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted"}`}>{s.body}</p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href="/contact" className="btn-primary group" tabIndex={i === index ? 0 : -1}>
+                  <Link href="/contact" className={`group ${s.tone === "dark" ? "btn-sky" : "btn-primary"}`} tabIndex={i === index ? 0 : -1}>
                     Book a free consultation
                     <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                   </Link>
@@ -175,13 +213,31 @@ export default function HeroCarousel() {
                     href={whatsappLink(s.whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn border border-line bg-white text-navy hover:border-sky hover:text-sky"
+                    className={`btn bg-white text-navy hover:text-sky ${s.tone === "dark" ? "border border-white/20" : "border border-line hover:border-sky"}`}
                     tabIndex={i === index ? 0 : -1}
                   >
                     <WhatsAppIcon />
                     WhatsApp us
                   </a>
                 </div>
+
+                {s.features && (
+                  <ul className="mt-9 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                    {s.features.map((f) => (
+                      <li key={f.title}>
+                        <span className={s.tone === "dark" ? "text-sky" : "text-navy"}>
+                          <Icon name={f.icon} className="h-6 w-6" strokeWidth={1.5} />
+                        </span>
+                        <p className={`mt-2 font-display text-sm font-bold ${s.tone === "dark" ? "text-white" : "text-navy"}`}>
+                          {f.title}
+                        </p>
+                        <p className={`mt-0.5 text-xs leading-5 ${s.tone === "dark" ? "text-white/65" : "text-muted"}`}>
+                          {f.body}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
           </div>
@@ -212,7 +268,9 @@ export default function HeroCarousel() {
                 aria-label={`Go to slide ${i + 1}`}
                 aria-current={i === index}
                 className={`block h-2 rounded-full transition-all duration-300 ${
-                  i === index ? "w-7 bg-navy" : "w-2 bg-navy/25 hover:bg-navy/50"
+                  i === index
+                    ? dark ? "w-7 bg-sky" : "w-7 bg-navy"
+                    : dark ? "w-2 bg-white/30 hover:bg-white/60" : "w-2 bg-navy/25 hover:bg-navy/50"
                 }`}
               />
             </li>
