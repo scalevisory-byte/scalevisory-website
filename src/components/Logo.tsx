@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { asset } from "@/lib/basePath";
 
 /**
  * Official Scale Visory logo (owner-supplied, replaces the placeholder SVG mark
@@ -19,7 +20,7 @@ export default function Logo({
   return (
     <Link href="/" className="inline-flex shrink-0 no-underline" aria-label="Scale Visory — home">
       <img
-        src={light ? "/logo-white.png" : "/logo.png"}
+        src={asset(light ? "/logo-white.png" : "/logo.png")}
         alt="Scale Visory — Accounting, Taxation, Legal. Balancing The Unbalanced."
         width={900}
         height={187}

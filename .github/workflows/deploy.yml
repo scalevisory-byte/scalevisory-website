@@ -34,10 +34,16 @@ jobs:
 
       - run: npm run build
         env:
+          # Canonicals and the sitemap always name the real domain, so the
+          # github.io preview never competes with it in search.
           NEXT_PUBLIC_SITE_URL: https://scalevisory.in
+          # The site currently lives at github.io/scalevisory-website/, so every
+          # asset needs that prefix. WHEN scalevisory.in IS POINTED HERE: delete
+          # this line and restore the CNAME step below, in the same commit.
+          BASE_PATH: /scalevisory-website
 
-      # Tells GitHub Pages to serve the custom domain.
-      - run: echo 'scalevisory.in' > out/CNAME
+      # Restore once DNS points at GitHub Pages:
+      # - run: echo 'scalevisory.in' > out/CNAME
 
       # Without this, GitHub Pages' Jekyll step strips _next/, which holds all
       # the CSS and JS — the site would render unstyled.
