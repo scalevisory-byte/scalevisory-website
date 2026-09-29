@@ -1,18 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import { nav, site } from "@/lib/content/site";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const path = usePathname();
+
+  // Compact the bar once the reader has moved past the hero.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur">
-      <div className="wrap flex h-20 items-center justify-between gap-6">
-        <Logo className="h-10 md:h-11" />
+    <header
+      className={`sticky top-0 z-40 border-b bg-paper/95 backdrop-blur transition-shadow duration-300 ${
+        scrolled ? "border-line shadow-[0_1px_16px_-6px_rgba(7,53,116,0.35)]" : "border-line"
+      }`}
+    >
+      <div
+        className={`wrap flex items-center justify-between gap-6 transition-[height] duration-300 ${
+          scrolled ? "h-16" : "h-20"
+        }`}
+      >
+        <Logo className={`w-auto transition-[height] duration-300 ${scrolled ? "h-9 md:h-10" : "h-10 md:h-11"}`} />
         <nav className="hidden items-center gap-5 xl:flex" aria-label="Main">
           {nav.map((n) => (
             <Link

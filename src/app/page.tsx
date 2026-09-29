@@ -1,185 +1,241 @@
 import Link from "next/link";
 import Shell from "@/components/Shell";
+import HeroCarousel from "@/components/HeroCarousel";
+import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 import InquiryForm from "@/components/InquiryForm";
 import JsonLd from "@/components/JsonLd";
 import { services } from "@/lib/content/services";
-import { industries, industryHref } from "@/lib/content/industries";
+import { industries, industryHref, getIndustry } from "@/lib/content/industries";
 import { postHref } from "@/lib/content/resources";
 import { publishedPosts } from "@/lib/content/posts";
+import { homeServices, whyPoints, processSteps, specialisations } from "@/lib/content/home";
 import { site, whatsappLink } from "@/lib/content/site";
 
 export default function HomePage() {
   const posts = publishedPosts.slice(0, 3);
+  const travel = getIndustry("travel-agencies")!;
 
   return (
     <Shell>
-      {/* Hero — the tagline is the object */}
-      <section className="bg-navy text-white">
-        <div className="wrap py-20 md:py-28">
-          <p className="text-sm font-medium text-sky">Accounting · Taxation · Legal · Business Consultancy — Surat</p>
-          <h1 className="mt-4 max-w-4xl text-white">
-            Balancing<br />The Unbalanced
-          </h1>
-          <div className="beam mt-8 h-[3px] w-full max-w-4xl bg-sky" aria-hidden="true" />
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-white/80">
-            Books that close on time, taxes filed before the due date, filings that do not slip, and a finance partner
-            who tells you what the numbers mean. {site.years} years of exactly that for Gujarat businesses.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/contact" className="btn-sky">Book a free consultation</Link>
-            <a
-              href={whatsappLink("Hi Scale Visory, I'd like to discuss my accounting / tax requirements.")}
-              className="btn-light"
-            >
-              WhatsApp us
-            </a>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel />
 
-      {/* Ledger-style facts strip */}
+      {/* ── Stats strip ─────────────────────────────────────────────────── */}
       <section className="border-b border-line bg-white">
-        <div className="wrap grid gap-6 py-8 sm:grid-cols-3">
+        <div className="wrap grid divide-y divide-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
           {[
-            [`${site.years} years`, "of accounting, tax and audit practice"],
-            ["Vesu, Surat", "office — and clients across Gujarat"],
-            ["One calendar", "every GST, TDS, ROC and licence date, tracked"],
-          ].map(([big, small]) => (
-            <div key={big} className="border-l-2 border-sky pl-4">
-              <p className="font-display text-2xl font-bold text-navy">{big}</p>
-              <p className="text-sm text-muted">{small}</p>
+            [`${site.years} Years`, "Professional experience"],
+            ["Travel Expertise", "Specialised industry knowledge"],
+            ["End-to-End", "Accounting & compliance"],
+            ["Gujarat & Beyond", "Serving businesses across India"],
+          ].map(([big, small], i) => (
+            <div key={big} className={`py-7 sm:px-6 lg:border-l lg:border-line ${i === 0 ? "lg:border-l-0 lg:pl-0" : ""}`}>
+              <p className="font-display text-xl font-bold text-navy md:text-2xl">{big}</p>
+              <p className="mt-1 text-sm text-muted">{small}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Four core services */}
-      <section className="section">
+      {/* ── Services ────────────────────────────────────────────────────── */}
+      <section className="section" id="services">
         <div className="wrap">
-          <div className="max-w-2xl">
-            <h2>What we take off your desk</h2>
-            <p className="mt-3 text-muted">
-              Four services, one team, one WhatsApp number. Take what you need now; the rest is there when you grow.
-            </p>
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="eyebrow">What we do</p>
+              <h2 className="mt-3">Complete Accounting Solutions</h2>
+              <p className="mt-4 text-lg text-muted">
+                End-to-end financial, tax and compliance support across four core services — so the books, the filings
+                and the decisions all sit with one team.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {homeServices.map((s, i) => (
+              <Reveal key={s.name} delay={(i % 3) * 70}>
+                <Link href={s.href} className="card group block h-full no-underline">
+                  <h3 className="text-lg text-navy group-hover:text-sky">{s.name}</h3>
+                  <p className="mt-2 text-sm leading-7 text-muted">{s.blurb}</p>
+                </Link>
+              </Reveal>
+            ))}
           </div>
-          <div className="ledger mt-10">
-            {services.map((s) => (
-              <Link key={s.slug} href={`/services/${s.slug}`} className="group grid gap-2 no-underline md:grid-cols-12 md:gap-6">
-                <h3 className="md:col-span-3 group-hover:text-sky">{s.name}</h3>
-                <p className="text-muted md:col-span-7">{s.short}</p>
-                <span className="text-sm font-semibold text-navy md:col-span-2 md:text-right">See details</span>
-              </Link>
+
+          <Reveal>
+            <div className="mt-10">
+              <Link href="/services" className="btn-ghost">View All Services →</Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Industries ──────────────────────────────────────────────────── */}
+      <section className="bg-white py-16 md:py-24" id="industries">
+        <div className="wrap">
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="eyebrow">Sectors</p>
+              <h2 className="mt-3">Industries We Understand</h2>
+              <p className="mt-4 text-lg text-muted">
+                The services are the same; what differs is where the mistakes get made. These are the sectors we work
+                in most.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {industries.map((ind, i) => (
+              <Reveal key={ind.slug} delay={(i % 4) * 60}>
+                <Link href={industryHref(ind)} className="card group flex h-full flex-col no-underline">
+                  <h3 className="text-base text-navy group-hover:text-sky">{ind.name}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted">{ind.short}</p>
+                  <span className="mt-4 text-sm font-semibold text-navy group-hover:text-sky">Read more →</span>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Consultancy — the diagnostic is the strongest entry point */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="wrap grid gap-8 md:grid-cols-12 md:items-center">
-          <div className="md:col-span-7">
-            <p className="text-sm font-semibold text-sky">Business Consultancy</p>
-            <h2 className="mt-2">Why isn&apos;t your business growing?</h2>
-            <p className="mt-4 text-muted">
-              Turnover flat while costs rise. Nothing moving when you are away for a week. Margins slipping without a
-              clear reason. The cause is usually structural, and it is findable — a review across finance, sales,
-              operations and management, ending in a scored health check and a 30/60/90-day action plan.
+      {/* ── Travel specialisation (one capability among several) ────────── */}
+      <section className="section">
+        <div className="wrap grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+          <Reveal className="lg:col-span-6">
+            <p className="eyebrow">Specialisation</p>
+            <h2 className="mt-3">Specialized Accounting for Travel Businesses</h2>
+            <p className="mt-4 leading-8 text-muted">
+              Travel accounting involves tickets, hotels, packages, commissions, TCS, GST, supplier reconciliation and
+              several payment flows at once. Money moves through you that is not your revenue, tax applies on a margin
+              you have to compute, and every booking touches three ledgers.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/services/business-consultancy/why-isnt-your-business-growing" className="btn-primary">
-                Read the diagnostic
-              </Link>
-              <Link href="/services/business-consultancy" className="btn-ghost">All of consultancy</Link>
-            </div>
-          </div>
-          <div className="md:col-span-5">
-            <ul className="ledger rounded-lg border border-line p-6">
-              {[
-                "Business Health Check across four blocks",
-                "Profit improvement, not just revenue growth",
-                "30/60/90-day cash forecast",
-                "Monthly review with your department heads",
-                "AI & automation on the systems you already run",
-              ].map((t) => (
-                <li key={t} className="!py-3 text-sm">{t}</li>
+            <p className="mt-4 leading-8 text-muted">
+              It is one of the sectors we are asked about most — and one where general accounting quietly gets it wrong.
+            </p>
+            <Link href="/travel-agency-accounting" className="btn-primary mt-8">Explore Travel Accounting →</Link>
+          </Reveal>
+
+          <Reveal className="lg:col-span-6" delay={120}>
+            <ul className="ledger rounded-lg border border-line bg-white px-6">
+              {travel.challenges.map((c) => (
+                <li key={c} className="!py-4 text-sm leading-6">{c}</li>
               ))}
             </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Why Scale Visory ────────────────────────────────────────────── */}
+      <section className="bg-navy py-16 text-white md:py-24">
+        <div className="wrap">
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="eyebrow">Why us</p>
+              <h2 className="mt-3 text-white">Why Businesses Choose Scale Visory</h2>
+            </div>
+          </Reveal>
+
+          <div className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {whyPoints.map((p, i) => (
+              <Reveal key={p.title} delay={(i % 3) * 70}>
+                <div className="border-t border-white/15 pt-5">
+                  <span className="text-sky"><Icon name={p.icon} /></span>
+                  <h3 className="mt-3 text-lg text-white">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-white/70">{p.body}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Industries */}
+      {/* ── How we work ─────────────────────────────────────────────────── */}
       <section className="section">
         <div className="wrap">
-          <div className="max-w-2xl">
-            <h2>Sectors we know well</h2>
-            <p className="mt-3 text-muted">
-              The services are the same; what differs is where the mistakes get made. Travel is the one we are asked
-              about most.
-            </p>
-          </div>
-          <ul className="mt-8 flex flex-wrap gap-2.5">
-            {industries.map((i) => (
-              <li key={i.slug}>
-                <Link
-                  href={industryHref(i)}
-                  className="inline-block rounded-md border border-line bg-white px-4 py-2.5 text-sm text-navy no-underline hover:border-sky"
-                >
-                  {i.name}
-                </Link>
-              </li>
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="eyebrow">Process</p>
+              <h2 className="mt-3">How We Work</h2>
+            </div>
+          </Reveal>
+
+          <ol className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {processSteps.map((s, i) => (
+              <Reveal key={s.n} delay={i * 80}>
+                <li className="border-t-2 border-navy pt-4">
+                  <span className="font-display text-3xl font-bold text-gold">{s.n}</span>
+                  <h3 className="mt-2 text-lg">{s.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-muted">{s.body}</p>
+                </li>
+              </Reveal>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
 
-      {/* Training + partner programs */}
+      {/* ── Specialized solutions ───────────────────────────────────────── */}
       <section className="bg-white py-16 md:py-24">
-        <div className="wrap grid gap-8 md:grid-cols-2">
-          <div className="rounded-lg border border-line p-8">
-            <h2>Training institute</h2>
-            <p className="mt-3 text-muted">
-              Practical accounts and taxation courses taught by working professionals — Tally Prime, GST, TDS, income
-              tax and real client files. For freshers, job-seekers and business owners&apos; own staff.
-            </p>
-            <Link href="/training" className="btn-primary mt-6">See courses</Link>
-          </div>
-          <div className="rounded-lg bg-navy p-8 text-white">
-            <h2 className="text-white">Payment recovery</h2>
-            <p className="mt-3 text-white/80">
-              Overdue invoices recovered through a documented, escalating process — ledger audit, demand notice,
-              negotiation, legal escalation — run by our recovery partner Artha.
-            </p>
-            <a href="https://artharecovery.in" target="_blank" rel="noopener noreferrer" className="btn-sky mt-6">
-              Visit artharecovery.in
-            </a>
+        <div className="wrap">
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="eyebrow">Also from Scale Visory</p>
+              <h2 className="mt-3">Specialized Solutions</h2>
+            </div>
+          </Reveal>
+
+          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {specialisations.map((s, i) => (
+              <Reveal key={s.name} delay={(i % 3) * 70}>
+                <div className="card flex h-full flex-col">
+                  <h3 className="text-lg">{s.name}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-7 text-muted">{s.body}</p>
+                  {s.external ? (
+                    <a href={s.href} target="_blank" rel="noopener noreferrer" className="mt-5 text-sm font-semibold text-navy hover:text-sky">
+                      {s.cta} →
+                    </a>
+                  ) : (
+                    <Link href={s.href} className="mt-5 text-sm font-semibold text-navy no-underline hover:text-sky">
+                      {s.cta} →
+                    </Link>
+                  )}
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Why us */}
+      {/* ── Credibility — only what the site already states ─────────────── */}
       <section className="section">
         <div className="wrap grid gap-10 md:grid-cols-12">
-          <div className="md:col-span-5">
-            <h2>Why owners stay with us for years</h2>
-          </div>
+          <Reveal className="md:col-span-5">
+            <p className="eyebrow">The practice</p>
+            <h2 className="mt-3">A Firm, Not a Portal</h2>
+            <p className="mt-4 leading-8 text-muted">
+              Scale Visory works out of {site.address.split(",").slice(-3).join(",").trim()}, with clients across
+              Gujarat. {site.years} years of accounting, tax and audit practice sit behind the four services on this site.
+            </p>
+          </Reveal>
+
           <div className="ledger md:col-span-7">
             {[
-              ["We work in your system", "Tally, Zoho, Busy or Excel — we don't force a migration to bill you for it."],
+              ["We work in your system", "Tally, Zoho, Busy or Excel — we do not force a migration to bill you for it."],
               ["Reminders before due dates, not after", "Your compliance calendar lands on WhatsApp a week ahead, every time."],
-              ["Owner-level conversations", "You speak to the person who signs off your books, not a call centre."],
-              ["Travel & tourism expertise", "TCS on overseas packages, GST on commission, agent ledgers — we know this sector inside out."],
-            ].map(([t, d]) => (
-              <div key={t}>
-                <h3 className="text-lg">{t}</h3>
-                <p className="mt-1 text-muted">{d}</p>
-              </div>
+              ["Owner-level conversations", "You speak to the person who signs off your books."],
+              ["Advisory and documentation on the legal side", "Representation before courts and authorities is coordinated through empanelled advocates."],
+            ].map(([t, d], i) => (
+              <Reveal key={t} delay={i * 60}>
+                <div>
+                  <h3 className="text-lg">{t}</h3>
+                  <p className="mt-1 text-muted">{d}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Resources */}
+      {/* ── Resources (only when posts exist) ───────────────────────────── */}
       {posts.length > 0 && (
         <section className="border-t border-line bg-white py-16">
           <div className="wrap">
@@ -194,29 +250,52 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-            <Link href="/resources" className="mt-4 inline-block text-sm font-semibold text-navy">
-              All resources
-            </Link>
+            <Link href="/resources" className="mt-4 inline-block text-sm font-semibold text-navy">All resources</Link>
           </div>
         </section>
       )}
 
-      {/* Inquiry */}
+      {/* ── Final CTA ───────────────────────────────────────────────────── */}
+      <section className="bg-navy-deep py-16 text-white md:py-20">
+        <div className="wrap grid gap-8 md:grid-cols-12 md:items-center">
+          <Reveal className="md:col-span-7">
+            <h2 className="text-white">Let&apos;s Bring Balance to Your Business.</h2>
+            <p className="mt-4 max-w-2xl text-lg text-white/75">
+              Talk to us about your accounting, taxation, compliance or business support requirements.
+            </p>
+          </Reveal>
+          <Reveal className="md:col-span-5" delay={100}>
+            <div className="flex flex-wrap gap-3 md:justify-end">
+              <Link href="/contact" className="btn-sky">Book a Free Consultation</Link>
+              <a
+                href={whatsappLink("Hi Scale Visory, I'd like to discuss my requirements.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-light"
+              >
+                WhatsApp Us
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Enquiry ─────────────────────────────────────────────────────── */}
       <section className="section" id="inquiry">
         <div className="wrap grid gap-10 md:grid-cols-12">
-          <div className="md:col-span-5">
+          <Reveal className="md:col-span-5">
             <h2>Tell us where the books stand</h2>
             <p className="mt-3 text-muted">
               A 20-minute call, no charge. We&apos;ll tell you what&apos;s pending, what it costs to fix, and whether
               we&apos;re the right fit.
             </p>
             <p className="mt-6 text-sm text-muted">{site.address}</p>
-          </div>
+            <p className="mt-2 text-sm">
+              <a href={`tel:${site.phoneRaw}`} className="font-semibold text-navy">{site.phone}</a>
+            </p>
+          </Reveal>
           <div className="md:col-span-7">
-            <InquiryForm
-              kind="service"
-              subjectOptions={[...services.map((s) => s.name), "Training", "Something else"]}
-            />
+            <InquiryForm kind="service" subjectOptions={[...services.map((s) => s.name), "Training", "Something else"]} />
           </div>
         </div>
       </section>

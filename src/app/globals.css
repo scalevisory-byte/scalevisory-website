@@ -35,6 +35,9 @@
   .field { @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/70 focus:border-sky focus:outline-none; }
   .label { @apply mb-1.5 block text-sm font-medium text-ink; }
   .ledger > * { @apply border-t border-line py-5 first:border-t-0; }
+  /* Small caps label above a heading. */
+  .eyebrow { @apply font-display text-xs font-bold uppercase tracking-[0.18em] text-sky; }
+  .card { @apply rounded-lg border border-line bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky hover:shadow-[0_8px_30px_-12px_rgba(7,53,116,0.25)]; }
   .prose-sv p { @apply mb-4 text-[17px] leading-8 text-ink; }
   .prose-sv h2 { @apply mt-10 mb-3 text-2xl; }
   .prose-sv h3 { @apply mt-8 mb-2 text-xl; }
@@ -44,3 +47,17 @@
 /* Hero balance-beam: one page-load moment */
 @keyframes level { from { transform: rotate(-4deg); } to { transform: rotate(0deg); } }
 .beam { transform-origin: 50% 50%; animation: level 1.4s cubic-bezier(.2,.8,.2,1) both; }
+
+/* Scroll reveal. Starts visible so the page is readable with JS off or before
+   hydration; Reveal.tsx adds .reveal only once it can observe. */
+.reveal { opacity: 0; transform: translateY(14px); }
+.reveal.is-in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+
+/* Hero slides cross-fade in place. */
+.slide { opacity: 0; visibility: hidden; transition: opacity .7s ease; }
+.slide.is-active { opacity: 1; visibility: visible; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.is-in { opacity: 1; transform: none; transition: none; }
+  .slide { transition: none; }
+}

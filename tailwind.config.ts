@@ -11,6 +11,8 @@ const config: Config = {
         ink: "#1B2430",
         muted: "#5B6675",
         line: "#D9E0EA",
+        // Used sparingly — rules, eyebrow marks, the odd number. Never a fill.
+        gold: { DEFAULT: "#B8912F", soft: "#F3ECD8" },
       },
       fontFamily: {
         display: ["var(--font-montserrat)", "sans-serif"],
