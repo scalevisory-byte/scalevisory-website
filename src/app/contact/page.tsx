@@ -7,6 +7,7 @@ import { site, whatsappLink } from "@/lib/content/site";
 export const metadata: Metadata = {
   title: "Contact",
   description: `Contact Scale Visory — ${site.address}. Call ${site.phone} or send an inquiry.`,
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

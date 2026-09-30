@@ -7,6 +7,7 @@ import { whatsappLink } from "@/lib/content/site";
 export const metadata: Metadata = {
   title: "Training Institute — Practical Accounts & Taxation Courses, Surat",
   description: "Job-ready accounting and taxation training in Surat: Tally Prime, GST, TDS, income tax and real client work, taught by practising professionals at Scale Visory.",
+  alternates: { canonical: "/training" },
 };
 
 const courses = [

@@ -32,18 +32,33 @@ jobs:
       # The same gate used locally, so a broken build never reaches the domain.
       - run: npm run typecheck
 
+      # Where the site is served from decides whether every asset URL needs a
+      # subpath prefix, and getting that wrong ships a site with no CSS. So it
+      # is derived from one thing rather than hand-edited:
+      #
+      #   public/CNAME present  → a custom domain, served at the root, no prefix
+      #   public/CNAME absent   → the github.io project site, needs the prefix
+      #
+      # Next copies public/ into out/, so the same file is what tells GitHub
+      # Pages which domain to answer on. Cutting over is therefore one commit
+      # that adds the file, and rolling back is one that deletes it.
+      - name: Work out the base path
+        id: site
+        run: |
+          if [ -f public/CNAME ]; then
+            echo "base_path=" >> "$GITHUB_OUTPUT"
+            echo "Custom domain $(cat public/CNAME) — building for the root."
+          else
+            echo "base_path=/scalevisory-website" >> "$GITHUB_OUTPUT"
+            echo "No CNAME — building for the github.io project subpath."
+          fi
+
       - run: npm run build
         env:
           # Canonicals and the sitemap always name the real domain, so the
           # github.io preview never competes with it in search.
           NEXT_PUBLIC_SITE_URL: https://scalevisory.in
-          # The site currently lives at github.io/scalevisory-website/, so every
-          # asset needs that prefix. WHEN scalevisory.in IS POINTED HERE: delete
-          # this line and restore the CNAME step below, in the same commit.
-          BASE_PATH: /scalevisory-website
-
-      # Restore once DNS points at GitHub Pages:
-      # - run: echo 'scalevisory.in' > out/CNAME
+          BASE_PATH: ${{ steps.site.outputs.base_path }}
 
       # Without this, GitHub Pages' Jekyll step strips _next/, which holds all
       # the CSS and JS — the site would render unstyled.

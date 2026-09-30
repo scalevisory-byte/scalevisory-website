@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Shell from "@/components/Shell";
 import HeroCarousel from "@/components/HeroCarousel";
@@ -13,6 +14,15 @@ import { publishedPosts } from "@/lib/content/posts";
 import { homeServices, whyPoints, processSteps, specialisations, stats, travelChecklist, firmPoints } from "@/lib/content/home";
 import { asset } from "@/lib/basePath";
 import { site, whatsappLink } from "@/lib/content/site";
+
+/**
+ * The homepage is the one page whose canonical is not derived from a slug, so
+ * it is set explicitly. Without it the github.io preview of "/" can be indexed
+ * alongside the real domain.
+ */
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   const posts = publishedPosts.slice(0, 3);

@@ -7,6 +7,7 @@ import { site } from "@/lib/content/site";
 export const metadata: Metadata = {
   title: "About",
   description: "Scale Visory — a Surat-based accounting, taxation and advisory firm with 12+ years of practice. Our background, leadership, values and credentials.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {
