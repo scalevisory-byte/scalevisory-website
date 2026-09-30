@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import { WhatsAppIcon } from "./Icon";
 import { legalNav, site, whatsappLink } from "@/lib/content/site";
 import { services } from "@/lib/content/services";
 import { industries, industryHref } from "@/lib/content/industries";
@@ -92,16 +93,19 @@ export default function Footer() {
             <a className="no-underline hover:text-sky" href={`mailto:${site.email}`}>{site.email}</a>
             <br />
             <a className="no-underline hover:text-sky" href={`mailto:${site.emailAlt}`}>{site.emailAlt}</a>
-            <br />
-            <a
-              className="no-underline hover:text-sky"
-              href={whatsappLink("Hi Scale Visory, I have a query.")}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp
-            </a>
           </p>
+          {/* The WhatsApp line was the word itself, sitting under two email
+              addresses and reading like a third one. The mark says what it is
+              at a glance, and it opens a chat rather than a page. */}
+          <a
+            className="mt-3 flex w-full max-w-[13rem] items-center justify-center gap-2 rounded-md bg-[#25D366] px-3 py-2 text-center font-display text-sm font-semibold text-[#08331C] no-underline transition-colors hover:bg-[#1FBE5A]"
+            href={whatsappLink("Hi Scale Visory, I have a query.")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <WhatsAppIcon className="h-[18px] w-[18px] shrink-0" />
+            WhatsApp
+          </a>
           <p className="mt-2 text-sm">{site.hours[0].days}<br />{site.hours[0].time}</p>
         </div>
       </div>

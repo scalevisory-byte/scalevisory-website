@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import HeroVisual, { type VisualKind } from "./HeroVisual";
 import Icon, { WhatsAppIcon } from "./Icon";
+import GlobalNetwork from "./GlobalNetwork";
 import { asset } from "@/lib/basePath";
 import { site, whatsappLink } from "@/lib/content/site";
 
@@ -172,7 +173,7 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className={`relative overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-white"}`}
+      className={`relative isolate overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-white"}`}
       aria-roledescription="carousel"
       aria-label="Scale Visory highlights"
       tabIndex={0}
@@ -184,6 +185,8 @@ export default function HeroCarousel() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
+      <GlobalNetwork className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-[0.07]" />
+
       {/* Photographic backdrop for the right-hand panel, where one is supplied.
           Hidden below lg, where the column layout stacks and the drawn
           composition reads better at narrow widths. */}
@@ -194,16 +197,32 @@ export default function HeroCarousel() {
             className={`slide absolute inset-y-0 right-0 hidden w-[62%] lg:block ${i === index ? "is-active" : ""}`}
             aria-hidden="true"
           >
-            <img src={asset(s.image)} alt="" className="h-full w-full object-cover object-center" />
-            {/* Feathers the photograph into the slide's own ground, then drops
-                an even scrim over the whole of it so the right-hand side stays
-                dark enough for the navy section to read as one surface. */}
+            <img
+              src={asset(s.image)}
+              alt=""
+              className="h-full w-full object-cover object-center"
+              /* A flat scrim over a whole photograph kills its contrast along
+                 with its brightness. Lifting contrast and saturation first
+                 means the scrim can darken it without flattening it. */
+              style={{ filter: "contrast(1.12) saturate(1.08)" }}
+            />
+            {/* Feathered into the slide's ground on the left, where the type
+                sits, and left far lighter on the right, where the picture is
+                the only thing there. */}
             {s.tone === "dark" ? (
               <>
-                <div className="absolute inset-0 bg-navy/38" />
-                <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/45 to-navy/15" />
-                <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-navy to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-navy to-transparent" />
+                <div className="absolute inset-0 bg-navy/22" />
+                <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/40 to-transparent" />
+                <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-navy via-navy/70 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-navy to-transparent" />
+                {/* Vignette, so the eye lands on the middle of the frame. */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(78% 84% at 48% 50%, transparent 0%, rgba(7,53,116,0.22) 74%, rgba(7,53,116,0.42) 100%)",
+                  }}
+                />
               </>
             ) : (
               <>
@@ -341,8 +360,10 @@ export default function HeroCarousel() {
           </div>
         </div>
 
-        {/* Dots, centred under the hero. */}
-        <ul className="mt-8 flex items-center justify-center gap-2.5">
+        {/* Dots. The mark stays small; the button around it is 24px square,
+            which is the minimum target size WCAG 2.5.8 asks for — the old
+            8x8 dot was the hardest thing on the site to hit on a phone. */}
+        <ul className="mt-6 flex items-center justify-center">
           {slides.map((s, i) => (
             <li key={s.title}>
               <button
@@ -350,16 +371,37 @@ export default function HeroCarousel() {
                 onClick={() => go(i)}
                 aria-label={`Go to slide ${i + 1}`}
                 aria-current={i === index}
-                className={`block h-2 rounded-full transition-all duration-300 ${
-                  i === index
-                    ? dark ? "w-7 bg-sky" : "w-7 bg-navy"
-                    : dark ? "w-2 bg-white/30 hover:bg-white/60" : "w-2 bg-navy/25 hover:bg-navy/50"
-                }`}
-              />
+                className="group grid h-6 w-6 place-items-center"
+              >
+                <span
+                  className={`block h-1.5 rounded-full transition-all duration-300 ${
+                    i === index
+                      ? dark ? "w-6 bg-sky" : "w-6 bg-navy"
+                      : dark
+                        ? "w-1.5 bg-white/35 group-hover:bg-white/70"
+                        : "w-1.5 bg-navy/25 group-hover:bg-navy/50"
+                  }`}
+                />
+              </button>
             </li>
           ))}
         </ul>
       </div>
+
+      {/* Ambient light from the upper right — the same wash the landing heroes
+          use. It sits ABOVE the photograph rather than behind it: behind, the
+          panel's left edge was the one strip the light never reached, and that
+          showed as a hard vertical seam down the hero. */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(110% 85% at 72% 6%, rgba(16,169,232,0.16) 0%, rgba(16,169,232,0.05) 40%, transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sky/40 to-transparent" />
 
       {/* Edge arrows. Hidden on small screens, where swiping is natural. */}
       <button
@@ -368,7 +410,7 @@ export default function HeroCarousel() {
         aria-label="Previous slide"
         className={`absolute left-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:left-6 ${
           dark
-            ? "border-white/25 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white/20"
+            ? "border-white/25 bg-white/10 text-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] backdrop-blur hover:border-white hover:bg-white/20"
             : "border-line bg-white text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] hover:border-sky hover:text-sky"
         }`}
       >
@@ -382,7 +424,7 @@ export default function HeroCarousel() {
         aria-label="Next slide"
         className={`absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:right-6 ${
           dark
-            ? "border-white/25 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white/20"
+            ? "border-white/25 bg-white/10 text-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] backdrop-blur hover:border-white hover:bg-white/20"
             : "border-line bg-white text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] hover:border-sky hover:text-sky"
         }`}
       >
