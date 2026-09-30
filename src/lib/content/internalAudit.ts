@@ -18,6 +18,13 @@
 export const financialAuditId = "financial-internal-audit";
 export const businessAuditId = "business-internal-audit";
 
+/** The three promises in the hero. Each restates a line from `deliverables`. */
+export const heroPoints: { icon: string; title: string; body: string }[] = [
+  { icon: "search", title: "Evidence, Not Opinion", body: "Every finding backed" },
+  { icon: "shieldCheck", title: "Risk-Rated", body: "So the order is obvious" },
+  { icon: "handshake", title: "Follow-Up Review", body: "Findings actually closed" },
+];
+
 /** What usually prompts the call. Each one restates a check the audit performs. */
 export const signals: { title: string; body: string }[] = [
   {

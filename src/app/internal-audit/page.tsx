@@ -8,6 +8,7 @@ import JsonLd from "@/components/JsonLd";
 import Icon from "@/components/Icon";
 import { getService } from "@/lib/content/services";
 import {
+  heroPoints,
   signals,
   deliverables,
   faqs,
@@ -41,6 +42,7 @@ export default function InternalAuditPage() {
         accent="Before the Gap Finds You."
         lead="Books, stock, cash and controls examined by someone who does not work for you — so a bank, a tax officer or a loss is not the first to notice."
         visual="reports"
+        points={heroPoints}
         whatsapp={WHATSAPP}
       />
       <Breadcrumbs trail={[{ href: "/internal-audit", label: "Internal Audit" }]} />
