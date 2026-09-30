@@ -99,6 +99,7 @@ export const specialisations: Specialisation[] = [
   { name: "Payment Recovery", body: "Overdue invoices pursued through a documented, escalating process.", href: "https://artharecovery.in", external: true, cta: "Visit artharecovery.in" },
   { name: "Virtual Accounting", body: "Your accounts function run off-site, inside your own Tally, Zoho or Busy file.", href: "/services/accounting#virtual-accounting", cta: "Learn more" },
   { name: "Accounting Staffing & Support", body: "Trained accounts people to fill a gap, plus review of the staff you have.", href: "/services/accounting#staffing-support", cta: "Learn more" },
+  { name: "Internal Audit", body: "An independent check on books, stock, cash and controls — before a bank, an officer or a loss finds the gap.", href: "/internal-audit", cta: "See how it works" },
   { name: "Forensic Accounting", body: "Investigation where a loss is already suspected, reported with the evidence.", href: "/services/accounting#forensic-accounting", cta: "Learn more" },
   { name: "Business Advisory", body: "A monthly review with your department heads and an action plan that closes.", href: "/services/business-consultancy/monthly-business-advisory", cta: "Learn more" },
   { name: "AI & Automation", body: "Billing, follow-ups and reporting automated on the systems you already run.", href: "/services/business-consultancy/ai-automation", cta: "Learn more" },

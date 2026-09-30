@@ -33,6 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // Priority SEO landing (decision #6)
     entry("/travel-agency-accounting", 0.9, "monthly"),
+    entry("/internal-audit", 0.9, "monthly"),
 
     ...services.map((s) => entry(`/services/${s.slug}`, 0.9)),
     ...consultancyPages.map((p) => entry(`/services/business-consultancy/${p.slug}`, 0.8)),

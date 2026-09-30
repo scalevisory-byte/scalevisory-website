@@ -39,8 +39,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const moved = legacyServiceRedirects[slug];
   if (moved) {
     const target = getService(moved.slug)!;
-    const to = `/services/${moved.slug}${moved.anchor ? `#${moved.anchor}` : ""}`;
-    return <LegacyRedirect to={to} label={target.name} />;
+    const to = moved.href ?? `/services/${moved.slug}${moved.anchor ? `#${moved.anchor}` : ""}`;
+    return <LegacyRedirect to={to} label={moved.label ?? target.name} />;
   }
 
   const s = getService(slug);

@@ -460,9 +460,16 @@ export const getService = (slug: string) => services.find((s) => s.slug === slug
  * Old six-service slugs → where they went (decision #1).
  * `anchor` deep-links to the section that absorbed the page, where one exists.
  */
-export const legacyServiceRedirects: Record<string, { slug: string; anchor?: string }> = {
+/**
+ * Retired slugs from the six-service structure. `href` sends the visitor to a
+ * page outside /services — internal audit has its own landing page again.
+ */
+export const legacyServiceRedirects: Record<
+  string,
+  { slug: string; anchor?: string; href?: string; label?: string }
+> = {
   "accounting-bookkeeping": { slug: "accounting" },
   "compliance-regulatory": { slug: "taxation" },
   "business-advisory": { slug: "business-consultancy" },
-  "internal-audit": { slug: "accounting", anchor: "financial-internal-audit" },
+  "internal-audit": { slug: "accounting", href: "/internal-audit", label: "Internal Audit" },
 };

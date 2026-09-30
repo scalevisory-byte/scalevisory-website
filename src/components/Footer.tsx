@@ -33,6 +33,9 @@ export default function Footer() {
                 <Link className="no-underline hover:text-sky" href={`/services/${s.slug}`}>{s.name}</Link>
               </li>
             ))}
+            {/* Its own landing page rather than a service slug — the work is
+                described inside two of the four services above. */}
+            <li><Link className="no-underline hover:text-sky" href="/internal-audit">Internal Audit</Link></li>
           </ul>
         </div>
 
