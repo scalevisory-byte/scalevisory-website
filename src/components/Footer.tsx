@@ -91,6 +91,8 @@ export default function Footer() {
             <br />
             <a className="no-underline hover:text-sky" href={`mailto:${site.email}`}>{site.email}</a>
             <br />
+            <a className="no-underline hover:text-sky" href={`mailto:${site.emailAlt}`}>{site.emailAlt}</a>
+            <br />
             <a
               className="no-underline hover:text-sky"
               href={whatsappLink("Hi Scale Visory, I have a query.")}

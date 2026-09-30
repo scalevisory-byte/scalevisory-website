@@ -26,7 +26,8 @@ export default function ContactPage() {
               </li>
               <li>
                 <p className="text-sm text-muted">Email</p>
-                <a href={`mailto:${site.email}`} className="font-semibold text-navy">{site.email}</a>
+                <a href={`mailto:${site.email}`} className="block font-semibold text-navy">{site.email}</a>
+                <a href={`mailto:${site.emailAlt}`} className="mt-1 block font-semibold text-navy">{site.emailAlt}</a>
               </li>
               <li>
                 <p className="text-sm text-muted">Office</p>

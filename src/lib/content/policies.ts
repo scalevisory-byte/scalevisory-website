@@ -14,7 +14,7 @@ export interface Policy {
 }
 
 const CONTACT_LINE =
-  "Questions about this page, or a request relating to your own data, go to info@scalevisory.in or +91 99099 93565.";
+  "Questions about this page, or a request relating to your own data, go to info@scalevisory.in, scalevisory@gmail.com or +91 99099 93565.";
 
 export const policies: Policy[] = [
   {
@@ -84,7 +84,7 @@ export const policies: Policy[] = [
       {
         heading: "About this site",
         paragraphs: [
-          "This website is published by Scale Visory, an accounting, taxation, legal and business consultancy practice based at G-59, VIP Plaza, VIP Road, Vesu, Surat – 395007, Gujarat.",
+          "This website is published by Scale Visory, an accounting, taxation, legal and business consultancy practice based at 116, SNS Atria, Behind Prime Shoppers, Vesu, Surat – 395007, Gujarat.",
         ],
       },
       {

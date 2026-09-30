@@ -7,8 +7,18 @@ export const site = {
   phone: "+91 99099 93565",
   phoneRaw: "919909993565",
   email: "info@scalevisory.in",
-  address: "G-59, VIP Plaza, VIP Road, Vesu, Surat – 395007, Gujarat",
-  mapsQuery: "VIP Plaza, VIP Road, Vesu, Surat 395007",
+  /** Second address, shown alongside the first wherever email is listed. */
+  emailAlt: "scalevisory@gmail.com",
+  address: "116, SNS Atria, Behind Prime Shoppers, Vesu, Surat – 395007, Gujarat",
+  /** The parts, so the structured data stops keeping its own copy of them. */
+  postal: {
+    street: "116, SNS Atria, Behind Prime Shoppers, Vesu",
+    locality: "Surat",
+    region: "Gujarat",
+    postalCode: "395007",
+    country: "IN",
+  },
+  mapsQuery: "SNS Atria, Vesu, Surat 395007",
   hours: [
     { days: "Monday – Saturday", time: "10:00 AM – 7:00 PM" },
     { days: "Sunday", time: "Closed" },
