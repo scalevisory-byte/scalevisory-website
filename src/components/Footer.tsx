@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { WhatsAppIcon } from "./Icon";
+import { InstagramIcon, LinkedInIcon, WhatsAppIcon } from "./Icon";
 import { legalNav, site, whatsappLink } from "@/lib/content/site";
 import { services } from "@/lib/content/services";
 import { industries, industryHref } from "@/lib/content/industries";
@@ -24,6 +24,33 @@ export default function Footer() {
             <a className="btn-sky !py-2" href={whatsappLink("Hi Scale Visory, I have a query.")}>WhatsApp us</a>
             <a className="btn-light !py-2" href={`tel:${site.phoneRaw}`}>{site.phone}</a>
           </div>
+
+          {/* Both were in site.ts and rendered nowhere — they only reached the
+              structured data's sameAs, where no reader ever sees them. */}
+          <ul className="mt-5 flex items-center gap-3">
+            <li>
+              <a
+                href={site.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Scale Visory on Instagram"
+                className="grid h-10 w-10 place-items-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white hover:bg-white/10 hover:text-white"
+              >
+                <InstagramIcon className="h-[19px] w-[19px]" />
+              </a>
+            </li>
+            <li>
+              <a
+                href={site.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Scale Visory on LinkedIn"
+                className="grid h-10 w-10 place-items-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white hover:bg-white/10 hover:text-white"
+              >
+                <LinkedInIcon className="h-[19px] w-[19px]" />
+              </a>
+            </li>
+          </ul>
         </div>
 
         <div className="md:col-span-2">

@@ -3,6 +3,7 @@ import "./globals.css";
 import { site } from "@/lib/content/site";
 import Analytics from "@/components/Analytics";
 import TawkChat from "@/components/TawkChat";
+import WhatsAppFab from "@/components/WhatsAppFab";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
+        <WhatsAppFab />
         <Analytics />
         <TawkChat />
       </body>
