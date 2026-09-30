@@ -4,6 +4,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # The compliance calendar is computed from the build date, so the site has to
+  # rebuild for it to roll over. Daily, early morning IST. Nothing else on the
+  # site depends on the clock, so a missed run costs at most a stale calendar.
+  schedule:
+    - cron: "23 1 * * *"
   workflow_dispatch:
 
 permissions:
