@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Shell from "@/components/Shell";
-import PageHero from "@/components/PageHero";
+import TravelHero from "@/components/TravelHero";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import InquiryForm from "@/components/InquiryForm";
 import JsonLd from "@/components/JsonLd";
@@ -48,20 +48,7 @@ export default function TravelAgencyAccountingPage() {
 
   return (
     <Shell>
-      <PageHero
-        title="Travel agency accounting, done by people who know the sector"
-        lead="TCS on overseas packages, GST on commission versus gross, supplier ledgers that drift, advances booked as revenue too early. Travel accounting goes wrong in a specific set of ways — and each one is avoidable."
-      >
-        <div className="flex flex-wrap gap-3">
-          <Link href="/contact" className="btn-sky">Book a consultation</Link>
-          <a
-            href={whatsappLink("Hi Scale Visory, I run a travel agency and need help with accounting and GST/TCS.")}
-            className="btn-light"
-          >
-            WhatsApp us
-          </a>
-        </div>
-      </PageHero>
+      <TravelHero />
       <Breadcrumbs
         trail={[
           { href: "/industries", label: "Industries" },

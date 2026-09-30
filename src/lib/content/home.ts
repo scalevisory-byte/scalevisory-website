@@ -34,6 +34,17 @@ export const homeServices: HomeService[] = [
   { icon: "scales", name: "Legal & Advisory", tone: "gold", blurb: "ROC, licences, agreements and business support.", href: "/services/legal" },
 ];
 
+/**
+ * The four promises under the travel hero's buttons. Each one restates work
+ * the travel page already describes below it — nothing new is claimed here.
+ */
+export const travelHeroPoints: { icon: string; title: string; body: string }[] = [
+  { icon: "book", title: "Accurate Books", body: "On time, every time" },
+  { icon: "shieldCheck", title: "Tax Compliance", body: "GST • TDS • TCS • ITR" },
+  { icon: "bars", title: "Business Reports", body: "Clear insights" },
+  { icon: "handshake", title: "Dedicated Support", body: "For travel businesses" },
+];
+
 /** What the travel specialisation actually covers. */
 export const travelChecklist = [
   "TCS on overseas tours",

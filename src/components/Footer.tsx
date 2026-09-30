@@ -59,7 +59,10 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className="md:col-span-2">
+        {/* min-w-0 lets the grid column shrink below its longest word; without
+            it the email address pushes the page 4px wide at the md breakpoint.
+            break-words then wraps the address itself rather than clipping. */}
+        <div className="min-w-0 break-words md:col-span-2">
           <h4 className="mb-3 font-display text-sm font-semibold text-white">Quick Links</h4>
           <ul className="space-y-2 text-sm">
             <li><Link className="no-underline hover:text-sky" href="/industries">Industries</Link></li>
