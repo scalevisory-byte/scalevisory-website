@@ -55,18 +55,18 @@ interface Slide {
  */
 const slides: Slide[] = [
   {
-    tone: "dark",
+    tone: "light",
     eyebrow: ["Accounting", "Taxation", "Legal", "Business Consultancy"],
     features: [
       { icon: "clock", title: "Reliable Support", body: "On time, every time" },
-      { icon: "people", title: "Practical Advice", body: "For real business needs" },
-      { icon: "bars", title: "Long-Term Partnership", body: "Beyond just compliance" },
+      { icon: "bars", title: "Expert Guidance", body: "For real business needs" },
+      { icon: "people", title: "Long-Term Partnership", body: "Beyond just compliance" },
     ],
-    title: "Complete Accounting.",
-    titleSecondLine: "Clear Numbers,",
-    accent: "Better Decisions.",
-    body: "Daily entries, reconciled banks, accurate ledgers and monthly financial reporting — giving business owners clear numbers they can actually use.",
-    image: "/hero/office.jpg",
+    title: "Complete Accounting",
+    titleSecondLine: "Solutions for",
+    accent: "Growing Businesses.",
+    body: "Accurate books. Timely compliance. Clear financial insights. So you can focus on what you do best — grow your business.",
+    image: "/hero/desk.jpg",
     imageAlt: "",
     visual: "dashboard",
     whatsapp: "Hi Scale Visory, I'd like to discuss my accounting requirements.",
@@ -174,7 +174,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
 
   return (
     <section
-      className={`relative isolate overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-white"}`}
+      className={`relative isolate overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-paper"}`}
       aria-roledescription="carousel"
       aria-label="Scale Visory highlights"
       tabIndex={0}
@@ -186,7 +186,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <GlobalNetwork className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-[0.07]" />
+      {dark && <GlobalNetwork className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-[0.07]" />}
 
       {/* Photographic backdrop for the right-hand panel, where one is supplied.
           Hidden below lg, where the column layout stacks and the drawn
@@ -205,7 +205,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
               /* A flat scrim over a whole photograph kills its contrast along
                  with its brightness. Lifting contrast and saturation first
                  means the scrim can darken it without flattening it. */
-              style={{ filter: "contrast(1.12) saturate(1.08)" }}
+              style={{ filter: s.tone === "dark" ? "contrast(1.12) saturate(1.08)" : "contrast(1.08) saturate(1.06)" }}
             />
             {/* Feathered into the slide's ground on the left, where the type
                 sits, and left far lighter on the right, where the picture is
@@ -227,8 +227,11 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
               </>
             ) : (
               <>
-                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/25 to-transparent" />
-                <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white to-transparent" />
+                {/* Only the left of the frame is washed, where the type sits.
+                    The laptop is the reason this photograph is here, so the
+                    middle and right are left alone. */}
+                <div className="absolute inset-y-0 left-0 w-[52%] bg-gradient-to-r from-paper via-paper/80 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-paper to-transparent" />
               </>
             )}
           </div>
@@ -242,44 +245,51 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
       {hasPhoto && dueDates.length > 0 && (
         <Link
           href="/resources/compliance-calendar"
-          className="absolute right-[6.5%] top-1/2 z-10 hidden w-[15rem] -translate-y-1/2 rounded-xl border border-white/15 bg-navy-deep/75 p-4 no-underline shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-white/35 xl:block"
+          className={`absolute right-[6.5%] top-1/2 z-10 hidden w-[15rem] -translate-y-1/2 rounded-xl border p-4 no-underline backdrop-blur-md transition-colors xl:block ${
+            dark
+              ? "border-white/15 bg-navy-deep/75 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] hover:border-white/35"
+              : "border-line bg-white/90 shadow-[0_24px_60px_-28px_rgba(7,53,116,0.45)] hover:border-navy/40"
+          }`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-display text-[10px] font-bold uppercase tracking-[0.16em] text-sky">
+            <span className={`font-display text-[10px] font-bold uppercase tracking-[0.16em] ${dark ? "text-sky" : "text-gold-deep"}`}>
               Due next
             </span>
-            <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-white/55">
+            <span className={`flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider ${dark ? "text-white/55" : "text-muted"}`}>
               <span className="block h-1.5 w-1.5 rounded-full bg-[#25D366]" />
               Live
             </span>
           </div>
 
-          <ul className="mt-3 space-y-2.5 border-t border-white/10 pt-3">
+          <ul className={`mt-3 space-y-2.5 border-t pt-3 ${dark ? "border-white/10" : "border-line"}`}>
             {dueDates.slice(0, 3).map((d) => (
               <li key={`${d.iso}-${d.title}`} className="flex items-center gap-3">
-                <span className="grid h-9 w-9 shrink-0 place-content-center justify-items-center rounded-lg bg-white/10 text-white">
+                <span className={`grid h-9 w-9 shrink-0 place-content-center justify-items-center rounded-lg ${dark ? "bg-white/10 text-white" : "bg-navy text-white"}`}>
                   <span className="font-display text-[13px] font-bold leading-none">{d.day}</span>
-                  <span className="mt-px font-display text-[8px] font-bold uppercase tracking-wider text-white/60">
+                  <span className="mt-px font-display text-[8px] font-bold uppercase tracking-wider text-white/70">
                     {monthShort(d.month)}
                   </span>
                 </span>
                 <span className="min-w-0">
-                  <span className="block truncate font-display text-[12.5px] font-bold leading-tight text-white">
+                  <span className={`block truncate font-display text-[12.5px] font-bold leading-tight ${dark ? "text-white" : "text-navy"}`}>
                     {d.title}
                   </span>
-                  <span className="block text-[11px] leading-4 text-white/55">{d.category}</span>
+                  <span className={`block text-[11px] leading-4 ${dark ? "text-white/55" : "text-muted"}`}>{d.category}</span>
                 </span>
               </li>
             ))}
           </ul>
 
-          <span className="mt-3 block border-t border-white/10 pt-2.5 text-[11px] font-semibold text-sky">
+          <span className={`mt-3 block border-t pt-2.5 text-[11px] font-semibold ${dark ? "border-white/10 text-sky" : "border-line text-navy"}`}>
             Full compliance calendar →
           </span>
         </Link>
       )}
 
-      <div className="wrap relative py-10 md:py-14 lg:min-h-[520px]">
+      {/* A fixed floor rather than a content-driven height: the photo slides
+          hide the drawn column, so without it the section resizes as the
+          carousel turns. 620px is the tallest slide plus a little air. */}
+      <div className="wrap relative py-10 md:py-14 lg:min-h-[620px]">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-10">
           <div className="grid lg:col-span-6">
             {slides.map((s, i) => (
@@ -291,7 +301,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                 aria-label={`${i + 1} of ${slides.length}`}
                 aria-hidden={i !== index}
               >
-                <p className={`flex flex-wrap items-center gap-x-2.5 gap-y-1 font-display text-[11px] font-bold uppercase tracking-[0.16em] md:text-xs ${s.tone === "dark" ? "text-sky" : "text-gold"}`}>
+                <p className={`flex flex-wrap items-center gap-x-2.5 gap-y-1 font-display text-[11px] font-bold uppercase tracking-[0.16em] md:text-xs ${s.tone === "dark" ? "text-sky" : "text-gold-deep"}`}>
                   {/* The separator trails its word, so a wrap never starts a
                       line with a stray pipe. */}
                   {s.eyebrow.map((e, n) => (
@@ -308,7 +318,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                   {s.accent && (
                     <>
                       <br />
-                      <span className={s.tone === "dark" ? "text-sky" : "text-gold"}>{s.accent}</span>
+                      <span className={s.tone === "dark" ? "text-sky" : "text-gold-deep"}>{s.accent}</span>
                     </>
                   )}
                 </h1>
@@ -344,7 +354,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                     className={
                       s.tone === "dark"
                         ? "btn border border-white/25 bg-white/5 text-white hover:border-white hover:bg-white/10"
-                        : "btn border border-line bg-white text-navy hover:border-sky hover:text-sky"
+                        : "btn border border-line bg-white text-navy hover:border-navy [&>svg]:text-[#25D366]"
                     }
                     tabIndex={i === index ? 0 : -1}
                   >
@@ -437,16 +447,18 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
           use. It sits ABOVE the photograph rather than behind it: behind, the
           panel's left edge was the one strip the light never reached, and that
           showed as a hard vertical seam down the hero. */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(110% 85% at 72% 6%, rgba(16,169,232,0.16) 0%, rgba(16,169,232,0.05) 40%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
+      {dark && (
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-500"
+          style={{
+            background:
+              "radial-gradient(110% 85% at 72% 6%, rgba(16,169,232,0.16) 0%, rgba(16,169,232,0.05) 40%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
+      )}
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sky/40 to-transparent" />
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent ${dark ? "via-sky/40" : "via-line"}`} />
 
       {/* Edge arrows. Hidden on small screens, where swiping is natural. */}
       <button

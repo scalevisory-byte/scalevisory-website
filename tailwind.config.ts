@@ -12,7 +12,10 @@ const config: Config = {
         muted: "#5B6675",
         line: "#D9E0EA",
         // Used sparingly — rules, eyebrow marks, the odd number. Never a fill.
-        gold: { DEFAULT: "#B8912F", soft: "#F3ECD8" },
+        // DEFAULT is the rule-and-fill gold; it measures 2.95:1 on white, so
+        // it must never carry text on a light ground. `deep` is the same hue
+        // taken to 5.00:1, for gold that has to be read.
+        gold: { DEFAULT: "#B8912F", deep: "#8A6B1F", soft: "#F3ECD8" },
       },
       fontFamily: {
         // Section headings and the hero line — the serif does the "established
