@@ -13,6 +13,7 @@ import { postHref } from "@/lib/content/resources";
 import { publishedPosts } from "@/lib/content/posts";
 import { homeServices, whyPoints, processSteps, specialisations, stats, travelChecklist, firmPoints } from "@/lib/content/home";
 import { asset } from "@/lib/basePath";
+import { upcoming } from "@/lib/content/compliance";
 import { site, whatsappLink } from "@/lib/content/site";
 
 /**
@@ -33,7 +34,7 @@ export default function HomePage() {
 
   return (
     <Shell>
-      <HeroCarousel />
+      <HeroCarousel dueDates={upcoming(new Date(), 3)} />
 
       {/* ── Stats ───────────────────────────────────────────────────────────
           A card lifted over the seam between the hero and the section below,

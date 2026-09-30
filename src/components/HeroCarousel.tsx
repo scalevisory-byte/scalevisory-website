@@ -7,6 +7,7 @@ import Icon, { WhatsAppIcon } from "./Icon";
 import GlobalNetwork from "./GlobalNetwork";
 import { asset } from "@/lib/basePath";
 import { site, whatsappLink } from "@/lib/content/site";
+import { monthShort, type DueDate } from "@/lib/content/compliance";
 
 const ROTATE_MS = 5500;
 
@@ -138,7 +139,7 @@ const slides: Slide[] = [
 ];
 
 
-export default function HeroCarousel() {
+export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -232,6 +233,50 @@ export default function HeroCarousel() {
             )}
           </div>
         ) : null
+      )}
+
+      {/* One concrete thing in the hero, over the photograph — what is actually
+          due next. It is read from the compliance calendar at build time and
+          the site rebuilds daily, so it is never a mock-up. Only on the photo
+          slides, which are the only ones with a panel to sit on. */}
+      {hasPhoto && dueDates.length > 0 && (
+        <Link
+          href="/resources/compliance-calendar"
+          className="absolute right-[6.5%] top-1/2 z-10 hidden w-[15rem] -translate-y-1/2 rounded-xl border border-white/15 bg-navy-deep/75 p-4 no-underline shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-white/35 xl:block"
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-display text-[10px] font-bold uppercase tracking-[0.16em] text-sky">
+              Due next
+            </span>
+            <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-white/55">
+              <span className="block h-1.5 w-1.5 rounded-full bg-[#25D366]" />
+              Live
+            </span>
+          </div>
+
+          <ul className="mt-3 space-y-2.5 border-t border-white/10 pt-3">
+            {dueDates.slice(0, 3).map((d) => (
+              <li key={`${d.iso}-${d.title}`} className="flex items-center gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-content-center justify-items-center rounded-lg bg-white/10 text-white">
+                  <span className="font-display text-[13px] font-bold leading-none">{d.day}</span>
+                  <span className="mt-px font-display text-[8px] font-bold uppercase tracking-wider text-white/60">
+                    {monthShort(d.month)}
+                  </span>
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate font-display text-[12.5px] font-bold leading-tight text-white">
+                    {d.title}
+                  </span>
+                  <span className="block text-[11px] leading-4 text-white/55">{d.category}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <span className="mt-3 block border-t border-white/10 pt-2.5 text-[11px] font-semibold text-sky">
+            Full compliance calendar →
+          </span>
+        </Link>
       )}
 
       <div className="wrap relative py-10 md:py-14 lg:min-h-[520px]">
