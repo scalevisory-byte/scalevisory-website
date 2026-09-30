@@ -1,30 +1,50 @@
 # Putting the site on scalevisory.in
 
-The repo side is ready. The only step that cannot be done from here is adding
-the DNS records, because that needs the login for wherever the domain is
-registered.
+The repo side is ready. The only step that cannot be done from here is changing
+the DNS records, because that needs the GoDaddy login.
 
-**Where things stand:** `scalevisory.in` currently resolves to `15.197.225.128`
-and `3.33.251.168`. Those are not GitHub's — the domain is still pointing at
-whatever it was set to before (a registrar parking or forwarding service).
-`artharecovery.in`, for comparison, already resolves to the four GitHub Pages
-addresses, so that one is set up the way this one needs to be.
+**Where things stand**, read off the live DNS on 30 September 2026:
+
+| | |
+|---|---|
+| Nameservers | `ns59.domaincontrol.com`, `ns60.domaincontrol.com` — **GoDaddy** |
+| A records on `scalevisory.in` | `15.197.225.128`, `3.33.251.168` (TTL 3600) |
+| `www` | CNAME → `scalevisory.in` |
+| MX records | **none** |
+| TXT records | **none** |
+
+Two things follow from that.
+
+**The DNS is managed at GoDaddy**, so that is where the records change — not
+wherever the domain was bought, if those differ.
+
+**Those A records are GoDaddy's Domain Forwarding**, not a website. That pair
+of addresses is what GoDaddy points a domain at when forwarding is switched on.
+This matters for one reason: **forwarding has to be turned off first.** While it
+is on, GoDaddy keeps rewriting the A records back to those two addresses, so
+adding GitHub's and leaving forwarding on means the change silently undoes
+itself. That is the single most common way this goes wrong.
+
+There are **no MX and no TXT records**, so no email and no verification records
+run on this domain today — there is nothing to break. (If any get added later,
+leave them alone; the records below only affect the website.)
 
 ---
 
-## Step 1 — check nothing is live on the domain first
+## Step 1 — turn off Domain Forwarding
 
-Open `https://scalevisory.in` in a browser. If a real website answers, changing
-these records takes it down. Do not go further until you are sure that either
-nothing is there, or what is there is meant to be replaced by this site.
+GoDaddy → **My Products** → next to `scalevisory.in`, **DNS** → **Domain
+Forwarding** (it may sit under a "Forwarding" tab or at the bottom of the DNS
+page). Delete the forwarding rule.
 
-Also note any **email** on the domain (MX records, Google Workspace, Zoho).
-The records below only change where the *website* points. Leave every MX and
-TXT record exactly as it is — deleting those is what breaks email.
+Do this before Step 2, not after.
 
 ## Step 2 — add the DNS records
 
-At the registrar's DNS panel for `scalevisory.in`:
+GoDaddy → **DNS** → **Manage Zones** / **DNS Records** for `scalevisory.in`.
+
+First **delete** the two existing A records on `@` (`15.197.225.128` and
+`3.33.251.168`) and the `www` CNAME that points at `scalevisory.in`. Then add:
 
 **Four A records on the apex** (host `@`, or blank, or `scalevisory.in`
 depending on the panel):
@@ -46,17 +66,15 @@ All four. GitHub serves from all of them and having only one is fragile.
 
 Note the trailing dot some panels want: `scalevisory-byte.github.io.`
 
-**Remove** any existing A, AAAA or CNAME record on `@` or `www` that points
-somewhere else — otherwise the old destination keeps answering half the time.
-
 **Optional, IPv6.** Only if the panel supports AAAA records:
 `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`,
 `2606:50c0:8003::153`, all on `@`.
 
 ## Step 3 — wait for it to take
 
-Usually ten minutes to an hour; the registrar may say up to 24 hours. It has
-worked when this returns the 185.199.x addresses:
+The current records have a one-hour TTL, so reckon on up to an hour. GoDaddy
+may still say 24 hours in its own warning; the TTL is the number that matters.
+It has worked when this returns the four 185.199.x addresses:
 
 ```
 dig +short scalevisory.in
