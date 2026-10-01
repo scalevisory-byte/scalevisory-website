@@ -30,15 +30,28 @@ export const site = {
   },
 };
 
-export const nav: { href: string; label: string; external?: boolean }[] = [
-  { href: "/services", label: "Services" },
-  { href: "/industries", label: "Industries" },
+/**
+ * Main navigation — six items, not eight.
+ *
+ * Services and Industries carry their own menus, built in Header.tsx from
+ * services.ts and industries.ts so there is no second list to keep in step.
+ * The two partner ventures moved to `ventureNav` and the slim bar above the
+ * logo: they are other people's sites, and giving them the same weight as
+ * this firm's own pages was most of what made the header feel crowded.
+ */
+export const nav: { href: string; label: string; hasMenu?: boolean }[] = [
+  { href: "/services", label: "Services", hasMenu: true },
+  { href: "/industries", label: "Industries", hasMenu: true },
   { href: "/resources", label: "Resources" },
   { href: "/training", label: "Training" },
-  { href: "https://artharecovery.in", label: "Payment Recovery", external: true },
-  { href: "https://zyntajobs.in", label: "Careers", external: true },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+];
+
+/** The owner's other ventures, on their own domains. */
+export const ventureNav: { href: string; label: string }[] = [
+  { href: "https://artharecovery.in", label: "Payment Recovery" },
+  { href: "https://zyntajobs.in", label: "Careers" },
 ];
 
 /** Policy pages — footer only, never in the main nav. */

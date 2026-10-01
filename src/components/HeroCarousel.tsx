@@ -242,10 +242,17 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
           due next. It is read from the compliance calendar at build time and
           the site rebuilds daily, so it is never a mock-up. Only on the photo
           slides, which are the only ones with a panel to sit on. */}
+      {/* Docked to the content column rather than floated at a percentage of
+          the viewport: its right edge now lines up with the nav above it and
+          the trust panel below, so it reads as part of the layout instead of
+          something dropped on the photograph. */}
       {hasPhoto && dueDates.length > 0 && (
+        <div className="pointer-events-none absolute inset-0 z-10 hidden xl:block" aria-hidden="true">
+          <div className="wrap relative h-full">
         <Link
           href="/resources/compliance-calendar"
-          className={`absolute right-[6.5%] top-1/2 z-10 hidden w-[15rem] -translate-y-1/2 rounded-xl border p-4 no-underline backdrop-blur-md transition-colors xl:block ${
+          aria-hidden="false"
+          className={`pointer-events-auto absolute right-5 top-1/2 w-[15rem] -translate-y-1/2 rounded-xl border p-4 no-underline backdrop-blur-md transition-colors md:right-8 lg:right-10 ${
             dark
               ? "border-white/15 bg-navy-deep/75 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] hover:border-white/35"
               : "border-line bg-white/90 shadow-[0_24px_60px_-28px_rgba(7,53,116,0.45)] hover:border-navy/40"
@@ -284,6 +291,8 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
             Full compliance calendar →
           </span>
         </Link>
+          </div>
+        </div>
       )}
 
       {/* A fixed floor rather than a content-driven height: the photo slides
