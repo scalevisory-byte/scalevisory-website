@@ -3,16 +3,21 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import HeroVisual, { type VisualKind } from "./HeroVisual";
-import { WhatsAppIcon } from "./Icon";
+import Icon, { WhatsAppIcon } from "./Icon";
 import GlobalNetwork from "./GlobalNetwork";
 import BrandPattern from "./BrandPattern";
-import FinanceDashboard from "./FinanceDashboard";
 import ComplianceWidget from "./ComplianceWidget";
 import { asset } from "@/lib/basePath";
 import { whatsappLink } from "@/lib/content/site";
 import { type DueDate } from "@/lib/content/compliance";
 
 const ROTATE_MS = 5500;
+
+interface SlideFeature {
+  icon: string;
+  title: string;
+  body: string;
+}
 
 interface SlideCta {
   label: string;
@@ -33,17 +38,12 @@ interface Slide {
   titleSecondLine?: string;
   accent?: string;
   body: string;
-  /**
-   * Full-bleed photograph behind the whole slide, from public/hero/. Used by
-   * the dark slides only — the opening slide composes its picture inside the
-   * right column instead, behind the console.
-   */
+  /** Full-bleed photograph behind the whole slide, from public/hero/. */
   image?: string;
-  /**
-   * "console" is the drawn financial dashboard plus the live compliance
-   * widget; without it the slide falls back to its drawn HeroVisual.
-   */
-  panel?: "console";
+  /** Floats the live compliance card over the photograph on lg and up. */
+  dueCard?: boolean;
+  /** Optional promise row beneath the buttons. */
+  features?: SlideFeature[];
   visual: VisualKind;
   whatsapp: string;
 }
@@ -58,11 +58,17 @@ const slides: Slide[] = [
   {
     tone: "light",
     eyebrow: ["Accounting", "Taxation", "Legal", "Business Consultancy"],
+    features: [
+      { icon: "clock", title: "Reliable Support", body: "On time, every time" },
+      { icon: "bars", title: "Expert Guidance", body: "For real business needs" },
+      { icon: "people", title: "Long-Term Partnership", body: "Beyond just compliance" },
+    ],
     title: "Complete Accounting",
     titleSecondLine: "Solutions for",
     accent: "Growing Businesses.",
     body: "Accurate books. Timely compliance. Clear financial insights. So you can focus on what you do best — grow your business.",
-    panel: "console",
+    image: "/hero/desk.jpg",
+    dueCard: true,
     visual: "dashboard",
     whatsapp: "Hi Scale Visory, I'd like to discuss my accounting requirements.",
   },
@@ -166,7 +172,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
 
   return (
     <section
-      className={`relative isolate overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-white"}`}
+      className={`relative isolate overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-paper"}`}
       aria-roledescription="carousel"
       aria-label="Scale Visory highlights"
       tabIndex={0}
@@ -178,23 +184,8 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {dark ? (
+      {dark && (
         <GlobalNetwork className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-[0.07]" />
-      ) : (
-        /* The light slide's ground: a tint that deepens toward the left edge,
-           and the mark's own strokes behind it at 3%. Both are faint enough
-           that the type measured on them still clears AA by a full point. */
-        <>
-          <div
-            className="pointer-events-none absolute inset-0 -z-10"
-            style={{
-              background:
-                "linear-gradient(100deg, rgba(11,58,120,0.055) 0%, rgba(11,58,120,0.026) 28%, rgba(11,58,120,0) 56%)",
-            }}
-            aria-hidden="true"
-          />
-          <BrandPattern className="pointer-events-none absolute inset-y-0 left-0 -z-10 h-full w-[44%] opacity-[0.03]" />
-        </>
       )}
 
       {/* Full-bleed photograph, for the dark slides that carry one. */}
@@ -212,28 +203,91 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
               /* A flat scrim over a whole photograph kills its contrast along
                  with its brightness. Lifting contrast and saturation first
                  means the scrim can darken it without flattening it. */
-              style={{ filter: "contrast(1.12) saturate(1.08)" }}
+              style={{ filter: s.tone === "dark" ? "contrast(1.12) saturate(1.08)" : "contrast(1.08) saturate(1.06)" }}
             />
-            <div className="absolute inset-0 bg-navy/22" />
-            <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/40 to-transparent" />
-            <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-navy via-navy/70 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-navy to-transparent" />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(78% 84% at 48% 50%, transparent 0%, rgba(11,58,120,0.22) 74%, rgba(11,58,120,0.42) 100%)",
-              }}
-            />
+            {s.tone === "dark" ? (
+              <>
+                <div className="absolute inset-0 bg-navy/22" />
+                <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/40 to-transparent" />
+                <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-navy via-navy/70 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-navy to-transparent" />
+                {/* Vignette, so the eye lands on the middle of the frame. */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(78% 84% at 48% 50%, transparent 0%, rgba(11,58,120,0.22) 74%, rgba(11,58,120,0.42) 100%)",
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                {/* Only the left of the frame is washed, where the type sits.
+                    The laptop and the row of books are the reason this
+                    photograph is here, so the middle and right are left
+                    alone. The wash is paper, which is now the slide's own
+                    ground, so the two meet without a seam. */}
+                <div className="absolute inset-y-0 left-0 w-[52%] bg-gradient-to-r from-paper via-paper/80 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-paper to-transparent" />
+              </>
+            )}
           </div>
         ) : null
+      )}
+
+      {/* The light slide's ground. The owner wanted the left read as a tinted
+          panel rather than as white paper, so the wash is roughly twice what
+          it was and the mark's strokes sit a little higher. The ceiling is set
+          by the type, not by taste: at this depth the gold label measures 4.9
+          and the lead 5.0, both over AA.
+
+          It is painted ABOVE the photograph, not behind it. Behind, the photo
+          panel's own wash ended on plain paper while the slide around it was
+          tinted, and the two met as a hard vertical line down the hero. */}
+      {!dark && (
+        <>
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(100deg, rgba(11,58,120,0.130) 0%, rgba(11,58,120,0.065) 30%, rgba(11,58,120,0) 60%)",
+            }}
+            aria-hidden="true"
+          />
+          <BrandPattern className="pointer-events-none absolute inset-y-0 left-0 h-full w-[48%] opacity-[0.05]" />
+        </>
+      )}
+
+      {/* The live compliance card, docked to the content column rather than
+          floated at a percentage of the viewport: its right edge lines up with
+          the nav above it and the credibility bar below, so it reads as part
+          of the layout instead of something dropped on the photograph. Only
+          from lg, where the photograph exists; below that it sits in the
+          flow under the drawn composition. */}
+      {active.dueCard && dueDates.length > 0 && (
+        <div className="pointer-events-none absolute inset-0 z-10 hidden lg:block" aria-hidden="true">
+          <div className="wrap relative h-full">
+            <ComplianceWidget
+              dates={dueDates}
+              /* Docked to the content column on the right, and sat at the
+                 foot of the hero rather than its middle. Centred, its right
+                 edge and the next-slide arrow — which is also centred — shared
+                 22px at 1280, and the card swallowed the click. */
+              className="pointer-events-auto absolute bottom-10 right-5 w-[16rem] md:right-8 lg:right-10"
+            />
+          </div>
+        </div>
       )}
 
       {/* A fixed floor rather than a content-driven height: the slides differ
           in how much they carry, so without it the section resizes as the
           carousel turns. */}
       <div className="wrap relative py-12 md:py-16 lg:min-h-[620px]">
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,48fr)_minmax(0,52fr)] lg:gap-12 xl:gap-16">
+        {/* An even split. The brief's 48/52 was sized for the drawn console;
+            with the photograph full-bleed from 38% the right column carries
+            nothing on lg, and the extra 27px is what keeps "Long-Term
+            Partnership" on one line in the promise row. */}
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-10 xl:gap-12">
           <div className="grid">
             {slides.map((s, i) => (
               <div
@@ -264,7 +318,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                   {s.accent && (
                     <>
                       <br />
-                      <span className={s.tone === "dark" ? "text-gold-light" : "text-gold"}>{s.accent}</span>
+                      <span className={s.tone === "dark" ? "text-gold-light" : "text-gold-deep"}>{s.accent}</span>
                     </>
                   )}
                 </h1>
@@ -310,6 +364,35 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                     WhatsApp us
                   </a>
                 </div>
+
+                {s.features && (
+                  <ul className="mt-9 grid gap-x-3 gap-y-6 sm:grid-cols-3">
+                    {s.features.map((f, n) => (
+                      <li
+                        key={f.title}
+                        className={`flex items-start gap-2.5 ${
+                          n > 0
+                            ? s.tone === "dark"
+                              ? "sm:border-l sm:border-white/15 sm:pl-3"
+                              : "sm:border-l sm:border-navy/15 sm:pl-3.5"
+                            : ""
+                        }`}
+                      >
+                        <span className={`shrink-0 ${s.tone === "dark" ? "text-sky-bright" : "text-navy"}`}>
+                          <Icon name={f.icon} className="mt-0.5 h-6 w-6" strokeWidth={1.4} />
+                        </span>
+                        <div className="min-w-0">
+                          <p className={`font-display text-[12px] font-bold leading-tight tracking-tight ${s.tone === "dark" ? "text-white" : "text-navy"}`}>
+                            {f.title}
+                          </p>
+                          <p className={`mt-0.5 text-[11.5px] leading-5 ${s.tone === "dark" ? "text-white/65" : "text-muted-deep"}`}>
+                            {f.body}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
           </div>
@@ -326,13 +409,10 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                 className={`slide col-start-1 row-start-1 ${i === index ? "is-active" : ""} ${s.image ? "lg:hidden" : ""}`}
                 aria-hidden="true"
               >
-                {s.panel === "console" ? (
-                  <ConsolePanel dueDates={dueDates} />
-                ) : (
-                  <div className="mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none">
-                    <HeroVisual kind={s.visual} />
-                  </div>
-                )}
+                <div className="mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none">
+                  <HeroVisual kind={s.visual} />
+                  {s.dueCard && <ComplianceWidget dates={dueDates} className="mt-6" />}
+                </div>
               </div>
             ))}
           </div>
@@ -417,42 +497,3 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
   );
 }
 
-/**
- * The opening slide's right-hand composition.
- *
- * Three layers, back to front: the office photograph blurred to the point
- * where it is an environment rather than a subject — which is also what
- * finally silences the wall lettering and the row of books that were competing
- * with the headline; the drawn console; and the live compliance widget,
- * overlapping the console's lower-left corner so the group has depth without
- * a single gradient. Below lg the widget drops under the console instead,
- * which is the order the brief asks for on a phone.
- */
-function ConsolePanel({ dueDates }: { dueDates: DueDate[] }) {
-  return (
-    <div className="relative lg:pb-[8.5rem]">
-      <div
-        className="pointer-events-none absolute -inset-x-8 -inset-y-10 -z-10 hidden overflow-hidden rounded-[32px] lg:block"
-        aria-hidden="true"
-      >
-        <img
-          src={asset("/hero/desk.jpg")}
-          alt=""
-          className="h-full w-full scale-[1.18] object-cover object-center"
-          style={{ filter: "blur(22px) saturate(0.8) brightness(1.1)" }}
-        />
-        {/* Lifted almost to white, so it reads as daylight in a glass office
-            rather than as a photograph someone put behind the panel. */}
-        <div className="absolute inset-0 bg-white/60" />
-        <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-transparent to-white/55" />
-      </div>
-
-      <FinanceDashboard className="relative" />
-
-      <ComplianceWidget
-        dates={dueDates}
-        className="mt-5 w-full sm:mx-auto sm:max-w-[19rem] lg:absolute lg:inset-x-0 lg:-bottom-1 lg:mx-0 lg:mt-0 lg:max-w-none"
-      />
-    </div>
-  );
-}

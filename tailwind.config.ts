@@ -10,10 +10,10 @@ import type { Config } from "tailwindcss";
  * Measured on #FFFFFF / #F5F8FC, then on #0B3A78 / #082E5F:
  *   ink        #17365D  12.19 / 11.45              body and headings
  *   muted      #61738A   4.85 /  4.56              secondary text
- *   muted.deep #52647B   6.06 /  5.69              secondary on a tinted ground
+ *   muted.deep #4C5D73   6.73 /  6.33              secondary on a tinted ground
  *   navy       #0B3A78  11.11 / 10.43              dominant brand colour
  *   gold       #A67C20   3.80 /  3.57              rules and LARGE display only
- *   gold.deep  #886414   5.41 /  5.08              small gold labels on light
+ *   gold.deep  #7A5910   6.43 /  6.04              ALL gold text on a light ground
  *   gold.light #CDAE68     —  /   —   5.21 / 6.29  gold as text on navy
  *   sky        #10A9E8     —  /   —                fills only (2.67 on white)
  *   sky.bright #3CBCEF     —  /   —   5.09 / 6.15  sky as text on navy
@@ -28,10 +28,10 @@ const config: Config = {
         sky: { DEFAULT: "#10A9E8", bright: "#3CBCEF", deep: "#0E6A90", soft: "#E2F2FB" },
         // Champagne. An accent only — rules, small labels, one highlighted
         // word. DEFAULT is under AA as small text and must never carry any.
-        gold: { DEFAULT: "#A67C20", light: "#CDAE68", deep: "#886414", soft: "#F6F1E4" },
+        gold: { DEFAULT: "#A67C20", light: "#CDAE68", deep: "#7A5910", soft: "#F6F1E4" },
         paper: "#F5F8FC",
         ink: "#17365D",
-        muted: { DEFAULT: "#61738A", deep: "#52647B" },
+        muted: { DEFAULT: "#61738A", deep: "#4C5D73" },
         // `line` is a hairline divider. `line.strong` is for the boundary of a
         // form control, which WCAG 1.4.11 holds to 3:1 against its surround.
         line: { DEFAULT: "#DCE4EE", strong: "#8FA0B6" },
