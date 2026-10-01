@@ -9,13 +9,16 @@ const config: Config = {
         sky: { DEFAULT: "#10A9E8", soft: "#DDF2FC" },
         paper: "#F8FAFC",
         ink: "#1B2430",
-        muted: "#5B6675",
+        // DEFAULT is the body-copy grey, 4.98:1 on paper. `deep` is the same
+        // hue a shade down, for the tinted left of the light hero slide,
+        // where DEFAULT falls to 4.4:1 and misses AA.
+        muted: { DEFAULT: "#5B6675", deep: "#4E5867" },
         line: "#D9E0EA",
         // Used sparingly — rules, eyebrow marks, the odd number. Never a fill.
         // DEFAULT is the rule-and-fill gold; it measures 2.95:1 on white, so
         // it must never carry text on a light ground. `deep` is the same hue
         // taken to 5.00:1, for gold that has to be read.
-        gold: { DEFAULT: "#B8912F", deep: "#8A6B1F", soft: "#F3ECD8" },
+        gold: { DEFAULT: "#B8912F", deep: "#7A5C12", soft: "#F3ECD8" },
       },
       fontFamily: {
         // Section headings and the hero line — the serif does the "established

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import HeroVisual, { type VisualKind } from "./HeroVisual";
 import Icon, { WhatsAppIcon } from "./Icon";
 import GlobalNetwork from "./GlobalNetwork";
+import BrandPattern from "./BrandPattern";
 import { asset } from "@/lib/basePath";
 import { site, whatsappLink } from "@/lib/content/site";
 import { monthShort, type DueDate } from "@/lib/content/compliance";
@@ -186,7 +187,24 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {dark && <GlobalNetwork className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-[0.07]" />}
+      {dark ? (
+        <GlobalNetwork className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-[0.07]" />
+      ) : (
+        /* The light slide's left half was a flat sheet of paper. A tint that
+           deepens toward the edge, and the mark's own strokes at 5%, give it
+           something to sit on without touching the type's contrast. */
+        <>
+          <div
+            className="pointer-events-none absolute inset-0 -z-10"
+            style={{
+              background:
+                "linear-gradient(100deg, rgba(7,53,116,0.070) 0%, rgba(7,53,116,0.032) 26%, rgba(7,53,116,0) 54%)",
+            }}
+            aria-hidden="true"
+          />
+          <BrandPattern className="pointer-events-none absolute inset-y-0 left-0 -z-10 h-full w-[46%] opacity-[0.035]" />
+        </>
+      )}
 
       {/* Photographic backdrop for the right-hand panel, where one is supplied.
           Hidden below lg, where the column layout stacks and the drawn
@@ -332,7 +350,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                   )}
                 </h1>
 
-                <p className={`mt-5 max-w-[34rem] text-[17px] leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted"}`}>{s.body}</p>
+                <p className={`mt-5 max-w-[34rem] text-[17px] leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted-deep"}`}>{s.body}</p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   {s.cta?.external ? (
@@ -396,7 +414,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                           <p className={`font-display text-[12px] font-bold leading-tight tracking-tight ${s.tone === "dark" ? "text-white" : "text-navy"}`}>
                             {f.title}
                           </p>
-                          <p className={`mt-0.5 text-[11.5px] leading-5 ${s.tone === "dark" ? "text-white/65" : "text-muted"}`}>
+                          <p className={`mt-0.5 text-[11.5px] leading-5 ${s.tone === "dark" ? "text-white/65" : "text-muted-deep"}`}>
                             {f.body}
                           </p>
                         </div>
