@@ -93,7 +93,7 @@ export default async function PostPage({
                 {more.map((o) => (
                   <li key={o.slug}>
                     <Link href={postHref(o.category, o.slug)} className="no-underline">
-                      <span className="block font-display font-semibold text-navy hover:text-sky">
+                      <span className="block font-display font-semibold text-navy hover:text-sky-deep">
                         {o.title}
                       </span>
                       <span className="mt-0.5 block text-sm text-muted">

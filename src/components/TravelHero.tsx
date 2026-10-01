@@ -44,7 +44,7 @@ export default function TravelHero() {
 
         <div className="wrap relative py-14 md:py-20 lg:min-h-[600px]">
           <div className="max-w-[36rem] lg:max-w-[33rem] xl:max-w-[36rem]">
-            <p className="eyebrow eyebrow-rule text-sky after:hidden sm:after:block">
+            <p className="eyebrow eyebrow-rule text-gold-light after:hidden sm:after:block">
               <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
                 {EYEBROW.map((e, i) => (
                   <span key={e} className="flex items-center gap-x-2.5 whitespace-nowrap">
@@ -58,7 +58,7 @@ export default function TravelHero() {
             <h1 className="mt-5 !text-white">
               Accounting Built for
               <br />
-              <span className="text-sky">Travel Businesses.</span>
+              <span className="text-sky-bright">Travel Businesses.</span>
             </h1>
 
             <p className="mt-5 text-[17px] leading-8 text-white/80">
@@ -85,7 +85,7 @@ export default function TravelHero() {
             <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
               {travelHeroPoints.map((p) => (
                 <li key={p.title} className="flex items-start gap-3">
-                  <span className="mt-0.5 shrink-0 text-sky">
+                  <span className="mt-0.5 shrink-0 text-sky-bright">
                     <Icon name={p.icon} className="h-6 w-6" strokeWidth={1.4} />
                   </span>
                   <div className="min-w-0">

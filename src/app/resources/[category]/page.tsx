@@ -63,7 +63,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                   <p className="text-sm text-muted md:col-span-3">{fmtDate(p.date)}</p>
                   <div className="md:col-span-9">
                     <h2 className="text-2xl">
-                      <Link href={postHref(p.category, p.slug)} className="no-underline hover:text-sky">
+                      <Link href={postHref(p.category, p.slug)} className="no-underline hover:text-sky-deep">
                         {p.title}
                       </Link>
                     </h2>

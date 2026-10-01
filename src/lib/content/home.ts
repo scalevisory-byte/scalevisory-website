@@ -21,7 +21,7 @@ export const stats: { icon: string; big: string; small: string }[] = [
   { icon: "badge", big: "12+ Years", small: "of professional experience" },
   { icon: "shieldCheck", big: "Complete Support", small: "Accounting • Tax • Compliance" },
   { icon: "briefcase", big: "End-to-End", small: "Business financial support" },
-  { icon: "pin", big: "Gujarat & Beyond", small: "Serving businesses across India" },
+  { icon: "pin", big: "Pan India", small: "Serving businesses across India" },
 ];
 
 /** Six entry points into the four core services. */

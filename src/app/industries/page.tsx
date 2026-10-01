@@ -28,7 +28,7 @@ export default function IndustriesPage() {
             <article key={i.slug} className="grid gap-3 md:grid-cols-12 md:gap-8">
               <div className="md:col-span-4">
                 <h2 className="text-2xl">
-                  <Link href={industryHref(i)} className="no-underline hover:text-sky">{i.name}</Link>
+                  <Link href={industryHref(i)} className="no-underline hover:text-sky-deep">{i.name}</Link>
                 </h2>
                 <p className="mt-2 text-muted">{i.short}</p>
               </div>

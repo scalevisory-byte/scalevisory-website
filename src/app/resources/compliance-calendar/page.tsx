@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const TINT: Record<ComplianceCategory, string> = {
   GST: "bg-sky-soft text-navy",
   "TDS / TCS": "bg-navy-soft text-navy",
-  "Income Tax": "bg-gold-soft text-gold",
+  "Income Tax": "bg-gold-soft text-gold-deep",
   Payroll: "bg-sky-soft text-navy",
   ROC: "bg-navy-soft text-navy",
 };

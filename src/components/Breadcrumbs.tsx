@@ -12,8 +12,11 @@ export default function Breadcrumbs({ trail }: { trail: Crumb[] }) {
   const all: Crumb[] = [{ href: "/", label: "Home" }, ...trail];
   return (
     <>
-      <nav aria-label="Breadcrumb" className="border-b border-line bg-white">
-        <ol className="wrap flex flex-wrap items-center gap-x-2 gap-y-1 py-3 text-sm text-muted">
+      {/* z-20: the travel hero's trust panel is pulled up with a negative
+          margin and its shadow spilled 60px down over this bar, taking the
+          crumb links from 4.9:1 to 3.5:1. Raising the bar clips the spill. */}
+      <nav aria-label="Breadcrumb" className="relative z-20 border-b border-line bg-white">
+        <ol className="wrap flex flex-wrap items-center gap-x-2 gap-y-1 py-3 text-sm text-muted-deep">
           {all.map((c, i) => {
             const last = i === all.length - 1;
             return (

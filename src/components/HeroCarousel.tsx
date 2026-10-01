@@ -3,20 +3,16 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import HeroVisual, { type VisualKind } from "./HeroVisual";
-import Icon, { WhatsAppIcon } from "./Icon";
+import { WhatsAppIcon } from "./Icon";
 import GlobalNetwork from "./GlobalNetwork";
 import BrandPattern from "./BrandPattern";
+import FinanceDashboard from "./FinanceDashboard";
+import ComplianceWidget from "./ComplianceWidget";
 import { asset } from "@/lib/basePath";
-import { site, whatsappLink } from "@/lib/content/site";
-import { monthShort, type DueDate } from "@/lib/content/compliance";
+import { whatsappLink } from "@/lib/content/site";
+import { type DueDate } from "@/lib/content/compliance";
 
 const ROTATE_MS = 5500;
-
-interface SlideFeature {
-  icon: string;
-  title: string;
-  body: string;
-}
 
 interface SlideCta {
   label: string;
@@ -30,8 +26,6 @@ interface Slide {
   tone?: "light" | "dark";
   /** Overrides "Book a free consultation" → /contact on slides that belong elsewhere. */
   cta?: SlideCta;
-  /** Optional four-up row beneath the buttons. */
-  features?: SlideFeature[];
   /** Rendered with pipe separators, like the printed lockup. */
   eyebrow: string[];
   title: string;
@@ -40,35 +34,35 @@ interface Slide {
   accent?: string;
   body: string;
   /**
-   * Optional photograph, placed in public/hero/. When absent the drawn
-   * composition is used instead, so the site never ships a broken image.
+   * Full-bleed photograph behind the whole slide, from public/hero/. Used by
+   * the dark slides only — the opening slide composes its picture inside the
+   * right column instead, behind the console.
    */
   image?: string;
-  imageAlt?: string;
+  /**
+   * "console" is the drawn financial dashboard plus the live compliance
+   * widget; without it the slide falls back to its drawn HeroVisual.
+   */
+  panel?: "console";
   visual: VisualKind;
   whatsapp: string;
 }
 
 /**
- * Every slide is dark: navy ground, white type, sky accent. The two slides
- * with a photograph run it behind the type with a scrim over it, so the
- * picture reads as atmosphere rather than as a thing competing with the words.
+ * Slide one is the light treatment the owner specified: a clean two-column
+ * composition, 48/52, with one dominant visual on the right. The rest stay on
+ * navy, which is what makes the first slide read as the front of the brochure
+ * rather than as one of seven.
  */
 const slides: Slide[] = [
   {
     tone: "light",
     eyebrow: ["Accounting", "Taxation", "Legal", "Business Consultancy"],
-    features: [
-      { icon: "clock", title: "Reliable Support", body: "On time, every time" },
-      { icon: "bars", title: "Expert Guidance", body: "For real business needs" },
-      { icon: "people", title: "Long-Term Partnership", body: "Beyond just compliance" },
-    ],
     title: "Complete Accounting",
     titleSecondLine: "Solutions for",
     accent: "Growing Businesses.",
     body: "Accurate books. Timely compliance. Clear financial insights. So you can focus on what you do best — grow your business.",
-    image: "/hero/desk.jpg",
-    imageAlt: "",
+    panel: "console",
     visual: "dashboard",
     whatsapp: "Hi Scale Visory, I'd like to discuss my accounting requirements.",
   },
@@ -100,7 +94,6 @@ const slides: Slide[] = [
     accent: "Travel Agents.",
     body: "Tickets, hotels, packages, agent commissions, TCS and GST — travel accounting works differently, and we handle the whole of it for you.",
     image: "/hero/travel.jpg",
-    imageAlt: "",
     visual: "dashboard",
     cta: { label: "Explore travel accounting", href: "/travel-agency-accounting" },
     whatsapp: "Hi Scale Visory, I run a travel agency and need help with accounting and GST/TCS.",
@@ -139,7 +132,6 @@ const slides: Slide[] = [
   },
 ];
 
-
 export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -170,12 +162,11 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
   }
 
   const active = slides[index];
-  const hasPhoto = Boolean(active.image);
   const dark = active.tone === "dark";
 
   return (
     <section
-      className={`relative isolate overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-paper"}`}
+      className={`relative isolate overflow-hidden transition-colors duration-500 ${dark ? "bg-navy" : "bg-white"}`}
       aria-roledescription="carousel"
       aria-label="Scale Visory highlights"
       tabIndex={0}
@@ -190,25 +181,23 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
       {dark ? (
         <GlobalNetwork className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-[0.07]" />
       ) : (
-        /* The light slide's left half was a flat sheet of paper. A tint that
-           deepens toward the edge, and the mark's own strokes at 5%, give it
-           something to sit on without touching the type's contrast. */
+        /* The light slide's ground: a tint that deepens toward the left edge,
+           and the mark's own strokes behind it at 3%. Both are faint enough
+           that the type measured on them still clears AA by a full point. */
         <>
           <div
             className="pointer-events-none absolute inset-0 -z-10"
             style={{
               background:
-                "linear-gradient(100deg, rgba(7,53,116,0.070) 0%, rgba(7,53,116,0.032) 26%, rgba(7,53,116,0) 54%)",
+                "linear-gradient(100deg, rgba(11,58,120,0.055) 0%, rgba(11,58,120,0.026) 28%, rgba(11,58,120,0) 56%)",
             }}
             aria-hidden="true"
           />
-          <BrandPattern className="pointer-events-none absolute inset-y-0 left-0 -z-10 h-full w-[46%] opacity-[0.035]" />
+          <BrandPattern className="pointer-events-none absolute inset-y-0 left-0 -z-10 h-full w-[44%] opacity-[0.03]" />
         </>
       )}
 
-      {/* Photographic backdrop for the right-hand panel, where one is supplied.
-          Hidden below lg, where the column layout stacks and the drawn
-          composition reads better at narrow widths. */}
+      {/* Full-bleed photograph, for the dark slides that carry one. */}
       {slides.map((s, i) =>
         s.image ? (
           <div
@@ -223,102 +212,29 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
               /* A flat scrim over a whole photograph kills its contrast along
                  with its brightness. Lifting contrast and saturation first
                  means the scrim can darken it without flattening it. */
-              style={{ filter: s.tone === "dark" ? "contrast(1.12) saturate(1.08)" : "contrast(1.08) saturate(1.06)" }}
+              style={{ filter: "contrast(1.12) saturate(1.08)" }}
             />
-            {/* Feathered into the slide's ground on the left, where the type
-                sits, and left far lighter on the right, where the picture is
-                the only thing there. */}
-            {s.tone === "dark" ? (
-              <>
-                <div className="absolute inset-0 bg-navy/22" />
-                <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/40 to-transparent" />
-                <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-navy via-navy/70 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-navy to-transparent" />
-                {/* Vignette, so the eye lands on the middle of the frame. */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(78% 84% at 48% 50%, transparent 0%, rgba(7,53,116,0.22) 74%, rgba(7,53,116,0.42) 100%)",
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                {/* Only the left of the frame is washed, where the type sits.
-                    The laptop is the reason this photograph is here, so the
-                    middle and right are left alone. */}
-                <div className="absolute inset-y-0 left-0 w-[52%] bg-gradient-to-r from-paper via-paper/80 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-paper to-transparent" />
-              </>
-            )}
+            <div className="absolute inset-0 bg-navy/22" />
+            <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/40 to-transparent" />
+            <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-navy via-navy/70 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-navy to-transparent" />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(78% 84% at 48% 50%, transparent 0%, rgba(11,58,120,0.22) 74%, rgba(11,58,120,0.42) 100%)",
+              }}
+            />
           </div>
         ) : null
       )}
 
-      {/* One concrete thing in the hero, over the photograph — what is actually
-          due next. It is read from the compliance calendar at build time and
-          the site rebuilds daily, so it is never a mock-up. Only on the photo
-          slides, which are the only ones with a panel to sit on. */}
-      {/* Docked to the content column rather than floated at a percentage of
-          the viewport: its right edge now lines up with the nav above it and
-          the trust panel below, so it reads as part of the layout instead of
-          something dropped on the photograph. */}
-      {hasPhoto && dueDates.length > 0 && (
-        <div className="pointer-events-none absolute inset-0 z-10 hidden xl:block" aria-hidden="true">
-          <div className="wrap relative h-full">
-        <Link
-          href="/resources/compliance-calendar"
-          aria-hidden="false"
-          className={`pointer-events-auto absolute right-5 top-1/2 w-[15rem] -translate-y-1/2 rounded-xl border p-4 no-underline backdrop-blur-md transition-colors md:right-8 lg:right-10 ${
-            dark
-              ? "border-white/15 bg-navy-deep/75 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] hover:border-white/35"
-              : "border-line bg-white/90 shadow-[0_24px_60px_-28px_rgba(7,53,116,0.45)] hover:border-navy/40"
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className={`font-display text-[10px] font-bold uppercase tracking-[0.16em] ${dark ? "text-sky" : "text-gold-deep"}`}>
-              Due next
-            </span>
-            <span className={`flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider ${dark ? "text-white/55" : "text-muted"}`}>
-              <span className="block h-1.5 w-1.5 rounded-full bg-[#25D366]" />
-              Live
-            </span>
-          </div>
-
-          <ul className={`mt-3 space-y-2.5 border-t pt-3 ${dark ? "border-white/10" : "border-line"}`}>
-            {dueDates.slice(0, 3).map((d) => (
-              <li key={`${d.iso}-${d.title}`} className="flex items-center gap-3">
-                <span className={`grid h-9 w-9 shrink-0 place-content-center justify-items-center rounded-lg ${dark ? "bg-white/10 text-white" : "bg-navy text-white"}`}>
-                  <span className="font-display text-[13px] font-bold leading-none">{d.day}</span>
-                  <span className="mt-px font-display text-[8px] font-bold uppercase tracking-wider text-white/70">
-                    {monthShort(d.month)}
-                  </span>
-                </span>
-                <span className="min-w-0">
-                  <span className={`block truncate font-display text-[12.5px] font-bold leading-tight ${dark ? "text-white" : "text-navy"}`}>
-                    {d.title}
-                  </span>
-                  <span className={`block text-[11px] leading-4 ${dark ? "text-white/55" : "text-muted"}`}>{d.category}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <span className={`mt-3 block border-t pt-2.5 text-[11px] font-semibold ${dark ? "border-white/10 text-sky" : "border-line text-navy"}`}>
-            Full compliance calendar →
-          </span>
-        </Link>
-          </div>
-        </div>
-      )}
-
-      {/* A fixed floor rather than a content-driven height: the photo slides
-          hide the drawn column, so without it the section resizes as the
-          carousel turns. 620px is the tallest slide plus a little air. */}
-      <div className="wrap relative py-10 md:py-14 lg:min-h-[620px]">
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-10">
-          <div className="grid lg:col-span-6">
+      {/* A fixed floor rather than a content-driven height: the slides differ
+          in how much they carry, so without it the section resizes as the
+          carousel turns. */}
+      <div className="wrap relative py-12 md:py-16 lg:min-h-[620px]">
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,48fr)_minmax(0,52fr)] lg:gap-12 xl:gap-16">
+          <div className="grid">
             {slides.map((s, i) => (
               <div
                 key={s.title}
@@ -328,7 +244,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                 aria-label={`${i + 1} of ${slides.length}`}
                 aria-hidden={i !== index}
               >
-                <p className={`flex flex-wrap items-center gap-x-2.5 gap-y-1 font-display text-[11px] font-bold uppercase tracking-[0.16em] md:text-xs ${s.tone === "dark" ? "text-sky" : "text-gold-deep"}`}>
+                <p className={`eyebrow flex flex-wrap items-center gap-x-2.5 gap-y-1 !tracking-[0.14em] ${s.tone === "dark" ? "text-gold-light" : "text-gold-deep"}`}>
                   {/* The separator trails its word, so a wrap never starts a
                       line with a stray pipe. */}
                   {s.eyebrow.map((e, n) => (
@@ -339,20 +255,25 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                   ))}
                 </p>
 
-                <h1 className={`mt-5 ${s.tone === "dark" ? "!text-white" : "text-navy"}`}>
+                {/* The site's h1 is 60px; in a 48%-wide column Playfair breaks
+                    "Complete Accounting" over two lines at that size, which
+                    makes a five-line headline. 48px keeps it to three. */}
+                <h1 className={`mt-6 lg:!text-[48px] ${s.tone === "dark" ? "!text-white" : "text-navy"}`}>
                   {s.title}
                   {s.titleSecondLine && (<><br />{s.titleSecondLine}</>)}
                   {s.accent && (
                     <>
                       <br />
-                      <span className={s.tone === "dark" ? "text-sky" : "text-gold-deep"}>{s.accent}</span>
+                      <span className={s.tone === "dark" ? "text-gold-light" : "text-gold"}>{s.accent}</span>
                     </>
                   )}
                 </h1>
 
-                <p className={`mt-5 max-w-[34rem] text-[17px] leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted-deep"}`}>{s.body}</p>
+                <p className={`mt-6 max-w-[34rem] text-[17px] leading-8 ${s.tone === "dark" ? "text-white/80" : "text-muted-deep"}`}>
+                  {s.body}
+                </p>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-9 flex flex-wrap gap-3">
                   {s.cta?.external ? (
                     <a
                       href={s.cta.href}
@@ -381,7 +302,7 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                     className={
                       s.tone === "dark"
                         ? "btn border border-white/25 bg-white/5 text-white hover:border-white hover:bg-white/10"
-                        : "btn border border-line bg-white text-navy hover:border-navy [&>svg]:text-[#25D366]"
+                        : "btn-outline [&>svg]:text-[#128C4A]"
                     }
                     tabIndex={i === index ? 0 : -1}
                   >
@@ -389,63 +310,37 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
                     WhatsApp us
                   </a>
                 </div>
-
-                {s.features && (
-                  <ul
-                    className={`mt-8 grid gap-x-4 gap-y-6 sm:grid-cols-2 ${
-                      s.features.length === 3 ? "lg:grid-cols-3" : "xl:grid-cols-4"
-                    }`}
-                  >
-                    {s.features.map((f, n) => (
-                      <li
-                        key={f.title}
-                        className={`flex items-start gap-2.5 ${
-                          n > 0
-                            ? s.tone === "dark"
-                              ? "sm:border-l sm:border-white/15 sm:pl-3.5"
-                              : "sm:border-l sm:border-line sm:pl-3.5"
-                            : ""
-                        }`}
-                      >
-                        <span className={`shrink-0 ${s.tone === "dark" ? "text-sky" : "text-navy"}`}>
-                          <Icon name={f.icon} className="mt-0.5 h-6 w-6" strokeWidth={1.4} />
-                        </span>
-                        <div className="min-w-0">
-                          <p className={`font-display text-[12px] font-bold leading-tight tracking-tight ${s.tone === "dark" ? "text-white" : "text-navy"}`}>
-                            {f.title}
-                          </p>
-                          <p className={`mt-0.5 text-[11.5px] leading-5 ${s.tone === "dark" ? "text-white/65" : "text-muted-deep"}`}>
-                            {f.body}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             ))}
           </div>
 
-          {/* Drawn composition. On lg the photograph takes over, so this hides. */}
-          <div className={hasPhoto ? "lg:hidden" : "lg:col-span-6"}>
-              <div className="grid mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none">
-                {slides.map((s, i) => (
-                  <div
-                    key={s.visual}
-                    className={`slide col-start-1 row-start-1 ${i === index ? "is-active" : ""}`}
-                    aria-hidden="true"
-                  >
+          {/* ── The visual column ──────────────────────────────────────────
+              One dominant visual per slide. The opening slide gets the drawn
+              console over a blurred office; the rest keep their drawn
+              compositions. The travel slide's photograph is full-bleed behind
+              everything on lg, so its column visual drops out there. */}
+          <div className="grid">
+            {slides.map((s, i) => (
+              <div
+                key={`v-${s.title}`}
+                className={`slide col-start-1 row-start-1 ${i === index ? "is-active" : ""} ${s.image ? "lg:hidden" : ""}`}
+                aria-hidden="true"
+              >
+                {s.panel === "console" ? (
+                  <ConsolePanel dueDates={dueDates} />
+                ) : (
+                  <div className="mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none">
                     <HeroVisual kind={s.visual} />
                   </div>
-                ))}
+                )}
               </div>
+            ))}
           </div>
         </div>
 
         {/* Dots. The mark stays small; the button around it is 24px square,
-            which is the minimum target size WCAG 2.5.8 asks for — the old
-            8x8 dot was the hardest thing on the site to hit on a phone. */}
-        <ul className="mt-6 flex items-center justify-center">
+            which is the minimum target size WCAG 2.5.8 asks for. */}
+        <ul className="mt-10 flex items-center justify-center">
           {slides.map((s, i) => (
             <li key={s.title}>
               <button
@@ -492,10 +387,10 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
         type="button"
         onClick={prev}
         aria-label="Previous slide"
-        className={`absolute left-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:left-6 ${
+        className={`absolute left-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:left-5 ${
           dark
-            ? "border-white/25 bg-white/10 text-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] backdrop-blur hover:border-white hover:bg-white/20"
-            : "border-line bg-white text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] hover:border-sky hover:text-sky"
+            ? "border-white/25 bg-white/10 text-white backdrop-blur hover:border-white hover:bg-white/20"
+            : "border-line bg-white text-navy shadow-soft hover:border-navy"
         }`}
       >
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -506,10 +401,10 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
         type="button"
         onClick={next}
         aria-label="Next slide"
-        className={`absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:right-6 ${
+        className={`absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-full border p-3 transition-colors md:block xl:right-5 ${
           dark
-            ? "border-white/25 bg-white/10 text-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] backdrop-blur hover:border-white hover:bg-white/20"
-            : "border-line bg-white text-navy shadow-[0_6px_20px_-8px_rgba(7,53,116,0.45)] hover:border-sky hover:text-sky"
+            ? "border-white/25 bg-white/10 text-white backdrop-blur hover:border-white hover:bg-white/20"
+            : "border-line bg-white text-navy shadow-soft hover:border-navy"
         }`}
       >
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -519,5 +414,45 @@ export default function HeroCarousel({ dueDates = [] }: { dueDates?: DueDate[] }
 
       <p className="sr-only" aria-live="polite">{`Slide ${index + 1} of ${slides.length}: ${active.title}`}</p>
     </section>
+  );
+}
+
+/**
+ * The opening slide's right-hand composition.
+ *
+ * Three layers, back to front: the office photograph blurred to the point
+ * where it is an environment rather than a subject — which is also what
+ * finally silences the wall lettering and the row of books that were competing
+ * with the headline; the drawn console; and the live compliance widget,
+ * overlapping the console's lower-left corner so the group has depth without
+ * a single gradient. Below lg the widget drops under the console instead,
+ * which is the order the brief asks for on a phone.
+ */
+function ConsolePanel({ dueDates }: { dueDates: DueDate[] }) {
+  return (
+    <div className="relative lg:pb-[8.5rem]">
+      <div
+        className="pointer-events-none absolute -inset-x-8 -inset-y-10 -z-10 hidden overflow-hidden rounded-[32px] lg:block"
+        aria-hidden="true"
+      >
+        <img
+          src={asset("/hero/desk.jpg")}
+          alt=""
+          className="h-full w-full scale-[1.18] object-cover object-center"
+          style={{ filter: "blur(22px) saturate(0.8) brightness(1.1)" }}
+        />
+        {/* Lifted almost to white, so it reads as daylight in a glass office
+            rather than as a photograph someone put behind the panel. */}
+        <div className="absolute inset-0 bg-white/60" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-transparent to-white/55" />
+      </div>
+
+      <FinanceDashboard className="relative" />
+
+      <ComplianceWidget
+        dates={dueDates}
+        className="mt-5 w-full sm:mx-auto sm:max-w-[19rem] lg:absolute lg:inset-x-0 lg:-bottom-1 lg:mx-0 lg:mt-0 lg:max-w-none"
+      />
+    </div>
   );
 }

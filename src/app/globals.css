@@ -1,26 +1,67 @@
+/* Self-hosted, so the type does not wait on a third-party stylesheet and
+   the metrics are fixed at build time. One variable file per family per
+   subset — Google serves the same bytes for every weight URL. They live
+   beside this file rather than in public/, so the bundler fingerprints them
+   and the URL stays correct under any basePath. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(./fonts/inter-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(./fonts/inter-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url(./fonts/playfair-display-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url(./fonts/playfair-display-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --navy: #073574;
+  --navy: #0b3a78;
+  --navy-deep: #082e5f;
   --sky: #10a9e8;
-  --font-montserrat: "Montserrat";
+  --gold: #a67c20;
   --font-inter: "Inter";
   --font-playfair: "Playfair Display";
 }
 
 @layer base {
   html { scroll-behavior: smooth; }
-  body { @apply bg-paper text-ink font-body antialiased; }
+  body { @apply bg-white text-ink font-body antialiased; }
   h1, h2, h3, h4 { @apply text-navy tracking-tight; }
-  h1 { @apply font-title text-4xl md:text-5xl lg:text-[56px] font-bold leading-[1.08]; }
-  h2 { @apply font-title text-3xl md:text-[40px] font-bold leading-[1.15]; }
-  h3 { @apply font-display text-xl md:text-2xl font-semibold; }
-  h4 { @apply font-display font-semibold; }
+  /* The serif carries authority, so it is allowed to be large and is given
+     room to breathe. Tight leading on the headline, looser on the rest. */
+  h1 { @apply font-title text-[40px] sm:text-5xl lg:text-[60px] font-bold leading-[1.06]; }
+  h2 { @apply font-title text-[30px] md:text-[42px] font-bold leading-[1.14]; }
+  h3 { @apply font-display text-xl md:text-[22px] font-semibold tracking-[-0.01em]; }
+  h4 { @apply font-display font-semibold tracking-[-0.01em]; }
   p { @apply leading-relaxed; }
   a { @apply underline-offset-4; }
-  :focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
@@ -28,27 +69,44 @@
 
 @layer components {
   .wrap { @apply mx-auto w-full max-w-wrap px-5 md:px-8 lg:px-10; }
-  .section { @apply py-16 md:py-24; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60; }
+  .section { @apply py-18 md:py-28; }
+
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold tracking-[-0.005em] transition-colors disabled:opacity-60; }
   .btn-primary { @apply btn bg-navy text-white hover:bg-navy-deep; }
   .btn-sky { @apply btn bg-sky text-navy-deep hover:bg-[#0d93cb] hover:text-white; }
   .btn-ghost { @apply btn border border-navy text-navy hover:bg-navy-soft; }
-  .btn-light { @apply btn bg-white text-navy hover:bg-sky-soft; }
-  .field { @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/70 focus:border-sky focus:outline-none; }
+  .btn-light { @apply btn bg-white text-navy hover:bg-navy-soft; }
+  /* Outline button on a light ground — the hero's second action. */
+  .btn-outline { @apply btn border border-line-strong bg-white text-navy hover:border-navy hover:bg-navy-soft; }
+
+  .field { @apply w-full rounded-md border border-line-strong bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-navy focus:outline-none; }
   .label { @apply mb-1.5 block text-sm font-medium text-ink; }
   .ledger > * { @apply border-t border-line py-5 first:border-t-0; }
-  /* Small caps label above a heading. */
-  .eyebrow { @apply font-display text-xs font-bold uppercase tracking-[0.18em] text-sky; }
-  /* Eyebrow followed by a short gold rule, as on the reference layout. */
+
+  /* Small caps label above a heading. It carries no colour of its own: the
+     ground decides it — gold-deep on light, gold-light on navy. */
+  .eyebrow { @apply font-display text-[11px] font-bold uppercase tracking-[0.2em] md:text-xs; }
+  /* Eyebrow followed by a short rule. The rule takes the eyebrow's own colour
+     at half strength, so it works on either ground without a second token. */
   .eyebrow-rule { @apply flex items-center gap-3; }
-  .eyebrow-rule::after { @apply block h-px w-9 bg-gold content-[""]; }
+  .eyebrow-rule::after { @apply block h-px w-10 bg-current opacity-50 content-[""]; }
+
   /* Quiet "see everything" link that sits opposite a section heading. */
   .see-all { @apply inline-flex shrink-0 items-center gap-2 text-sm font-semibold no-underline transition-colors; }
-  .card { @apply rounded-lg border border-line bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky hover:shadow-[0_8px_30px_-12px_rgba(7,53,116,0.25)]; }
+
+  /* One card style across the site: white, hairline, a shadow you feel rather
+     than see, and a lift that does not move the layout. */
+  .card { @apply rounded-xl border border-line bg-white p-6 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-navy/25 hover:shadow-lift; }
+
   .prose-sv p { @apply mb-4 text-[17px] leading-8 text-ink; }
   .prose-sv h2 { @apply mt-10 mb-3 text-2xl; }
   .prose-sv h3 { @apply mt-8 mb-2 text-xl; }
   .prose-sv ul { @apply mb-4 list-disc pl-6 leading-8; }
+}
+
+@layer utilities {
+  /* Tailwind has no py-18, and the section rhythm wants it. */
+  .py-18 { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 }
 
 /* Hero balance-beam: one page-load moment */
@@ -64,7 +122,12 @@
 .slide { opacity: 0; visibility: hidden; transition: opacity .7s ease; }
 .slide.is-active { opacity: 1; visibility: visible; }
 
+/* The live dot on the compliance widget. One slow pulse, not a blink. */
+@keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+.live-dot { animation: livePulse 2.4s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal.is-in { opacity: 1; transform: none; transition: none; }
   .slide { transition: none; }
+  .live-dot { animation: none; }
 }

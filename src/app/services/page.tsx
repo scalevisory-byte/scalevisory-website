@@ -26,16 +26,16 @@ export default function ServicesPage() {
         <div className="wrap grid gap-6 md:grid-cols-2">
           {services.map((s, i) => (
             <article key={s.slug} className="flex flex-col rounded-lg border border-line bg-white p-7">
-              <span className="font-display text-sm font-bold text-sky">0{i + 1}</span>
+              <span className="font-display text-sm font-bold text-sky-deep">0{i + 1}</span>
               <h2 className="mt-2 text-2xl">
-                <Link href={`/services/${s.slug}`} className="no-underline hover:text-sky">{s.name}</Link>
+                <Link href={`/services/${s.slug}`} className="no-underline hover:text-sky-deep">{s.name}</Link>
               </h2>
               <p className="mt-3 text-muted">{s.short}</p>
               <ul className="mt-5 grid gap-1.5 text-sm text-ink">
                 {s.sections.map((sec) => (
                   <li key={sec.id} className="flex gap-2.5">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-sky" />
-                    <Link href={`/services/${s.slug}#${sec.id}`} className="no-underline hover:text-sky">
+                    <Link href={`/services/${s.slug}#${sec.id}`} className="no-underline hover:text-sky-deep">
                       {sec.title}
                     </Link>
                   </li>

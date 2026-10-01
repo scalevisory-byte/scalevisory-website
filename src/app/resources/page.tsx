@@ -40,10 +40,10 @@ export default function ResourcesPage() {
         <div className="wrap">
           <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
             <div>
-              <p className="eyebrow eyebrow-rule text-gold after:hidden sm:after:block">Updated daily</p>
+              <p className="eyebrow eyebrow-rule text-gold-deep after:hidden sm:after:block">Updated daily</p>
               <h2 className="mt-3">What&rsquo;s Due Next</h2>
             </div>
-            <Link href="/resources/compliance-calendar" className="see-all group mb-1 text-navy hover:text-sky">
+            <Link href="/resources/compliance-calendar" className="see-all group mb-1 text-navy hover:text-sky-deep">
               Full compliance calendar
               <span className="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
             </Link>
@@ -106,7 +106,7 @@ export default function ResourcesPage() {
                     </p>
                     <div className="md:col-span-9">
                       <h3 className="text-xl">
-                        <Link href={postHref(p.category, p.slug)} className="no-underline hover:text-sky">
+                        <Link href={postHref(p.category, p.slug)} className="no-underline hover:text-sky-deep">
                           {p.title}
                         </Link>
                       </h3>

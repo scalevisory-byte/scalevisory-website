@@ -67,14 +67,14 @@ export default function LandingHero({
       <div className="wrap relative py-14 md:py-16 lg:min-h-[560px] lg:py-20">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-8 xl:gap-12">
           <div className="lg:col-span-7">
-            <p className="eyebrow eyebrow-rule text-sky after:hidden sm:after:block">{eyebrow}</p>
+            <p className="eyebrow eyebrow-rule text-gold-light after:hidden sm:after:block">{eyebrow}</p>
 
             <h1 className="mt-5 !text-white">
               {title}
               {accent && (
                 <>
                   <br />
-                  <span className="text-sky">{accent}</span>
+                  <span className="text-sky-bright">{accent}</span>
                 </>
               )}
             </h1>
@@ -106,7 +106,7 @@ export default function LandingHero({
                       i > 0 ? "sm:border-l sm:border-white/15 sm:pl-4" : ""
                     }`}
                   >
-                    <span className="mt-0.5 shrink-0 text-sky">
+                    <span className="mt-0.5 shrink-0 text-sky-bright">
                       <Icon name={p.icon} className="h-6 w-6" strokeWidth={1.4} />
                     </span>
                     <div className="min-w-0">

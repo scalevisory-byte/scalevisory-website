@@ -67,8 +67,8 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b bg-paper/95 backdrop-blur transition-shadow duration-300 ${
-        scrolled ? "border-line shadow-[0_1px_16px_-6px_rgba(7,53,116,0.35)]" : "border-line"
+      className={`sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur transition-shadow duration-300 ${
+        scrolled ? "shadow-[0_1px_3px_rgba(11,58,120,0.07)]" : ""
       }`}
     >
       {/* The partner ventures and the office line, in their own register above
@@ -76,11 +76,11 @@ export default function Header() {
           this one's pages was most of what made the header feel crowded. It
           collapses on scroll so the sticky bar stays slim. */}
       <div
-        className={`hidden overflow-hidden bg-white transition-[height] duration-300 lg:block ${
-          scrolled ? "h-0" : "h-9 border-b border-line"
+        className={`hidden overflow-hidden bg-paper transition-[height] duration-300 lg:block ${
+          scrolled ? "h-0" : "h-8 border-b border-line"
         }`}
       >
-        <div className="wrap flex h-9 items-center justify-between text-xs text-muted">
+        <div className="wrap flex h-8 items-center justify-between text-[11.5px] text-muted">
           <p className="truncate">{site.address}</p>
           <ul className="flex shrink-0 items-center gap-5 pl-6">
             {ventureNav.map((v) => (
@@ -89,14 +89,14 @@ export default function Header() {
                   href={v.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium no-underline hover:text-navy"
+                  className="block py-1.5 font-medium no-underline hover:text-navy"
                 >
                   {v.label} <span aria-hidden="true">↗</span>
                 </a>
               </li>
             ))}
             <li>
-              <a href={`mailto:${site.emailAlt}`} className="no-underline hover:text-navy">
+              <a href={`mailto:${site.emailAlt}`} className="block py-1.5 no-underline hover:text-navy">
                 {site.emailAlt}
               </a>
             </li>
@@ -106,10 +106,10 @@ export default function Header() {
 
       <div
         className={`wrap flex items-center justify-between gap-6 transition-[height] duration-300 ${
-          scrolled ? "h-16" : "h-20"
+          scrolled ? "h-[60px]" : "h-[72px]"
         }`}
       >
-        <Logo className={`w-auto transition-[height] duration-300 ${scrolled ? "h-10 md:h-11" : "h-12 md:h-14"}`} />
+        <Logo className={`w-auto transition-[height] duration-300 ${scrolled ? "h-9 md:h-10" : "h-11 md:h-12"}`} />
 
         <nav ref={navRef} className="hidden items-center gap-6 lg:flex" aria-label="Main">
           {nav.map((n) =>
@@ -125,7 +125,7 @@ export default function Header() {
                   aria-expanded={menu === n.label}
                   aria-haspopup="true"
                   onClick={() => setMenu(menu === n.label ? null : n.label)}
-                  className={`flex items-center gap-1 whitespace-nowrap text-sm font-medium transition-colors hover:text-navy ${
+                  className={`flex items-center gap-1 whitespace-nowrap py-2 text-sm font-medium transition-colors hover:text-navy ${
                     isCurrent(n.href) ? "text-navy" : "text-muted"
                   }`}
                 >
@@ -144,14 +144,14 @@ export default function Header() {
                   </svg>
                 </button>
                 {isCurrent(n.href) && (
-                  <span aria-hidden="true" className="absolute -bottom-1.5 left-0 h-0.5 w-full bg-sky" />
+                  <span aria-hidden="true" className="absolute -bottom-1.5 left-0 h-0.5 w-full bg-gold" />
                 )}
 
                 {menu === n.label && (
                   /* The padding is on the wrapper, so the gap between the
                      button and the panel does not break the hover. */
                   <div className="absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 pt-3">
-                    <ul className="overflow-hidden rounded-lg border border-line bg-white py-1.5 shadow-[0_18px_40px_-16px_rgba(7,53,116,0.35)]">
+                    <ul className="overflow-hidden rounded-xl border border-line bg-white py-2 shadow-lift">
                       <li>
                         <Link
                           href={n.href}
@@ -179,13 +179,13 @@ export default function Header() {
               <Link
                 key={n.href}
                 href={n.href}
-                className={`relative whitespace-nowrap text-sm font-medium no-underline transition-colors hover:text-navy ${
+                className={`relative whitespace-nowrap py-2 text-sm font-medium no-underline transition-colors hover:text-navy ${
                   isCurrent(n.href) ? "text-navy" : "text-muted"
                 }`}
               >
                 {n.label}
                 {isCurrent(n.href) && (
-                  <span aria-hidden="true" className="absolute -bottom-1.5 left-0 h-0.5 w-full bg-sky" />
+                  <span aria-hidden="true" className="absolute -bottom-1.5 left-0 h-0.5 w-full bg-gold" />
                 )}
               </Link>
             )

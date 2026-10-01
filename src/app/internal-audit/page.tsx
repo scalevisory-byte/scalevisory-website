@@ -92,7 +92,7 @@ export default function InternalAuditPage() {
             <ul className="mt-4 space-y-3">
               {deliverables.map((d) => (
                 <li key={d} className="flex gap-3">
-                  <span className="mt-1 shrink-0 text-sky">
+                  <span className="mt-1 shrink-0 text-navy">
                     <Icon name="shieldCheck" className="h-5 w-5" strokeWidth={1.8} />
                   </span>
                   {d}
@@ -154,7 +154,7 @@ export default function InternalAuditPage() {
       {/* ── What tends to prompt the call ──────────────────────────────── */}
       <section className="bg-navy-deep py-16 text-white md:py-20">
         <div className="wrap">
-          <p className="eyebrow eyebrow-rule text-gold after:hidden sm:after:block">
+          <p className="eyebrow eyebrow-rule text-gold-light after:hidden sm:after:block">
             When businesses call us in
           </p>
           <h2 className="mt-3 !text-white">Six things owners notice first</h2>

@@ -75,7 +75,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
               <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
                 {s.sections.map((sec) => (
                   <li key={sec.id}>
-                    <a href={`#${sec.id}`} className="text-muted no-underline hover:text-sky">{sec.title}</a>
+                    <a href={`#${sec.id}`} className="text-muted no-underline hover:text-sky-deep">{sec.title}</a>
                   </li>
                 ))}
               </ul>
@@ -87,7 +87,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 <ol className="mt-4 grid gap-6 sm:grid-cols-2">
                   {s.process.map((p, i) => (
                     <li key={p.step} className="border-t-2 border-navy pt-3">
-                      <span className="font-display text-sm font-bold text-sky">Step {i + 1}</span>
+                      <span className="font-display text-sm font-bold text-sky-deep">Step {i + 1}</span>
                       <h3 className="mt-1 text-lg">{p.step}</h3>
                       <p className="mt-1 text-sm leading-6 text-muted">{p.detail}</p>
                     </li>
